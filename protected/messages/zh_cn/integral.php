@@ -1,0 +1,50 @@
+<?php
+return array(
+    'the name of already exists'=>'名称已经存在',
+
+	'Integral Add List' => '学分类型列表',
+	'Integral Add Form' => '学分类型表单',
+	'Integral Name' => '学分名称',
+	'Integral Num' => '学分数值',
+	'Integral Form' => '学分表单',
+
+	'Integral Cut List' => '兑换列表',
+	'Integral Cut Form' => '兑换详情',
+	'Cut Form' => '兑换表单',
+	'Audit Form' => '审核表单',
+	'Item details' => '物品详情',
+
+	'Images' => '图片',
+	'City' => '城市',
+
+	' Did not find' => '没找到',
+	'Employee Name' => '员工名字',
+    'Remark' => '备注',
+    'Reject Note' => '拒绝原因',
+    'Status'=>'状态',
+    'Draft'=>'草稿',
+    'Sent, pending approval'=>'已发送，等待审核',
+    'The application is successful, please wait for approval.' => '申请成功，请等待审核',
+    'Lack of integral' => '积分不足',
+    'Insufficient inventory' => '库存不足',
+    'pending approval'=>'等待审核',
+    'Finish'=>'完成',
+    'Rejected'=>'拒绝',
+    'approve'=>'批准',
+    'Finish approval'=>'审核通过',
+    'Audit'=>'审核',
+    'audit'=>'审核通过',
+    'For Audit'=>'要求审核',
+    'apply for time'=>'申请时间',
+    'pending approval'=>'待审核',
+
+    'Cut Name' => '兑换名称',
+    'Cut Integral' => '扣除积分',
+    'inventory' => '库存',
+    'Number of applications' => '申请数量',
+    'apply' => '申请',
+    'apply cut' => '兑换申请',
+    'All integral' => '所有积分',
+    'Available integral' => '可用积分',
+);
+?>
