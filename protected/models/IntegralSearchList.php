@@ -1,6 +1,6 @@
 <?php
 
-class CutList extends CListPageModel
+class IntegralSearchList extends CListPageModel
 {
     public $searchTimeStart;//開始日期
     public $searchTimeEnd;//結束日期
@@ -15,9 +15,8 @@ class CutList extends CListPageModel
 			'id'=>Yii::t('integral','ID'),
             'employee_id'=>Yii::t('integral','Employee Name'),
             'employee_name'=>Yii::t('integral','Employee Name'),
-            'set_id'=>Yii::t('integral','Cut Name'),
-            'integral'=>Yii::t('integral','Cut Integral'),
-            'apply_num'=>Yii::t('integral','Number of applications'),
+            'set_id'=>Yii::t('integral','Integral Name'),
+            'integral'=>Yii::t('integral','Integral Num'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
             'state'=>Yii::t('integral','Status'),
@@ -40,19 +39,24 @@ class CutList extends CListPageModel
 		$staffId = Yii::app()->user->staff_id();//
         $city_allow = Yii::app()->user->city_allow();
 		$sql1 = "select a.*,b.integral_name,d.name AS employee_name,d.city AS s_city from gr_integral a
-                LEFT JOIN gr_integral_cut b ON a.set_id = b.id
+                LEFT JOIN gr_integral_add b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.alg_con = 1 
+                where d.city IN ($city_allow) AND (a.state=3) AND a.alg_con = 0 
 			";
         $sql2 = "select count(a.id) from gr_integral a
-                LEFT JOIN gr_integral_cut b ON a.set_id = b.id
+                LEFT JOIN gr_integral_add b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.alg_con = 1 
+                where d.city IN ($city_allow) AND (a.state=3) AND a.alg_con = 0 
 			";
 		$clause = "";
 		if (!empty($this->searchField) && !empty($this->searchValue)) {
 			$svalue = str_replace("'","\'",$this->searchValue);
 			switch ($this->searchField) {
+				case 'employee_id':
+				    if(is_numeric($svalue)){
+                        $clause .= ' and d.id = '.$svalue;
+                    }
+					break;
 				case 'employee_name':
 					$clause .= General::getSqlConditionClause('d.name',$svalue);
 					break;
@@ -61,10 +65,7 @@ class CutList extends CListPageModel
 					break;
 				case 'integral':
 					$clause .= General::getSqlConditionClause('a.integral',$svalue);
-                    break;
-                case 'apply_num':
-                    $clause .= General::getSqlConditionClause('a.apply_num',$svalue);
-                    break;
+					break;
 				case 'lcd':
 					$clause .= General::getSqlConditionClause('a.lcd',$svalue);
 					break;
@@ -106,7 +107,6 @@ class CutList extends CListPageModel
 					'employee_name'=>$record['employee_name'],
 					'integral_name'=>$record['integral_name'],
 					'integral'=>$record['integral'],
-					'apply_num'=>$record['apply_num'],
 					'lcd'=>date("Y-m-d",strtotime($record['lcd'])),
                     'status'=>$colorList["status"],
                     'city'=>CGeneral::getCityName($record["s_city"]),
@@ -115,7 +115,7 @@ class CutList extends CListPageModel
 			}
 		}
 		$session = Yii::app()->session;
-		$session['cut_01'] = $this->getCriteria();
+		$session['integralSearch_01'] = $this->getCriteria();
 		return true;
 	}
 

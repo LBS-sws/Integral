@@ -36,11 +36,11 @@ return array(
             ),
             'Total credit search'=>array(
                 'access'=>'SR02',
-                'url'=>'/integralSearch/index',
+                'url'=>'/sumSearch/index',
             ),
             'Exchange search'=>array(
-                'access'=>'SR02',
-                'url'=>'/integralSearch/index',
+                'access'=>'SR03',
+                'url'=>'/cutSearch/index',
             ),
         ),
     ),

@@ -1,6 +1,6 @@
 <?php
 
-class CutList extends CListPageModel
+class CutSearchList extends CListPageModel
 {
     public $searchTimeStart;//開始日期
     public $searchTimeEnd;//結束日期
@@ -42,12 +42,12 @@ class CutList extends CListPageModel
 		$sql1 = "select a.*,b.integral_name,d.name AS employee_name,d.city AS s_city from gr_integral a
                 LEFT JOIN gr_integral_cut b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.alg_con = 1 
+                where a.state=3 AND d.city IN ($city_allow) AND a.alg_con = 1 
 			";
         $sql2 = "select count(a.id) from gr_integral a
                 LEFT JOIN gr_integral_cut b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.alg_con = 1 
+                where a.state=3 AND d.city IN ($city_allow) AND a.alg_con = 1 
 			";
 		$clause = "";
 		if (!empty($this->searchField) && !empty($this->searchValue)) {
@@ -115,7 +115,7 @@ class CutList extends CListPageModel
 			}
 		}
 		$session = Yii::app()->session;
-		$session['cut_01'] = $this->getCriteria();
+		$session['cutSearch_01'] = $this->getCriteria();
 		return true;
 	}
 

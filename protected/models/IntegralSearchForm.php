@@ -1,0 +1,291 @@
+<?php
+
+/**
+ * UserForm class.
+ * UserForm is the data structure for keeping
+ * user form data. It is used by the 'user' action of 'SiteController'.
+ */
+class IntegralSearchForm extends CFormModel
+{
+	/* User Fields */
+	public $id = 0;
+	public $employee_id;
+	public $employee_name;
+	public $alg_con = 0;
+	public $set_id;
+	public $integral;
+	public $images_url;
+	public $remark;
+	public $reject_note;
+	public $state = 0;
+	public $city;
+	public $lcu;
+	public $luu;
+	public $lcd;
+	public $lud;
+
+
+    public $no_of_attm = array(
+        'gral'=>0
+    );
+    public $docType = 'GRAL';
+    public $docMasterId = array(
+        'gral'=>0
+    );
+    public $files;
+    public $removeFileId = array(
+        'gral'=>0
+    );
+	/**
+	 * Declares customized attribute labels.
+	 * If not declared here, an attribute would have a label that is
+	 * the same as its name with the first letter in upper case.
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'id'=>Yii::t('integral','Record ID'),
+            'employee_id'=>Yii::t('integral','Employee Name'),
+            'employee_name'=>Yii::t('integral','Employee Name'),
+            'set_id'=>Yii::t('integral','Integral Name'),
+            'integral'=>Yii::t('integral','Integral Num'),
+			'remark'=>Yii::t('integral','Remark'),
+            'reject_note'=>Yii::t('integral','Reject Note'),
+            'city'=>Yii::t('integral','City'),
+		);
+	}
+
+	/**
+	 * Declares the validation rules.
+	 */
+	public function rules()
+	{
+		return array(
+			array('id, employee_id, employee_name, alg_con, set_id, integral, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
+			array('employee_id','required'),
+			array('set_id','required'),
+			array('set_id','validateIntegral'),
+			array('employee_id','validateEmployee'),
+            array('files, removeFileId, docMasterId, no_of_attm','safe'),
+		);
+	}
+
+	public function validateIntegral($attribute, $params){
+        $rows = Yii::app()->db->createCommand()->select("integral_num")->from("gr_integral_add")
+            ->where("id=:id", array(':id'=>$this->set_id))->queryRow();
+        if ($rows){
+            $this->integral = $rows["integral_num"];
+        }else{
+            $message = Yii::t('integral','Integral Name'). Yii::t('integral',' Did not find');
+            $this->addError($attribute,$message);
+        }
+    }
+
+	public function validateEmployee($attribute, $params){
+        $suffix = Yii::app()->params['envSuffix'];
+        $from = "hr".$suffix.".hr_employee";
+        $city_allow = Yii::app()->user->city_allow();
+        $rows = Yii::app()->db->createCommand()->select("name,city")->from($from)
+            ->where("id=:id and city in ($city_allow) and staff_status=0 ", array(':id'=>$this->employee_id))->queryRow();
+        if ($rows){
+            $this->city = $rows["city"];
+        }else{
+            $message = Yii::t('integral','Employee Name'). Yii::t('integral',' Did not find');
+            $this->addError($attribute,$message);
+        }
+    }
+    //獲取所有已绑定员工的账号id
+	public function getBindingIdList(){
+        $city_allow = Yii::app()->user->city_allow();
+        $suffix = Yii::app()->params['envSuffix'];
+        $bindList = Yii::app()->db->createCommand()->select("a.user_id")->from("hr$suffix.hr_binding a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("b.city in ($city_allow)")->queryAll();
+        if($bindList){
+            return array_column($bindList,"user_id");
+        }
+        return array();
+    }
+
+    //獲取所有已绑定员工的账号列表
+	public function getBindingList(){
+        $city_allow = Yii::app()->user->city_allow();
+        $suffix = Yii::app()->params['envSuffix'];
+        $bindList = Yii::app()->db->createCommand()->select("b.id,b.name")->from("hr$suffix.hr_binding a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("b.city in ($city_allow)")->queryAll();
+        $arr = array(""=>"");
+        if($bindList){
+            foreach ($bindList as $row){
+                $arr[$row["id"]] = $row["name"];
+            }
+        }
+        return $arr;
+    }
+
+	public function retrieveData($index)
+	{
+        $city = Yii::app()->user->city();
+        $suffix = Yii::app()->params['envSuffix'];
+        $city_allow = Yii::app()->user->city_allow();
+        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,docman$suffix.countdoc('GRAL',a.id) as graldoc")->from("gr_integral a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("a.id=:id and a.alg_con = 0 and a.state = 3 and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
+		if (count($rows) > 0)
+		{
+			foreach ($rows as $row)
+			{
+				$this->id = $row['id'];
+				$this->employee_id = $row['employee_id'];
+				$this->employee_name = $row['employee_name'];
+				$this->alg_con = $row['alg_con'];
+                $this->set_id = $row['set_id'];
+                $this->integral = $row['integral'];
+                $this->images_url = $row['images_url'];
+                $this->remark = $row['remark'];
+                $this->reject_note = $row['reject_note'];
+                $this->state = $row['state'];
+                $this->lcu = $row['lcu'];
+                $this->luu = $row['luu'];
+                $this->lcd = $row['lcd'];
+                $this->lud = $row['lud'];
+                $this->city = $row['city'];
+                $this->no_of_attm['gral'] = $row['graldoc'];
+				break;
+			}
+		}
+		return true;
+	}
+	
+	public function saveData()
+	{
+		$connection = Yii::app()->db;
+		$transaction=$connection->beginTransaction();
+		try {
+			$this->saveStaff($connection);
+            $this->updateDocman($connection,'GRAL');
+			$transaction->commit();
+		}
+		catch(Exception $e) {
+			$transaction->rollback();
+			throw new CHttpException(404,'Cannot update.');
+		}
+	}
+
+    protected function updateDocman(&$connection, $doctype) {
+        if ($this->scenario=='new') {
+            $docidx = strtolower($doctype);
+            if ($this->docMasterId[$docidx] > 0) {
+                $docman = new DocMan($doctype,$this->id,get_class($this));
+                $docman->masterId = $this->docMasterId[$docidx];
+                $docman->updateDocId($connection, $this->docMasterId[$docidx]);
+            }
+            $this->scenario = "edit";
+        }
+    }
+
+	protected function saveStaff(&$connection)
+	{
+		$sql = '';
+        $city = Yii::app()->user->city();
+        $city_allow = Yii::app()->user->city_allow();
+        $uid = Yii::app()->user->id;
+		switch ($this->scenario) {
+			case 'delete':
+                $sql = "delete from gr_integral where id = :id and city IN ($city_allow)";
+				break;
+			case 'new':
+				$sql = "insert into gr_integral(
+							employee_id, alg_con, set_id, integral, remark, state, city, lcu
+						) values (
+							:employee_id, :alg_con, :set_id, :integral, :remark, :state, :city, :lcu
+						)";
+				break;
+			case 'edit':
+				$sql = "update gr_integral set
+							employee_id = :employee_id, 
+							alg_con = :alg_con, 
+							set_id = :set_id, 
+							integral = :integral,
+							remark = :remark,
+							reject_note = '',
+							state = :state,
+							luu = :luu,
+							lcd = :lcd
+						where id = :id
+						";
+				break;
+		}
+
+		$command=$connection->createCommand($sql);
+		if (strpos($sql,':id')!==false)
+			$command->bindParam(':id',$this->id,PDO::PARAM_INT);
+		if (strpos($sql,':employee_id')!==false)
+			$command->bindParam(':employee_id',$this->employee_id,PDO::PARAM_STR);
+		if (strpos($sql,':alg_con')!==false)
+			$command->bindParam(':alg_con',$this->alg_con,PDO::PARAM_STR);
+		if (strpos($sql,':set_id')!==false)
+			$command->bindParam(':set_id',$this->set_id,PDO::PARAM_INT);
+		if (strpos($sql,':integral')!==false)
+			$command->bindParam(':integral',$this->integral,PDO::PARAM_STR);
+		if (strpos($sql,':remark')!==false)
+			$command->bindParam(':remark',$this->remark,PDO::PARAM_STR);
+		if (strpos($sql,':state')!==false)
+			$command->bindParam(':state',$this->state,PDO::PARAM_STR);
+
+        if (strpos($sql,':lcd')!==false)
+            $command->bindParam(':lcd',date("Y-m-d H:i:s"),PDO::PARAM_STR);
+        if (strpos($sql,':city')!==false)
+            $command->bindParam(':city',$this->city,PDO::PARAM_STR);
+		if (strpos($sql,':luu')!==false)
+			$command->bindParam(':luu',$uid,PDO::PARAM_STR);
+		if (strpos($sql,':lcu')!==false)
+			$command->bindParam(':lcu',$uid,PDO::PARAM_STR);
+
+		$command->execute();
+
+        if ($this->scenario=='new'){
+            $this->id = Yii::app()->db->getLastInsertID();
+        }
+        return true;
+	}
+
+    //驗證當前用戶的權限
+	public function validateNowUser($bool = false){
+	    if(Yii::app()->user->validFunction('ZR01')){
+	        return true;//允許待申請學分
+        }else{
+            $uid = Yii::app()->user->id;
+            $suffix = Yii::app()->params['envSuffix'];
+            $rs = Yii::app()->db->createCommand()->select("b.id,b.name")->from("hr$suffix.hr_binding a")
+                ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                ->where("a.user_id ='$uid'")->queryRow();
+	        if($rs){
+	            if($bool){
+                    $this->employee_id = $rs["id"];
+                    $this->employee_name = $rs["name"];
+                }
+	            return true; //已綁定員工
+            }else{
+                return false;
+            }
+        }
+    }
+
+//获取地区編號（模糊查詢）
+    public function getCityCodeSqlLikeName($code)
+    {
+        $from =  'security'.Yii::app()->params['envSuffix'].'.sec_city';
+        $rows = Yii::app()->db->createCommand()->select("code")->from($from)->where(array('like', 'name', "%$code%"))->queryAll();
+        $arr = array();
+        foreach ($rows as $row){
+            array_push($arr,"'".$row["code"]."'");
+        }
+        if(empty($arr)){
+            return "('')";
+        }else{
+            $arr = implode(",",$arr);
+            return "($arr)";
+        }
+    }
+}

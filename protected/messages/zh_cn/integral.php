@@ -5,12 +5,17 @@ return array(
 	'Integral Add List' => '学分类型列表',
 	'Integral Add Form' => '学分类型表单',
 	'Integral Name' => '学分名称',
+	'Integral Detail' => '学分明细',
+	'Integral Ranking' => '学分排名',
+	'ranking' => '排名',
+	'Sum Integral' => '总学分',
 	'Integral Num' => '学分数值',
 	'Integral Form' => '学分表单',
 
 	'Integral Cut List' => '兑换列表',
 	'Integral Cut Form' => '兑换详情',
 	'Cut Form' => '兑换表单',
+	'Cut Detail' => '兑换明细',
 	'Audit Form' => '审核表单',
 	'Item details' => '物品详情',
 
