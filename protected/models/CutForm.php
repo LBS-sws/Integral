@@ -64,12 +64,12 @@ class CutForm extends CFormModel
             ->where("id=:id", array(':id'=>$this->set_id))->queryRow();
         if ($rows){
             $num = IntegralCutList::getNowUserIntegralCut();
-            if(intval($num) < intval($rows["integral_num"])){
+            if(intval($num) < intval($rows["integral_num"])*intval($this->apply_num)){
                 $message = Yii::t('integral','Lack of integral');//積分不足
                 $this->addError($attribute,$message);
             }else{
                 if(intval($this->apply_num)>intval($rows["inventory"])){
-                    $message = Yii::t('integral','Insufficient inventory');//積分不足
+                    $message = Yii::t('integral','Insufficient inventory');//庫存不足
                     $this->addError($attribute,$message);
                 }else{
                     $this->integral = $rows["integral_num"];
