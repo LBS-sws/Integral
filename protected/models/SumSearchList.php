@@ -70,7 +70,7 @@ class SumSearchList extends CListPageModel
 			$order .= " order by ".$this->orderField." ";
 			if ($this->orderType=='D') $order .= "desc ";
 		} else
-            $order = " order by a.id desc";
+            $order = " order by a.employee_id desc";
 
 		$sql = $sql1.$clause.$order;
         $records = Yii::app()->db->createCommand($sql)->queryAll();
