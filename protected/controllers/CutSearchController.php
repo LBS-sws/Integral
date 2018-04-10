@@ -36,7 +36,7 @@ class CutSearchController extends Controller
     }
 
     public static function allowReadWrite() {
-        return Yii::app()->user->validRWFunction('SR03');
+        return Yii::app()->user->validFunction('SR03');
     }
 
     public function actionIndex($pageNum=0){

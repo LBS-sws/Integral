@@ -36,7 +36,7 @@ class IntegralSearchController extends Controller
     }
 
     public static function allowReadWrite() {
-        return Yii::app()->user->validRWFunction('SR01');
+        return Yii::app()->user->validFunction('SR01');
     }
 
     public static function allowReadOnly() {

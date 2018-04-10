@@ -36,7 +36,7 @@ class SumSearchController extends Controller
     }
 
     public static function allowReadWrite() {
-        return Yii::app()->user->validRWFunction('SR02');
+        return Yii::app()->user->validFunction('SR02');
     }
 
     public function actionIndex($pageNum=0){
