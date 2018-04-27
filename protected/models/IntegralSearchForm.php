@@ -23,6 +23,8 @@ class IntegralSearchForm extends CFormModel
 	public $luu;
 	public $lcd;
 	public $lud;
+    public $integral_type;
+    public $s_remark;
 
 
     public $no_of_attm = array(
@@ -52,6 +54,8 @@ class IntegralSearchForm extends CFormModel
 			'remark'=>Yii::t('integral','Remark'),
             'reject_note'=>Yii::t('integral','Reject Note'),
             'city'=>Yii::t('integral','City'),
+            's_remark'=>Yii::t('integral','integral conditions'),
+            'integral_type'=>Yii::t('integral','integral type'),
 		);
 	}
 
@@ -128,8 +132,9 @@ class IntegralSearchForm extends CFormModel
         $city = Yii::app()->user->city();
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,docman$suffix.countdoc('GRAL',a.id) as graldoc")->from("gr_integral a")
+        $rows = Yii::app()->db->createCommand()->select("a.*,d.integral_type,d.s_remark,b.name as employee_name,docman$suffix.countdoc('GRAL',a.id) as graldoc")->from("gr_integral a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->leftJoin("gr_integral_add d","a.set_id = d.id")
             ->where("a.id=:id and a.alg_con = 0 and a.state = 3 and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
 		if (count($rows) > 0)
 		{
@@ -150,6 +155,8 @@ class IntegralSearchForm extends CFormModel
                 $this->lcd = $row['lcd'];
                 $this->lud = $row['lud'];
                 $this->city = $row['city'];
+                $this->integral_type = $row['integral_type'];
+                $this->s_remark = $row['s_remark'];
                 $this->no_of_attm['gral'] = $row['graldoc'];
 				break;
 			}

@@ -40,7 +40,7 @@ class SumSearchList extends CListPageModel
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city IN ($city_allow) AND (a.state=3) AND a.alg_con = 0 
 			";
-        $sql2 = "select count(a.employee_id) from gr_integral a
+		$sql2 = "select SUM(integral) AS sum_integral,a.employee_id,d.name AS employee_name,d.city AS s_city from gr_integral a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city IN ($city_allow) AND (a.state=3) AND a.alg_con = 0 
 			";
@@ -72,14 +72,17 @@ class SumSearchList extends CListPageModel
 		} else
             $order = " order by a.employee_id desc";
 
-		$sql = $sql1.$clause.$order;
-        $records = Yii::app()->db->createCommand($sql)->queryAll();
-        if($records){
-            $this->totalRow = count($records);
+        $sql = $sql1.$clause;
+        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        if($row){
+            $this->totalRow = count($row);
         }else{
             $this->totalRow = 0;
         }
-		$sql = $this->sqlWithPageCriteria($sql, $this->pageNum);
+
+        $sql = $sql1.$clause.$order;
+        $sql = $this->sqlWithPageCriteria($sql, $this->pageNum);
+        $records = Yii::app()->db->createCommand($sql)->queryAll();
 		
 		$list = array();
 		$this->attr = array();

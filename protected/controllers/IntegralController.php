@@ -34,7 +34,7 @@ class IntegralController extends Controller
                 'expression'=>array('IntegralController','allowReadOnly'),
             ),*/
             array('allow',
-                'actions'=>array('index','view','fileDownload'),
+                'actions'=>array('index','view','fileDownload','test'),
                 'expression'=>array('IntegralController','allowAddReadOnly'),
             ),
             array('deny',  // deny all users
@@ -212,5 +212,15 @@ class IntegralController extends Controller
         } else {
             throw new CHttpException(404,'Record not found.');
         }
+    }
+
+    public function actionTest(){
+        $test = new FormulaParser('If  (A<>0, iF( A>=1,IF(A<=1, ceil(ceil(1.22)), ceil(300.5)), 200), if(A=1, 100, 200))');
+        $str = $test->getSourceStr();
+        var_dump($str);
+        echo "<br>";
+        $str = $test->getResetStr();
+        var_dump($str);
+        die();
     }
 }

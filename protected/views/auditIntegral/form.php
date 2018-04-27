@@ -77,6 +77,16 @@ $this->pageTitle=Yii::app()->name . ' - auditIntegral Info';
                 'readonly'=>(true),
             ));
             ?>
+            <legend></legend>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'s_remark',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-6">
+                    <?php echo $form->textArea($model, 's_remark',
+                        array('readonly'=>(true),'rows'=>4)
+                    );
+                    ?>
+                </div>
+            </div>
 		</div>
 	</div>
 </section>

@@ -51,5 +51,14 @@ return array(
     'apply cut' => '兌換申請',
     'All integral' => '所有積分',
     'Available integral' => '可用積分',
+
+    //2018-04-27
+    'integral conditions' => '得分条件',
+    'integral type' => '学分类型',
+    'de' => '德',
+    'wisdom' => '智',
+    'the body' => '體',
+    'group of' => '群',
+    'beauty' => '美',
 );
 ?>

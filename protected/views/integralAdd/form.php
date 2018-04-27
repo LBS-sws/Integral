@@ -68,6 +68,23 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                     ); ?>
                 </div>
             </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'integral_type',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->dropDownList($model, 'integral_type',IntegralAddForm::getIntegralTypeAll(),
+                        array('readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'s_remark',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-6">
+                    <?php echo $form->textArea($model, 's_remark',
+                        array('readonly'=>($model->scenario=='view'),'rows'=>4)
+                    );
+                    ?>
+                </div>
+            </div>
 		</div>
 	</div>
 </section>
