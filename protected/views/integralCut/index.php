@@ -34,10 +34,13 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                     ));
                 ?>
             </div>
-            <div class="btn-group pull-right" role="group">
-                <span class="text-success">
-                <?php echo Yii::t('integral','Available integral')."：".$model->getNowUserIntegralCut();?>
-                </span>
+            <div class="btn-group pull-right text-right" role="group">
+                <?php
+                $listArrIntegral = $model->getNowUserIntegralList();
+                echo  '<span class="text-success">'.date("Y")."年".Yii::t('integral','Sum Integral')."：".$listArrIntegral["sumIntegral"]."</span><br>";
+                echo  '<span class="text-success">'.date("Y")."年".Yii::t('integral','Available integral')."：".$listArrIntegral["integral"]."</span>";
+
+                ?>
             </div>
         </div>
     </div>

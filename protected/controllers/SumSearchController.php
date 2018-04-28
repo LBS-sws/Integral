@@ -49,6 +49,10 @@ class SumSearchController extends Controller
                 $criteria = $session['sumSearch_01'];
                 $model->setCriteria($criteria);
             }
+            if(empty($model->searchTimeEnd)&&empty($model->searchTimeStart)){
+                $model->searchTimeStart = date("Y/01/01");
+                $model->searchTimeEnd = date("Y/12/31");
+            }
         }
         $model->determinePageNum($pageNum);
         $model->retrieveDataByPage($model->pageNum);

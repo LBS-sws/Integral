@@ -66,12 +66,20 @@ class IntegralCutList extends CListPageModel
 	}
 
 	//獲取當前用戶的可用積分
-	function getNowUserIntegralCut($staffId=0){
+	function getNowUserIntegralCut($staffId=0,$lcd=""){
+	    if(empty($lcd)){
+            $startDate = date("Y-01-01 00:00:00");
+            $lastDate = date("Y-12-31 23:59:59");
+        }else{
+            $startDate = date("Y-01-01 00:00:00",strtotime($lcd));
+            $lastDate = date("Y-12-31 23:59:59",strtotime($lcd));
+        }
 	    if(empty($staffId)){
             $staffId = Yii::app()->user->staff_id();
         }
+        $dateSql = " and lcd >='$startDate' and lcd <='$lastDate'";
         $rows = Yii::app()->db->createCommand()->select("alg_con,integral,apply_num")
-            ->from("gr_integral")->where("employee_id=:employee_id and ((state in (3,1) and alg_con = 1)or(state=3 and alg_con = 0))",array(":employee_id"=>$staffId))->queryAll();
+            ->from("gr_integral")->where("employee_id=:employee_id and ((state in (3,1) and alg_con = 1)or(state=3 and alg_con = 0))$dateSql",array(":employee_id"=>$staffId))->queryAll();
         $integral = 0;
         if($rows){
             foreach ($rows as $row){
@@ -86,5 +94,41 @@ class IntegralCutList extends CListPageModel
         }
 
         return $integral;
+    }
+
+	//獲取當前用戶的可用積分和總積分
+	function getNowUserIntegralList($staffId=0,$lcd=""){
+	    if(empty($lcd)){
+            $startDate = date("Y-01-01 00:00:00");
+            $lastDate = date("Y-12-31 23:59:59");
+        }else{
+            $startDate = date("Y-01-01 00:00:00",strtotime($lcd));
+            $lastDate = date("Y-12-31 23:59:59",strtotime($lcd));
+        }
+	    if(empty($staffId)){
+            $staffId = Yii::app()->user->staff_id();
+        }
+        $dateSql = " and lcd >='$startDate' and lcd <='$lastDate'";
+        $rows = Yii::app()->db->createCommand()->select("alg_con,integral,apply_num")
+            ->from("gr_integral")->where("employee_id=:employee_id and ((state in (3,1) and alg_con = 1)or(state=3 and alg_con = 0))$dateSql",array(":employee_id"=>$staffId))->queryAll();
+        $integral = 0;
+        $sumIntegral = 0;
+        if($rows){
+            foreach ($rows as $row){
+                $num = intval($row["integral"])*intval($row["apply_num"]);
+                if(intval($row["alg_con"]) == 1){
+                    //兌換
+                    $integral-=$num;
+                }else{
+                    $sumIntegral+=$num;
+                    $integral+=$num;
+                }
+            }
+        }
+
+        return array(
+            "integral"=>$integral,
+            "sumIntegral"=>$sumIntegral,
+        );
     }
 }

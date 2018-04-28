@@ -23,6 +23,17 @@ $this->pageTitle=Yii::app()->name . ' - Apply';
 </section>
 
 <section class="content">
+    <div class="box">
+        <div class="box-body">
+            <div class="btn-group pull-right" role="group">
+                <?php if (Yii::app()->user->validRWFunction('SR01')){
+                    //導入
+                    echo TbHtml::button('<span class="fa fa-file-text-o"></span> '.Yii::t('integral','Import File'), array(
+                        'data-toggle'=>'modal','data-target'=>'#importIntegral'));
+                } ?>
+            </div>
+        </div>
+    </div>
     <?php
     $search = array(
         'employee_name',
@@ -57,6 +68,11 @@ echo $form->hiddenField($model,'orderType');
 ?>
 <?php $this->endWidget(); ?>
 
+
+<?php
+if (Yii::app()->user->validRWFunction('SR01'))
+    $this->renderPartial('//site/importIntegral',array('name'=>"UploadExcelForm"));
+?>
 <?php
 $js = "
 $('#start_time').datepicker({autoclose: true, format: 'yyyy/mm/dd',language: 'zh_cn'});

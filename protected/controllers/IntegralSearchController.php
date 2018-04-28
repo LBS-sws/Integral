@@ -26,8 +26,12 @@ class IntegralSearchController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('index','view','fileDownload'),
+                'actions'=>array('ImportIntegral'),
                 'expression'=>array('IntegralSearchController','allowReadWrite'),
+            ),
+            array('allow',
+                'actions'=>array('index','view','fileDownload'),
+                'expression'=>array('IntegralSearchController','allowReadOnly'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
@@ -36,15 +40,11 @@ class IntegralSearchController extends Controller
     }
 
     public static function allowReadWrite() {
-        return Yii::app()->user->validFunction('SR01');
+        return Yii::app()->user->validRWFunction('SR01');
     }
 
     public static function allowReadOnly() {
-        return Yii::app()->user->validFunction('SR02');
-    }
-
-    public static function allowAddReadOnly() {
-        return Yii::app()->user->validFunction('SR03');
+        return Yii::app()->user->validFunction('SR01');
     }
 
     public function actionIndex($pageNum=0){
@@ -117,6 +117,39 @@ class IntegralSearchController extends Controller
             }
         } else {
             throw new CHttpException(404,'Record not found.');
+        }
+    }
+
+    //導入
+    public function actionImportIntegral(){
+        $model = new UploadExcelForm();
+        //$model->attributes = $_POST['UploadExcelForm'];
+        $img = CUploadedFile::getInstance($model,'file');
+        $city = Yii::app()->user->city();
+        $path =Yii::app()->basePath."/../upload/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path =Yii::app()->basePath."/../upload/excel/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path.=$city."/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $url = "upload/excel/".$city."/".date("YmdHis").".".$img->getExtensionName();
+        $model->file = $img->getName();
+        if ($model->file && $model->validate()) {
+            $img->saveAs($url);
+            $loadExcel = new LoadExcel($url);
+            $list = $loadExcel->getExcelList();
+            $model->loadGoods($list);
+            $this->redirect(Yii::app()->createUrl('integralSearch/index'));
+        }else{
+            $message = CHtml::errorSummary($model);
+            Dialog::message(Yii::t('dialog','Validation Message'), $message);
+            $this->redirect(Yii::app()->createUrl('integralSearch/index'));
         }
     }
 }

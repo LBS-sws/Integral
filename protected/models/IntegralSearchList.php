@@ -101,7 +101,7 @@ class IntegralSearchList extends CListPageModel
 		$this->attr = array();
 		if (count($records) > 0) {
 			foreach ($records as $k=>$record) {
-                $colorList = $this->statusToColor($record['state']);
+                $colorList = $this->statusToColor($record['state'],$record['lcd']);
 				$this->attr[] = array(
 					'id'=>$record['id'],
 					'employee_name'=>$record['employee_name'],
@@ -120,7 +120,10 @@ class IntegralSearchList extends CListPageModel
 	}
 
     //根據狀態獲取顏色
-    public function statusToColor($status){
+    public function statusToColor($status,$lcd){
+        $lcd = date("Y-m-d",strtotime($lcd));
+        $fastDate = date("Y-01-01");
+        $lastDate = date("Y-12-31");
         switch ($status){
             // text-danger
             case 0:
@@ -139,10 +142,17 @@ class IntegralSearchList extends CListPageModel
                     "style"=>" text-danger"
                 );
             case 3:
-                return array(
-                    "status"=>Yii::t("integral","approve"),//批准
-                    "style"=>" text-green"
-                );
+                if($lcd>=$fastDate&&$lcd<=$lastDate){
+                    return array(
+                        "status"=>Yii::t("integral","approve"),//批准
+                        "style"=>" text-primary"
+                    );
+                }else{
+                    return array(
+                        "status"=>Yii::t("integral","overdue"),//過期
+                        "style"=>" text-muted"
+                    );
+                }
         }
         return array(
             "status"=>"",

@@ -60,5 +60,12 @@ return array(
     'the body' => '體',
     'group of' => '群',
     'beauty' => '美',
+
+    //2018-04-28
+    'file' => '文件',
+    'Import File' => '導入',
+    'The employee can only import once every year. If there are multiple data, please combine the credits. (prevent repeated imports)' => '員工每個年度只能導入一次，如有多條數據，請合併學分。（防止重複導入）',
+    'overdue'=>'過期',
+
 );
 ?>
