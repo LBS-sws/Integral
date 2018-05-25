@@ -98,7 +98,7 @@ class IntegralCutForm extends CFormModel
 
     //刪除驗證
     public function deleteValidate(){
-        $rs0 = Yii::app()->db->createCommand()->select()->from("gr_integral")->where("alg_con=1 and set_id=:set_id",array(":set_id"=>$this->id))->queryAll();
+        $rs0 = Yii::app()->db->createCommand()->select()->from("gr_gral_cut")->where("set_id=:set_id",array(":set_id"=>$this->id))->queryAll();
         if($rs0){
             return false;
         }else{

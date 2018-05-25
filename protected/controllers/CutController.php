@@ -26,7 +26,7 @@ class CutController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('edit','audit','delete'),
+                'actions'=>array('audit','edit','delete','apply'),
                 'expression'=>array('CutController','allowReadWrite'),
             ),
 /*            array('allow',
@@ -44,15 +44,11 @@ class CutController extends Controller
     }
 
     public static function allowReadWrite() {
-        return Yii::app()->user->validRWFunction('DE03');
-    }
-
-    public static function allowReadOnly() {
-        return Yii::app()->user->validFunction('DE03');
+        return Yii::app()->user->validRWFunction('EX01');
     }
 
     public static function allowAddReadOnly() {
-        return Yii::app()->user->validFunction('DE03');
+        return Yii::app()->user->validFunction('EX02');
     }
 
     public function actionIndex($pageNum=0){
@@ -69,7 +65,8 @@ class CutController extends Controller
             }
             $model->determinePageNum($pageNum);
             $model->retrieveDataByPage($model->pageNum);
-            $this->render('index',array('model'=>$model));
+            $cutIntegral = IntegralCutView::getNowIntegral();
+            $this->render('index',array('model'=>$model,'cutIntegral'=>$cutIntegral));
         }else{
             throw new CHttpException(404,'您的账号未绑定员工，请与管理员联系');
         }

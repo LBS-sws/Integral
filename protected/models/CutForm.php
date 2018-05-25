@@ -9,9 +9,9 @@ class CutForm extends CFormModel
 {
 	/* User Fields */
 	public $id = 0;
+	public $activity_id;
 	public $employee_id;
 	public $employee_name;
-	public $alg_con = 1;
 	public $set_id;
 	public $set_name;
 	public $integral;
@@ -35,6 +35,7 @@ class CutForm extends CFormModel
 		return array(
 			'id'=>Yii::t('integral','Record ID'),
             'employee_id'=>Yii::t('integral','Employee Name'),
+            'activity_id'=>Yii::t('integral','Cut activities Name'),
             'employee_name'=>Yii::t('integral','Employee Name'),
             'set_id'=>Yii::t('integral','Cut Name'),
             'integral'=>Yii::t('integral','Cut Integral'),
@@ -51,19 +52,40 @@ class CutForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, employee_id, employee_name, alg_con, set_id, integral, images_url, remark, reject_not, apply_num, set_name, lcu, luu, lcd, lud','safe'),
+			array('id, employee_id, employee_name, activity_id, set_id, integral, images_url, remark, reject_not, apply_num, set_name, lcu, luu, lcd, lud','safe'),
 			array('set_id','required'),
 			array('apply_num','required'),
+			array('activity_id','required'),
+			array('activity_id','validateActivity'),
 			array('set_id','validateIntegral'),
             array('apply_num', 'numerical', 'min'=>1, 'integerOnly'=>true),
 		);
 	}
 
+	public function validateActivity($attribute, $params){
+        $row = Yii::app()->db->createCommand()->select("*")->from("gr_act_cut")
+            ->where("id=:id", array(':id'=>$this->activity_id))->queryRow();
+        if ($row){
+            $date = date("Y-m-d");
+            if(strtotime($date)<strtotime($row["start_time"])){
+                $message = Yii::t('integral','Cut activities').Yii::t("integral","Not at the");//未開始
+                $this->addError($attribute,$message);
+            }elseif (strtotime($date)>strtotime($row["end_time"])){
+                $message = Yii::t('integral','Cut activities').Yii::t("integral","Has ended");//已結束
+                $this->addError($attribute,$message);
+            }
+        }else{
+            $message = Yii::t('integral','Cut activities Name'). Yii::t('integral',' Did not find');
+            $this->addError($attribute,$message);
+        }
+    }
+
 	public function validateIntegral($attribute, $params){
         $rows = Yii::app()->db->createCommand()->select("integral_num,inventory")->from("gr_integral_cut")
             ->where("id=:id", array(':id'=>$this->set_id))->queryRow();
         if ($rows){
-            $num = IntegralCutList::getNowUserIntegralCut();
+            $num = IntegralCutView::getNowIntegral();
+            $num = $num['cut'];
             if(intval($num) < intval($rows["integral_num"])*intval($this->apply_num)){
                 $message = Yii::t('integral','Lack of integral');//積分不足
                 $this->addError($attribute,$message);
@@ -84,8 +106,8 @@ class CutForm extends CFormModel
 
     //积分删除
     public function validateDelete(){
-        $rows = Yii::app()->db->createCommand()->select()->from("gr_integral")
-            ->where('id=:id and state in (0,2) and alg_con = 1', array(':id'=>$this->id))->queryRow();
+        $rows = Yii::app()->db->createCommand()->select()->from("gr_gral_cut")
+            ->where('id=:id and state in (0,2)', array(':id'=>$this->id))->queryRow();
         if ($rows){
             return true; //允許刪除
         }
@@ -97,9 +119,9 @@ class CutForm extends CFormModel
         $city = Yii::app()->user->city();
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name")->from("gr_integral a")
+        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name")->from("gr_gral_cut a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
-            ->where("a.id=:id and a.alg_con = 1 and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
+            ->where("a.id=:id and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
 		if (count($rows) > 0)
 		{
 			foreach ($rows as $row)
@@ -107,7 +129,7 @@ class CutForm extends CFormModel
 				$this->id = $row['id'];
 				$this->employee_id = $row['employee_id'];
 				$this->employee_name = $row['employee_name'];
-				$this->alg_con = $row['alg_con'];
+				$this->activity_id = $row['activity_id'];
                 $this->set_id = $row['set_id'];
                 $this->set_name = IntegralCutForm::getIntegralCutNameToId($row['set_id']);
                 $this->integral = $row['integral'];
@@ -150,20 +172,17 @@ class CutForm extends CFormModel
         $staffId = Yii::app()->user->staff_id();
 		switch ($this->scenario) {
 			case 'delete':
-                $sql = "delete from gr_integral where id = :id and city IN ($city_allow)";
+                $sql = "delete from gr_gral_cut where id = :id and city IN ($city_allow)";
 				break;
 			case 'apply':
-				$sql = "insert into gr_integral(
-							employee_id, alg_con, set_id, integral, apply_num, remark, state, city, lcu
+				$sql = "insert into gr_gral_cut(
+							employee_id, activity_id, set_id, integral, apply_num, remark, state, city, lcu
 						) values (
-							:employee_id, :alg_con, :set_id, :integral, :apply_num, :remark, :state, :city, :lcu
+							:employee_id, :activity_id, :set_id, :integral, :apply_num, :remark, :state, :city, :lcu
 						)";
 				break;
             case 'audit':
-                $sql = "update gr_integral set
-							employee_id = :employee_id, 
-							alg_con = :alg_con, 
-							set_id = :set_id, 
+                $sql = "update gr_gral_cut set
 							integral = :integral,
 							apply_num = :apply_num,
 							remark = :remark,
@@ -181,8 +200,8 @@ class CutForm extends CFormModel
 			$command->bindParam(':id',$this->id,PDO::PARAM_INT);
 		if (strpos($sql,':employee_id')!==false)
 			$command->bindParam(':employee_id',$staffId,PDO::PARAM_STR);
-		if (strpos($sql,':alg_con')!==false)
-			$command->bindParam(':alg_con',$this->alg_con,PDO::PARAM_STR);
+		if (strpos($sql,':activity_id')!==false)
+			$command->bindParam(':activity_id',$this->activity_id,PDO::PARAM_STR);
 		if (strpos($sql,':set_id')!==false)
 			$command->bindParam(':set_id',$this->set_id,PDO::PARAM_INT);
 		if (strpos($sql,':apply_num')!==false)

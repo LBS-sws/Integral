@@ -73,7 +73,8 @@ return array(
     'Audit'=>'審核',
     'Exchange'=>'兌換',
     'Search'=>'查詢',
-    'Credit type allocation'=>'學分類型配置',
+    'Credit type allocation'=>'學分申請配置',
+    'Cut type allocation'=>'學分兌換配置',
     'Credit application'=>'學分申請',
     'Credits for'=>'學分兌換',
     'Credits search'=>'學分查詢',
@@ -85,6 +86,11 @@ return array(
     'Apply list'=>'申請列表',
     'Change list'=>'兌換列表',
     'Application for credit'=>'代申請學分',
+    'Credit activities'=>'學分活動',
+    'Cut activities'=>'兌換活動',
+    'Credits subsidiary List'=>'學分明細報表',
+    'Credits year List'=>'年度學分報表',
+    'Cut subsidiary List'=>'兌換明細報表',
     //沈超添加结束
 );
 ?>

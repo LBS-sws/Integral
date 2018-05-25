@@ -25,6 +25,7 @@ $this->pageTitle=Yii::app()->name . ' - Apply';
 <section class="content">
     <?php
     $search = array(
+        'activity_name',
         'integral',
         'city_name',
     );

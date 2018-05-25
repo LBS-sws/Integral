@@ -6,15 +6,11 @@ return array(
         'items'=>array(
             'Credit application'=>array(
                 'access'=>'DE01',
-                'url'=>'/integral/new',
+                'url'=>'/addIntegral/index',
             ),
             'Apply list'=>array(
                 'access'=>'DE02',
                 'url'=>'/integral/index',
-            ),
-            'Change list'=>array(
-                'access'=>'DE03',
-                'url'=>'/cut/index',
             ),
         ),
     ),
@@ -23,11 +19,15 @@ return array(
         'items'=>array(
             'Credits for'=>array(
                 'access'=>'EX01',
-                'url'=>'/integralCut/index',
+                'url'=>'/cutIntegral/index',
+            ),
+            'Change list'=>array(
+                'access'=>'EX02',
+                'url'=>'/cut/index',
             ),
         ),
     ),
-    'Search'=>array(
+/*    'Search'=>array(
         'access'=>'SR',
         'items'=>array(
             'Credits search'=>array(
@@ -43,13 +43,13 @@ return array(
                 'url'=>'/cutSearch/index',
             ),
         ),
-    ),
+    ),*/
     'Audit'=>array(
         'access'=>'GA',
         'items'=>array(
             'Credit review'=>array(
                 'access'=>'GA01',
-                'url'=>'/auditIntegral/add',
+                'url'=>'/auditAdd/index',
             ),
             'Exchange review'=>array(
                 'access'=>'GA02',
@@ -64,17 +64,39 @@ return array(
                 'access'=>'SS01',
                 'url'=>'/integralAdd/index',
             ),
+            'Cut type allocation'=>array(
+                'access'=>'SS04',
+                'url'=>'/integralCut/index',
+            ),
+            'Credit activities'=>array(
+                'access'=>'SS02',
+                'url'=>'/activityAdd/index',
+            ),
+            'Cut activities'=>array(
+                'access'=>'SS03',
+                'url'=>'/activityCut/index',
+            ),
         ),
     ),
-    /*
-        'Report'=>array(
-            'access'=>'ZY',
-            'items'=>array(
-                'Staff List'=>array(
-                    'access'=>'ZB01',
-                    'url'=>'#',
-                    'hidden'=>true,
-                ),
+    'Report'=>array(
+        'access'=>'YB',
+        'items'=>array(
+            'Credits subsidiary List'=>array(
+                'access'=>'YB02',
+                'url'=>'/report/creditslist',
             ),
-        ),*/
+            'Credits year List'=>array(
+                'access'=>'YB03',
+                'url'=>'/report/yearlist',
+            ),
+            'Cut subsidiary List'=>array(
+                'access'=>'YB04',
+                'url'=>'/report/cutlist',
+            ),
+            'Report Manager'=>array(
+                'access'=>'YB01',
+                'url'=>'/queue/index',
+            ),
+        ),
+    ),
 );

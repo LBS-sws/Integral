@@ -27,6 +27,7 @@ $this->pageTitle=Yii::app()->name . ' - Apply';
     $search = array(
         'integral',
         'apply_num',
+        'activity_name',
         'city_name',
     );
     $search_add_html="";

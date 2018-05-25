@@ -44,13 +44,6 @@ $this->pageTitle=Yii::app()->name . ' - Credits for';
                 'submit'=>Yii::app()->createUrl('integralCut/delete')));
             ?>
         <?php endif ?>
-        <?php if ($model->scenario!='new'): ?>
-            <?php
-            echo TbHtml::button('<span class="fa  fa-cube"></span> '.Yii::t('app','Exchange'), array(
-                    'class'=>'btnIntegralApply','data-id'=>$model->id)
-            );
-            ?>
-        <?php endif ?>
 	</div>
             <div class="btn-group pull-right" role="group">
                 <?php
@@ -110,22 +103,9 @@ $this->pageTitle=Yii::app()->name . ' - Credits for';
     'ronly'=>($model->scenario=='view'),
 ));
 ?>
-
-<?php $this->renderPartial('//site/integralApply',array(
-    'submit'=> Yii::app()->createUrl('integralCut/apply')
-));
-?>
 <?php
 
 $js = "
-        $('.btnIntegralApply').on('click',function () {
-            var tr = $(this).parents('tr:first');
-            $('#set_id').val('".$model->id."');
-            $('#integral_name').val('".$model->integral_name."');
-            $('#integral').val('".$model->integral_num."');
-            $('#integralApply').modal('show');
-            return false;
-        })
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 Script::genFileUpload($model,$form->id,'ICUT');
@@ -133,18 +113,6 @@ $js = Script::genReadonlyField();
 Yii::app()->clientScript->registerScript('readonlyClass',$js,CClientScript::POS_READY);
 ?>
 
-<script>
-    $(function () {
-        $(".btnIntegralApply").on("click",function () {
-            var $tr = $(this).parents("tr:first");
-            $("#set_id").val($(this).data("id"));
-            $("#integral_name").val($tr.find(".integral_name:first").text());
-            $("#integral").val($tr.find(".integral_num:first").text());
-            $('#integralApply').modal('show');
-            return false;
-        })
-    })
-</script>
 <?php $this->endWidget(); ?>
 
 

@@ -7,6 +7,9 @@ class IntegralAddForm extends CFormModel
 	public $integral_num;
 	public $integral_type;
 	public $s_remark;
+	public $year_sw=0;
+	public $year_num=0;
+	public $validity=1;
 
 	public function attributeLabels()
 	{
@@ -15,6 +18,9 @@ class IntegralAddForm extends CFormModel
             'integral_num'=>Yii::t('integral','Integral Num'),
             's_remark'=>Yii::t('integral','integral conditions'),
             'integral_type'=>Yii::t('integral','integral type'),
+            'year_sw'=>Yii::t('integral','Age limit'),
+            'year_num'=>Yii::t('integral','Limited number'),
+            'validity'=>Yii::t('integral','validity'),
 		);
 	}
 
@@ -24,11 +30,16 @@ class IntegralAddForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, integral_name,integral_num,integral_type,s_remark','safe'),
+			array('id, integral_name,integral_num,integral_type,s_remark,year_sw,year_num,validity','safe'),
             array('integral_type','required'),
             array('integral_name','required'),
             array('integral_num','required'),
-			array('integral_name','validateName'),
+            array('year_sw','required'),
+            array('validity','required'),
+            array('year_num','validateYearNum'),
+            array('year_sw', 'in', 'range' => array(0, 1)),
+            array('validity', 'in', 'range' => array(1,5)),
+            array('integral_name','validateName'),
             array('integral_num', 'numerical', 'min'=>0, 'integerOnly'=>true),
 		);
 	}
@@ -43,6 +54,20 @@ class IntegralAddForm extends CFormModel
         if(count($rows)>0){
             $message = Yii::t('integral','the name of already exists');
             $this->addError($attribute,$message);
+        }
+	}
+
+	public function validateYearNum($attribute, $params){
+	    if($this->year_sw == 1){
+	        if(!is_numeric($this->year_num)){
+                $message = "限制次数只能为数字";
+                $this->addError($attribute,$message);
+            }else{
+	            if(intval($this->year_num)!=floatval($this->year_num)){
+                    $message = "限制次数只能为整數";
+                    $this->addError($attribute,$message);
+                }
+            }
         }
 	}
 
@@ -67,6 +92,9 @@ class IntegralAddForm extends CFormModel
                 $this->integral_num = $row['integral_num'];
                 $this->integral_type = $row['integral_type'];
                 $this->s_remark = $row['s_remark'];
+                $this->year_sw = $row['year_sw'];
+                $this->year_num = $row['year_num'];
+                $this->validity = $row['validity'];
                 break;
 			}
 		}
@@ -89,7 +117,7 @@ class IntegralAddForm extends CFormModel
 
     //刪除驗證
     public function deleteValidate(){
-        $rs0 = Yii::app()->db->createCommand()->select()->from("gr_integral")->where("alg_con=0 and set_id=:set_id",array(":set_id"=>$this->id))->queryAll();
+        $rs0 = Yii::app()->db->createCommand()->select()->from("gr_gral_add")->where("alg_con=0 and set_id=:set_id",array(":set_id"=>$this->id))->queryAll();
         if($rs0){
             return false;
         }else{
@@ -119,9 +147,9 @@ class IntegralAddForm extends CFormModel
                 break;
             case 'new':
                 $sql = "insert into gr_integral_add(
-							integral_name,integral_num, integral_type, s_remark, lcu, city
+							integral_name,integral_num, integral_type, s_remark, year_sw, year_num, validity, lcu, city
 						) values (
-							:integral_name,:integral_num, :integral_type, :s_remark, :lcu, :city
+							:integral_name,:integral_num, :integral_type, :s_remark, :year_sw, :year_num, :validity, :lcu, :city
 						)";
                 break;
             case 'edit':
@@ -130,6 +158,9 @@ class IntegralAddForm extends CFormModel
 							integral_num = :integral_num, 
 							integral_type = :integral_type, 
 							s_remark = :s_remark, 
+							year_sw = :year_sw, 
+							year_num = :year_num, 
+							validity = :validity, 
 							luu = :luu
 						where id = :id
 						";
@@ -152,6 +183,12 @@ class IntegralAddForm extends CFormModel
             $command->bindParam(':s_remark',$this->s_remark,PDO::PARAM_STR);
         if (strpos($sql,':integral_num')!==false)
             $command->bindParam(':integral_num',$this->integral_num,PDO::PARAM_INT);
+        if (strpos($sql,':year_sw')!==false)
+            $command->bindParam(':year_sw',$this->year_sw,PDO::PARAM_INT);
+        if (strpos($sql,':year_num')!==false)
+            $command->bindParam(':year_num',$this->year_num,PDO::PARAM_INT);
+        if (strpos($sql,':validity')!==false)
+            $command->bindParam(':validity',$this->validity,PDO::PARAM_INT);
 
         if (strpos($sql,':city')!==false)
             $command->bindParam(':city',$city,PDO::PARAM_STR);

@@ -11,7 +11,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 <section class="content-header">
 	<h1>
-		<strong><?php echo Yii::t('app','Credits for'); ?></strong>
+		<strong><?php echo Yii::t('app','Cut type allocation'); ?></strong>
 	</h1>
 <!--
 	<ol class="breadcrumb">
@@ -28,32 +28,24 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
             <div class="btn-group" role="group">
                 <?php
                 //var_dump(Yii::app()->session['rw_func']);
-                if (Yii::app()->user->validRWFunction('EX01'))
+                if (Yii::app()->user->validRWFunction('SS04'))
                     echo TbHtml::button('<span class="fa fa-file-o"></span> '.Yii::t('misc','Add'), array(
                         'submit'=>Yii::app()->createUrl('integralCut/new'),
                     ));
                 ?>
             </div>
-            <div class="btn-group pull-right text-right" role="group">
-                <?php
-                $listArrIntegral = $model->getNowUserIntegralList();
-                echo  '<span class="text-success">'.date("Y")."年".Yii::t('integral','Sum Integral')."：".$listArrIntegral["sumIntegral"]."</span><br>";
-                echo  '<span class="text-success">'.date("Y")."年".Yii::t('integral','Available integral')."：".$listArrIntegral["integral"]."</span>";
-
-                ?>
-            </div>
         </div>
     </div>
 	<?php $this->widget('ext.layout.ListPageWidget', array(
-			'title'=>Yii::t('integral','Integral Cut List'),
-			'model'=>$model,
-				'viewhdr'=>'//integralCut/_listhdr',
-				'viewdtl'=>'//integralCut/_listdtl',
-				'search'=>array(
-							'integral_name',
-							'integral_num',
-						),
-		));
+        'title'=>Yii::t('integral','Integral Cut List'),
+        'model'=>$model,
+        'viewhdr'=>'//integralCut/_listhdr',
+        'viewdtl'=>'//integralCut/_listdtl',
+        'search'=>array(
+            'integral_name',
+            'integral_num',
+        ),
+    ));
 	?>
 </section>
 <?php
@@ -64,12 +56,6 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 ?>
 <?php $this->endWidget(); ?>
 
-<form class="form-horizontal MultiFile-intercepted" action="" method="post">
-<?php $this->renderPartial('//site/integralApply',array(
-        'submit'=> Yii::app()->createUrl('integralCut/apply')
-));
-?>
-</form>
 <?php
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);

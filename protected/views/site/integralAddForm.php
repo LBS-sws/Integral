@@ -1,5 +1,12 @@
 
 <div class="form-group">
+    <?php echo $form->labelEx($model,'activity_id',array('class'=>"col-sm-2 control-label")); ?>
+    <div class="col-sm-3">
+        <?php echo $form->hiddenField($model, 'activity_id'); ?>
+        <?php echo TbHtml::textField("test",ActivityAddForm::getActivityNameToId($model->activity_id),array("class"=>"form-control","readonly"=>true));?>
+    </div>
+</div>
+<div class="form-group">
     <?php echo $form->labelEx($model,'integral_type',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
         <?php echo $form->dropDownList($model, 'integral_type',IntegralAddForm::getIntegralTypeAll(),

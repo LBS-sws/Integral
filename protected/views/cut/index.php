@@ -23,6 +23,16 @@ $this->pageTitle=Yii::app()->name . ' - Apply';
 </section>
 
 <section class="content">
+    <div class="box">
+        <div class="box-body">
+            <div class="btn-group pull-left" role="group">
+                <span class="text-success"><?php echo date("Y")."年".Yii::t("integral","All integral")."：".$cutIntegral["sum"];?></span>
+            </div>
+            <div class="btn-group pull-right" role="group">
+                <span class="text-success"><?php echo date("Y")."年".Yii::t("integral","Available integral")."：".$cutIntegral["cut"];?></span>
+            </div>
+        </div>
+    </div>
     <?php
     $search = array(
         'integral',

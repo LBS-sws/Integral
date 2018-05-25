@@ -13,6 +13,7 @@ class AuditCutList extends CListPageModel
 	{
 		return array(	
 			'id'=>Yii::t('integral','ID'),
+            'activity_name'=>Yii::t('integral','Cut activities Name'),
             'employee_id'=>Yii::t('integral','Employee Name'),
             'employee_name'=>Yii::t('integral','Employee Name'),
             'set_id'=>Yii::t('integral','Cut Name'),
@@ -39,20 +40,25 @@ class AuditCutList extends CListPageModel
         $uid = Yii::app()->user->id;
 		$staffId = Yii::app()->user->staff_id();//
         $city_allow = Yii::app()->user->city_allow();
-		$sql1 = "select a.*,b.integral_name,d.name AS employee_name,d.city AS s_city from gr_integral a
+		$sql1 = "select a.*,e.name AS activity_name,b.integral_name,d.name AS employee_name,d.city AS s_city from gr_gral_cut a
+                LEFT JOIN gr_act_cut e ON a.activity_id = e.id
                 LEFT JOIN gr_integral_cut b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.alg_con = 1 AND a.state = 1 
+                where a.employee_id='$staffId' AND a.state = 1 
 			";
-        $sql2 = "select count(a.id) from gr_integral a
+        $sql2 = "select count(a.id) from gr_gral_cut a
+                LEFT JOIN gr_act_cut e ON a.activity_id = e.id
                 LEFT JOIN gr_integral_cut b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.alg_con = 1 AND a.state = 1  
+                where a.employee_id='$staffId' AND a.state = 1  
 			";
 		$clause = "";
 		if (!empty($this->searchField) && !empty($this->searchValue)) {
 			$svalue = str_replace("'","\'",$this->searchValue);
 			switch ($this->searchField) {
+                case 'activity_name':
+                    $clause .= General::getSqlConditionClause('e.name',$svalue);
+                    break;
 				case 'employee_name':
 					$clause .= General::getSqlConditionClause('d.employee_name',$svalue);
 					break;
@@ -104,6 +110,7 @@ class AuditCutList extends CListPageModel
 				$this->attr[] = array(
 					'id'=>$record['id'],
 					'employee_name'=>$record['employee_name'],
+                    'activity_name'=>$record['activity_name'],
 					'integral_name'=>$record['integral_name'],
 					'integral'=>$record['integral'],
 					'apply_num'=>$record['apply_num'],

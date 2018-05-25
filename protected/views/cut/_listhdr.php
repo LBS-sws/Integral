@@ -1,6 +1,11 @@
 <tr>
 	<th></th>
 	<th>
+		<?php echo TbHtml::link($this->getLabelName('activity_name').$this->drawOrderArrow('e.name'),'#',$this->createOrderLink('cut-list','e.name'))
+			;
+		?>
+	</th>
+	<th>
 		<?php echo TbHtml::link($this->getLabelName('employee_id').$this->drawOrderArrow('a.employee_id'),'#',$this->createOrderLink('cut-list','a.employee_id'))
 			;
 		?>

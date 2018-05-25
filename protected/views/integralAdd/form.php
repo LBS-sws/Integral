@@ -77,6 +77,30 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                 </div>
             </div>
             <div class="form-group">
+                <?php echo $form->labelEx($model,'year_sw',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->dropDownList($model, 'year_sw',array(Yii::t("integral","off"),Yii::t("integral","on")),
+                        array('readonly'=>($model->scenario=='view'),'id'=>'yearSw')
+                    ); ?>
+                </div>
+            </div>
+            <div class="form-group" style="display: none;">
+                <?php echo $form->labelEx($model,'year_num',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->numberField($model, 'year_num',
+                        array('readonly'=>($model->scenario=='view'),'id'=>'yearNum')
+                    ); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'validity',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->dropDownList($model, 'validity',array(1=>1,5=>5),
+                        array('readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+            </div>
+            <div class="form-group">
                 <?php echo $form->labelEx($model,'s_remark',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-6">
                     <?php echo $form->textArea($model, 's_remark',
@@ -91,6 +115,16 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 
 <?php
+$js = "
+        $('#yearSw').on('change',function () {
+            if($(this).val()==1){
+                $('#yearNum').parents('.form-group:first').slideDown(100);
+            }else{
+                $('#yearNum').parents('.form-group:first').slideUp(100);
+            }
+        }).trigger('change');
+";
+Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 $js = Script::genReadonlyField();
 Yii::app()->clientScript->registerScript('readonlyClass',$js,CClientScript::POS_READY);
 ?>

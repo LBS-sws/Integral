@@ -44,6 +44,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 				'search'=>array(
 							'integral_name',
 							'integral_num',
+							'integral_num',
 						),
 		));
 	?>

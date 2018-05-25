@@ -18,11 +18,11 @@ class QueueList extends CListPageModel
 	{
 		$uid = Yii::app()->user->id;
 		$sql1 = "select a.*
-				from opr_queue a 
+				from gr_queue a 
 				where a.username='".$uid."' 
 			";
 		$sql2 = "select count(a.id)
-				from opr_queue a 
+				from gr_queue a 
 				where a.username='".$uid."' 
 			";
 		$clause = "";

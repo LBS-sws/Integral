@@ -34,17 +34,15 @@ $this->pageTitle=Yii::app()->name . ' - Integral Form';
 		?>
 
         <?php if ($model->scenario!='view'): ?>
-            <?php if ($model->scenario=='new'||$model->state == 0||$model->state == 2): ?>
+            <?php if ($model->state == 0||$model->state == 2): ?>
                 <?php echo TbHtml::button('<span class="fa fa-upload"></span> '.Yii::t('integral','For Audit'), array(
                     'submit'=>Yii::app()->createUrl('cut/audit')));
                 ?>
-            <?php endif ?>
-            <?php if ($model->scenario=='edit'&& $model->state == 0): ?>
                 <?php echo TbHtml::button('<span class="fa fa-remove"></span> '.Yii::t('misc','Delete'), array(
                         'name'=>'btnDelete','id'=>'btnDelete','data-toggle'=>'modal','data-target'=>'#removedialog',)
                 );
                 ?>
-            <?php endif; ?>
+            <?php endif ?>
         <?php endif ?>
 	</div>
 	</div></div>

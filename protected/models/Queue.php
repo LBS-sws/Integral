@@ -16,6 +16,6 @@ class Queue extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'opr_queue';
+		return 'gr_queue';
 	}
 }

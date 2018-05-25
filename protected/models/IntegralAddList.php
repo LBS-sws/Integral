@@ -9,6 +9,7 @@ class IntegralAddList extends CListPageModel
             'integral_num'=>Yii::t('integral','Integral Num'),
             's_remark'=>Yii::t('integral','integral conditions'),
             'integral_type'=>Yii::t('integral','integral type'),
+            'validity'=>Yii::t('integral','validity'),
 		);
 	}
 	
@@ -36,6 +37,9 @@ class IntegralAddList extends CListPageModel
 				case 'integral_type':
 					$clause .= General::getSqlConditionClause('integral_type', $svalue);
 					break;
+				case 'validity':
+					$clause .= General::getSqlConditionClause('validity', $svalue);
+					break;
 			}
 		}
 		
@@ -60,6 +64,7 @@ class IntegralAddList extends CListPageModel
 						'id'=>$record['id'],
 						'integral_name'=>$record['integral_name'],
 						'integral_num'=>$record['integral_num'],
+						'validity'=>$record['validity'],
 						'integral_type'=>$this->getIntegralTypeToNum($record['integral_type']),
 					);
 			}

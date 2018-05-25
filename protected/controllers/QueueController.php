@@ -43,7 +43,7 @@ class QueueController extends Controller
 	public function actionView($index) {
 		$uid = Yii::app()->user->id;
 
-		$sql = "select rpt_content, rpt_type from opr_queue where id=:id and username=:uid";
+		$sql = "select rpt_content, rpt_type from gr_queue where id=:id and username=:uid";
 		$queue = Queue::model()->findBySql($sql, array(':id'=>$index,':uid'=>$uid));
 		if ($queue!==null) {
 			$file = $queue->rpt_content;
@@ -57,7 +57,7 @@ class QueueController extends Controller
 				default: $ext = '.tmp'; $ctype = 'multipart/form-data';
 			}
 			
-			$sql = "select param_value from opr_queue_param where queue_id=:qid and param_field='RPT_ID'";
+			$sql = "select param_value from gr_queue_param where queue_id=:qid and param_field='RPT_ID'";
 			$qparam = QueueParam::model()->findBySql($sql, array(':qid'=>$index));
 			$fname = ($qparam!==null) ? strtolower($qparam->param_value) : 'temp';
 
@@ -80,8 +80,8 @@ class QueueController extends Controller
 	public function actionDownloadfile($index) {
 		$uid = Yii::app()->user->id;
 
-		$sql = "select a.rpt_content, a.rpt_type from opr_queue a where a.id=".$index." and (a.username='".$uid."'
-				or exists(select b.username from opr_queue_user b where b.queue_id=a.id and b.username='".$uid."'))
+		$sql = "select a.rpt_content, a.rpt_type from gr_queue a where a.id=".$index." and (a.username='".$uid."'
+				or exists(select b.username from gr_queue_user b where b.queue_id=a.id and b.username='".$uid."'))
 			";
 		$queue = Yii::app()->db->createCommand($sql)->queryAll();
 		if (!empty($queue)) {
@@ -99,7 +99,7 @@ class QueueController extends Controller
 				default: $ext = '.tmp'; $ctype = 'multipart/form-data';
 			}
 			
-			$sql = "select param_value from opr_queue_param where queue_id=:qid and param_field='RPT_ID'";
+			$sql = "select param_value from gr_queue_param where queue_id=:qid and param_field='RPT_ID'";
 			$qparam = QueueParam::model()->findBySql($sql, array(':qid'=>$index));
 			$fname = ($qparam!==null) ? strtolower($qparam->param_value) : 'temp';
 
@@ -124,13 +124,13 @@ class QueueController extends Controller
 		$uid = Yii::app()->user->id;
 		$index = $_GET['index'];
 		if (!empty($index) && !empty($uid)) {
-			$sql = "select username from swo_queue where id=".$index;
+			$sql = "select username from gr_queue where id=".$index;
 			$rows = Yii::app()->db->createCommand($sql)->queryAll();
 			if (count($rows)>0) {
 				if ($rows['username']==$uid) {
 					$rtn = true;
 				} else {
-					$sql = "select username from opr_queue_user where queue_id=".$index." and username='".$uid."'";
+					$sql = "select username from gr_queue_user where queue_id=".$index." and username='".$uid."'";
 					$rows = Yii::app()->db->createCommand($sql)->queryAll();
 					$rtn =(count($rows)>0);
 				}

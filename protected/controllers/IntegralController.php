@@ -26,16 +26,12 @@ class IntegralController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('new','edit','save','audit','delete','fileupload','fileRemove'),
+                'actions'=>array('edit','save','audit','delete','fileupload','fileRemove'),
                 'expression'=>array('IntegralController','allowReadWrite'),
             ),
-/*            array('allow',
-                'actions'=>array('fileDownload'),
-                'expression'=>array('IntegralController','allowReadOnly'),
-            ),*/
             array('allow',
-                'actions'=>array('index','view','fileDownload','test'),
-                'expression'=>array('IntegralController','allowAddReadOnly'),
+                'actions'=>array('index','view','fileDownload'),
+                'expression'=>array('IntegralController','allowReadOnly'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
@@ -44,14 +40,10 @@ class IntegralController extends Controller
     }
 
     public static function allowReadWrite() {
-        return Yii::app()->user->validRWFunction('DE01');
+        return Yii::app()->user->validRWFunction('DE02');
     }
 
     public static function allowReadOnly() {
-        return Yii::app()->user->validFunction('DE01');
-    }
-
-    public static function allowAddReadOnly() {
         return Yii::app()->user->validFunction('DE02');
     }
 
@@ -198,7 +190,7 @@ class IntegralController extends Controller
     }
 
     public function actionFileDownload($mastId, $docId, $fileId, $doctype) {
-        $sql = "select city from gr_integral where id = $docId";
+        $sql = "select city from gr_gral_add where id = $docId";
         $row = Yii::app()->db->createCommand($sql)->queryRow();
         if ($row!==false) {
             $citylist = Yii::app()->user->city_allow();
@@ -212,15 +204,5 @@ class IntegralController extends Controller
         } else {
             throw new CHttpException(404,'Record not found.');
         }
-    }
-
-    public function actionTest(){
-        $test = new FormulaParser('If  (A<>0, iF( A>=1,IF(A<=1, ceil(ceil(1.22)), ceil(300.5)), 200), if(A=1, 100, 200))');
-        $str = $test->getSourceStr();
-        var_dump($str);
-        echo "<br>";
-        $str = $test->getResetStr();
-        var_dump($str);
-        die();
     }
 }

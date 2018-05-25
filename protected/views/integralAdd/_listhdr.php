@@ -15,4 +15,9 @@
         ;
         ?>
     </th>
+    <th>
+        <?php echo TbHtml::link($this->getLabelName('validity').$this->drawOrderArrow('validity'),'#',$this->createOrderLink('integralAdd-list','validity'))
+        ;
+        ?>
+    </th>
 </tr>

@@ -90,13 +90,7 @@ class CGeneral {
 	public static function getCityListWithNoDescendant($city_allow='') {
 		$list = array();
 		$suffix = Yii::app()->params['envSuffix'];
-		$clause = !empty($city_allow) ? "and a.code in ($city_allow)" : "";
-		$sql = "select distinct a.code, a.name from security$suffix.sec_city a 
-					left outer join security$suffix.sec_city b on a.code=b.region 
-					where b.code is null 
-					$clause 
-					order by a.code
-			";
+        $sql = "select code, name from security$suffix.sec_city WHERE code in ($city_allow) order by name";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 		if (count($rows) > 0) {
 			foreach ($rows as $row) {

@@ -25,8 +25,12 @@ class IntegralCutController extends Controller
                 'expression'=>array('IntegralCutController','allowReadWrite'),
             ),
             array('allow',
-                'actions'=>array('index','view','apply','fileDownload'),
+                'actions'=>array('index'),
                 'expression'=>array('IntegralCutController','allowReadOnly'),
+            ),
+            array('allow',
+                'actions'=>array('view','fileDownload'),
+                'expression'=>array('IntegralCutController','allowRead'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
@@ -35,11 +39,15 @@ class IntegralCutController extends Controller
     }
 
     public static function allowReadWrite() {
-        return Yii::app()->user->validRWFunction('EX01');
+        return Yii::app()->user->validRWFunction('SS04');
     }
 
     public static function allowReadOnly() {
-        return Yii::app()->user->validFunction('EX01');
+        return Yii::app()->user->validFunction('SS04');
+    }
+
+    public static function allowRead() {
+        return Yii::app()->user->validFunction('SS04')||Yii::app()->user->validFunction('EX02')||Yii::app()->user->validFunction('GA02');
     }
 	public function actionIndex($pageNum=0) 
 	{
@@ -72,23 +80,6 @@ class IntegralCutController extends Controller
 				$message = CHtml::errorSummary($model);
 				Dialog::message(Yii::t('dialog','Validation Message'), $message);
 				$this->render('form',array('model'=>$model,));
-			}
-		}
-	}
-
-	public function actionApply()
-	{
-		if (isset($_POST['integralCutForm'])) {
-			$model = new CutForm('apply');
-			$model->attributes = $_POST['integralCutForm'];
-			if ($model->validate()) {
-				$model->saveData();
-				Dialog::message(Yii::t('dialog','Information'), Yii::t('integral','The application is successful, please wait for approval.'));
-				$this->redirect(Yii::app()->createUrl('integralCut/index'));
-			} else {
-				$message = CHtml::errorSummary($model);
-				Dialog::message(Yii::t('dialog','Validation Message'), $message);
-                $this->redirect(Yii::app()->createUrl('integralCut/index'));
 			}
 		}
 	}

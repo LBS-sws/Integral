@@ -26,7 +26,7 @@ class AuditCutController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('edit','audit','reject'),
+                'actions'=>array('edit','audit','reject','test'),
                 'expression'=>array('AuditCutController','allowReadWrite'),
             ),
             array('allow',
@@ -115,6 +115,18 @@ class AuditCutController extends Controller
                 $this->redirect(Yii::app()->createUrl('auditCut/edit',array('index'=>$model->id)));
             }
         }
+    }
+
+    public function actionTest()
+    {
+        $model = new RptYearList();
+        $model->criteria=array(
+            'YEAR'=>'2018',
+            'CITY'=>'SH',
+            'STAFFS'=>'',
+        );
+        $model->retrieveData();
+        var_dump($model->data);
     }
 
 }

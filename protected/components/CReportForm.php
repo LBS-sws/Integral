@@ -160,7 +160,7 @@ class CReportForm extends CFormModel
 		$connection = Yii::app()->db;
 		$transaction=$connection->beginTransaction();
 		try {
-			$sql = "insert into opr_queue (rpt_desc, req_dt, username, status, rpt_type)
+			$sql = "insert into gr_queue (rpt_desc, req_dt, username, status, rpt_type)
 						values(:rpt_desc, :req_dt, :username, 'P', :rpt_type)
 					";
 			$command=$connection->createCommand($sql);
@@ -175,7 +175,7 @@ class CReportForm extends CFormModel
 			$command->execute();
 			$qid = Yii::app()->db->getLastInsertID();
 	
-			$sql = "insert into opr_queue_param (queue_id, param_field, param_value)
+			$sql = "insert into gr_queue_param (queue_id, param_field, param_value)
 						values(:queue_id, :param_field, :param_value)
 					";
 			foreach ($data as $key=>$value) {
@@ -190,7 +190,7 @@ class CReportForm extends CFormModel
 			}
 
 			if ($this->multiuser) {
-				$sql = "insert into opr_queue_user (queue_id, username)
+				$sql = "insert into gr_queue_user (queue_id, username)
 						values(:queue_id, :username)
 					";
 

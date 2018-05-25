@@ -67,5 +67,27 @@ return array(
     'The employee can only import once every year. If there are multiple data, please combine the credits. (prevent repeated imports)' => '员工每个年度只能导入一次，如有多条数据，请合并学分。（防止重复导入）',
     'overdue'=>'过期',
 
+    //2018-05-07
+    'Age limit'=>'年限限制',
+    'Limited number'=>'限制次数',
+    'validity'=>'有效期（年）',
+    'on'=>'有',
+    'off'=>'无',
+    'Start time'=>'开始时间',
+    'End time'=>'结束时间',
+    'Credit activities Name'=>'学分活动名称',
+    'Credit activities List'=>'学分活动列表',
+    'Credit activities Form'=>'学分活动表单',
+    'Cut activities Name'=>'兑换活动名称',
+    'Cut activities List'=>'兑换活动列表',
+    'Cut activities Form'=>'兑换活动表单',
+    'Not at the'=>'未开始',
+    'Has ended'=>'已结束',
+    'ongoing'=>'进行中',
+    'Staffs'=>'员工',
+    'activity'=>'活动',
+    'year'=>'年',
+    'Cut Integral Sum'=>'扣除总积分',
+
 );
 ?>
