@@ -27,12 +27,12 @@ return array(
             ),
         ),
     ),
-/*    'Search'=>array(
+    'Search'=>array(
         'access'=>'SR',
         'items'=>array(
             'Credits search'=>array(
                 'access'=>'SR01',
-                'url'=>'/integralSearch/index',
+                'url'=>'/addSearch/index',
             ),
             'Total credit search'=>array(
                 'access'=>'SR02',
@@ -43,7 +43,7 @@ return array(
                 'url'=>'/cutSearch/index',
             ),
         ),
-    ),*/
+    ),
     'Audit'=>array(
         'access'=>'GA',
         'items'=>array(

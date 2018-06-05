@@ -3,7 +3,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 ?>
 
 <?php $form=$this->beginWidget('TbActiveForm', array(
-'id'=>'integralAdd-list',
+'id'=>'sumSearch-list',
 'enableClientValidation'=>true,
 'clientOptions'=>array('validateOnSubmit'=>true,),
 'layout'=>TbHtml::FORM_LAYOUT_INLINE,
@@ -11,7 +11,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 <section class="content-header">
 	<h1>
-		<strong><?php echo Yii::t('app','Credit type allocation'); ?></strong>
+		<strong><?php echo Yii::t('app','Total credit search'); ?></strong>
 	</h1>
 <!--
 	<ol class="breadcrumb">
@@ -24,30 +24,29 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 <section class="content">
     <div class="box">
-        <div class="box-body">
-            <div class="btn-group" role="group">
-                <?php
-                //var_dump(Yii::app()->session['rw_func']);
-                if (Yii::app()->user->validRWFunction('SS01'))
-                    echo TbHtml::button('<span class="fa fa-file-o"></span> '.Yii::t('misc','Add'), array(
-                        'submit'=>Yii::app()->createUrl('integralAdd/new'),
-                    ));
-                ?>
-            </div>
-        </div>
     </div>
-	<?php $this->widget('ext.layout.ListPageWidget', array(
-			'title'=>Yii::t('integral','Integral Add List'),
-			'model'=>$model,
-				'viewhdr'=>'//integralAdd/_listhdr',
-				'viewdtl'=>'//integralAdd/_listdtl',
-				'search'=>array(
-							'integral_name',
-							'integral_num',
-							's_remark',
-						),
-		));
-	?>
+    <?php
+    $search = array(
+        'activity_name',
+        'integral',
+        'city_name',
+        'employee_name',
+    );
+    $search_add_html="";
+    $modelName = get_class($model);
+    $search_add_html .= TbHtml::dropDownList($modelName.'[year]',$model->year,ReportY03Form::getYearList(),array("class"=>"form-control"));
+
+    $this->widget('ext.layout.ListPageWidget', array(
+        'title'=>Yii::t('integral','Credit list'),
+        'model'=>$model,
+        'viewhdr'=>'//sumSearch/_listhdr',
+        'viewdtl'=>'//sumSearch/_listdtl',
+        'gridsize'=>'24',
+        'height'=>'600',
+        'search_add_html'=>$search_add_html,
+        'search'=>$search,
+    ));
+    ?>
 </section>
 <?php
 	echo $form->hiddenField($model,'pageNum');

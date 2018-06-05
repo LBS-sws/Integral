@@ -89,5 +89,10 @@ return array(
     'year'=>'年',
     'Cut Integral Sum'=>'扣除总积分',
 
+    //2018-06-01
+    'Credit list'=>'学分列表',
+    'effect'=>'有效',
+
+
 );
 ?>

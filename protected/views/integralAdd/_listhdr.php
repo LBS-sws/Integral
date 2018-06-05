@@ -20,4 +20,9 @@
         ;
         ?>
     </th>
+    <th>
+        <?php echo TbHtml::link($this->getLabelName('s_remark').$this->drawOrderArrow('s_remark'),'#',$this->createOrderLink('integralAdd-list','s_remark'))
+        ;
+        ?>
+    </th>
 </tr>

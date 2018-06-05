@@ -47,7 +47,7 @@ class IntegralCutController extends Controller
     }
 
     public static function allowRead() {
-        return Yii::app()->user->validFunction('SS04')||Yii::app()->user->validFunction('EX02')||Yii::app()->user->validFunction('GA02');
+        return Yii::app()->user->validFunction('SS04')||Yii::app()->user->validFunction('EX02')||Yii::app()->user->validFunction('GA02')||Yii::app()->user->validFunction('SR03');
     }
 	public function actionIndex($pageNum=0) 
 	{
