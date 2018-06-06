@@ -44,13 +44,13 @@ class AuditCutList extends CListPageModel
                 LEFT JOIN gr_act_cut e ON a.activity_id = e.id
                 LEFT JOIN gr_integral_cut b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.state = 1 
+                where (d.city IN ($city_allow) AND a.state = 1) 
 			";
         $sql2 = "select count(a.id) from gr_gral_cut a
                 LEFT JOIN gr_act_cut e ON a.activity_id = e.id
                 LEFT JOIN gr_integral_cut b ON a.set_id = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where a.employee_id='$staffId' AND a.state = 1  
+                where (d.city IN ($city_allow) AND a.state = 1) 
 			";
 		$clause = "";
 		if (!empty($this->searchField) && !empty($this->searchValue)) {
