@@ -1,7 +1,7 @@
-<tr class='clickable-row <?php echo $this->record['style']; ?>' data-href='<?php echo $this->getLink('DE03', 'cut/edit', 'cut/view', array('index'=>$this->record['id']));?>'>
+<tr class='clickable-row <?php echo $this->record['style']; ?>' data-href='<?php echo $this->getLink('EX02', 'cut/edit', 'cut/view', array('index'=>$this->record['id']));?>'>
 
 
-	<td><?php echo $this->drawEditButton('DE03', 'cut/edit', 'edit', array('index'=>$this->record['id'])); ?></td>
+	<td><?php echo $this->drawEditButton('EX02', 'cut/edit', 'edit', array('index'=>$this->record['id'])); ?></td>
 
 
 
