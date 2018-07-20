@@ -3,28 +3,24 @@
 
 class ReportY02Form extends CReportForm
 {
-	public $activity;
 	public $staffs;
 	public $staffs_desc;
 	
 	protected function labelsEx() {
 		return array(
 				'staffs'=>Yii::t('integral','Staffs'),
-				'activity'=>Yii::t('integral','Credit activities Name'),
 			);
 	}
 	
 	protected function rulesEx() {
         return array(
-            array('city,staffs,activity, staffs_desc','safe'),
-            array('activity','required'),
+            array('city,staffs,start_dt,end_dt, staffs_desc','safe'),
         );
 	}
 	
 	protected function queueItemEx() {
 		return array(
 				'CITY'=>$this->city,
-				'ACTIVITY'=>$this->activity,
 				'STAFFS'=>$this->staffs,
 				'STAFFSDESC'=>$this->staffs_desc,
 			);
@@ -34,8 +30,9 @@ class ReportY02Form extends CReportForm
 		$this->id = 'RptCreditsList';
 		$this->name = Yii::t('app','Credits subsidiary List');
 		$this->format = 'EXCEL';
-		$this->fields = 'city,activity,staffs,staffs_desc';
-		$this->activity = '';
+		$this->fields = 'city,start_dt,end_dt,staffs,staffs_desc';
+        $this->start_dt = date("Y/01/01");
+        $this->end_dt = date("Y/12/31");
 		$this->city = Yii::app()->user->city();
 		$this->staffs = '';
 		$this->staffs_desc = Yii::t('misc','All');

@@ -14,7 +14,9 @@ class SumSearchList extends CListPageModel
             'id'=>Yii::t('integral','ID'),
             'employee_id'=>Yii::t('integral','Employee Name'),
             'employee_name'=>Yii::t('integral','Employee Name'),
-            'integral'=>Yii::t('integral','Integral Num'),
+            'year'=>Yii::t('integral','particular year'),
+            'start_num'=>Yii::t('integral','sum credit num'),
+            'end_num'=>Yii::t('integral','effect credit num'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
         );
@@ -30,21 +32,14 @@ class SumSearchList extends CListPageModel
     public function retrieveDataByPage($pageNum=1)
     {
         $suffix = Yii::app()->params['envSuffix'];
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-        $staffId = Yii::app()->user->staff_id();//
         $city_allow = Yii::app()->user->city_allow();
-        $sql1 = "select d.name AS employee_name,d.city AS s_city,SUM(a.integral) AS num from gr_gral_add a
-                LEFT JOIN gr_act_add e ON a.activity_id = e.id
-                LEFT JOIN gr_integral_add b ON a.set_id = b.id
+        $sql1 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) AND a.state = 3 
+                where d.city IN ($city_allow) 
 			";
-        $sql2 = "select count(a.id) from gr_gral_add a
-                LEFT JOIN gr_act_add e ON a.activity_id = e.id
-                LEFT JOIN gr_integral_add b ON a.set_id = b.id
+        $sql2 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) AND a.state = 3 
+                where d.city IN ($city_allow) 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {
@@ -60,8 +55,10 @@ class SumSearchList extends CListPageModel
         }
         if (!empty($this->year)) {
             $year = str_replace("'","\'",$this->year);
-            $yearOld = intval($year)-4;
-            $clause .= " and ((a.lcd>='$year-01-01 00:00:00' and a.lcd<='$year-12-31 23:59:59' and b.validity=1)or(a.lcd>='$yearOld-01-01 00:00:00' and a.lcd<='$year-12-31 23:59:59' and b.validity=5)) ";
+            if(!is_numeric($year)){
+                $year = date("Y");
+            }
+            $clause .= " and a.year = '$year' ";
         }
 
         $order = "";
@@ -69,10 +66,10 @@ class SumSearchList extends CListPageModel
             $order .= " order by ".$this->orderField." ";
             if ($this->orderType=='D') $order .= "desc ";
         } else
-            $order = " order by num desc";
+            $order = " order by end_num desc";
 
 
-        $group = "GROUP BY a.employee_id ";
+        $group = "GROUP BY a.employee_id,a.year ";
 
         $sql = $sql1.$clause.$group;
         $count = Yii::app()->db->createCommand($sql)->queryAll();
@@ -92,7 +89,9 @@ class SumSearchList extends CListPageModel
             foreach ($records as $k=>$record) {
                 $this->attr[] = array(
                     'employee_name'=>$record['employee_name'],
-                    'integral'=>$record['num'],
+                    'start_num'=>$record['start_num'],
+                    'end_num'=>$record['end_num'],
+                    'year'=>$record['year'].Yii::t("integral","year"),
                     'city'=>CGeneral::getCityName($record["s_city"]),
                 );
             }
@@ -100,5 +99,13 @@ class SumSearchList extends CListPageModel
         $session = Yii::app()->session;
         $session['sumSearch_op01'] = $this->getCriteria();
         return true;
+    }
+
+    public function getYearList(){
+        $arr=array(''=>"所有");
+        for ($i=2015;$i<=2025;$i++){
+            $arr[$i] = $i.Yii::t("integral","year");
+        }
+        return $arr;
     }
 }

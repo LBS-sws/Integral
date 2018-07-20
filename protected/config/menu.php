@@ -6,11 +6,15 @@ return array(
         'items'=>array(
             'Credit application'=>array(
                 'access'=>'DE01',
-                'url'=>'/addIntegral/index',
+                'url'=>'/creditRequest/new',
             ),
-            'Apply list'=>array(
+            'Credit Apply list'=>array(
                 'access'=>'DE02',
-                'url'=>'/integral/index',
+                'url'=>'/creditRequest/index',
+            ),
+            'Credit exchange prize'=>array(
+                'access'=>'DE03',
+                'url'=>'/prizeRequest/index',
             ),
         ),
     ),
@@ -19,11 +23,11 @@ return array(
         'items'=>array(
             'Credits for'=>array(
                 'access'=>'EX01',
-                'url'=>'/cutIntegral/index',
+                'url'=>'/gift/index',
             ),
             'Change list'=>array(
                 'access'=>'EX02',
-                'url'=>'/cut/index',
+                'url'=>'/giftRequest/index',
             ),
         ),
     ),
@@ -32,7 +36,7 @@ return array(
         'items'=>array(
             'Credits search'=>array(
                 'access'=>'SR01',
-                'url'=>'/addSearch/index',
+                'url'=>'/creditSearch/index',
             ),
             'Total credit search'=>array(
                 'access'=>'SR02',
@@ -40,7 +44,7 @@ return array(
             ),
             'Exchange search'=>array(
                 'access'=>'SR03',
-                'url'=>'/cutSearch/index',
+                'url'=>'/giftSearch/index',
             ),
         ),
     ),
@@ -49,11 +53,15 @@ return array(
         'items'=>array(
             'Credit review'=>array(
                 'access'=>'GA01',
-                'url'=>'/auditAdd/index',
+                'url'=>'/auditCredit/index',
             ),
             'Exchange review'=>array(
                 'access'=>'GA02',
-                'url'=>'/auditCut/index',
+                'url'=>'/auditGift/index',
+            ),
+            'Prize review'=>array(
+                'access'=>'GA03',
+                'url'=>'/auditPrize/index',
             ),
         ),
     ),
@@ -62,19 +70,15 @@ return array(
         'items'=>array(
             'Credit type allocation'=>array(
                 'access'=>'SS01',
-                'url'=>'/integralAdd/index',
+                'url'=>'/creditType/index',
             ),
             'Cut type allocation'=>array(
                 'access'=>'SS04',
-                'url'=>'/integralCut/index',
+                'url'=>'/giftType/index',
             ),
-            'Credit activities'=>array(
+            'Prize Type'=>array(
                 'access'=>'SS02',
-                'url'=>'/activityAdd/index',
-            ),
-            'Cut activities'=>array(
-                'access'=>'SS03',
-                'url'=>'/activityCut/index',
+                'url'=>'/prizeType/index',
             ),
         ),
     ),

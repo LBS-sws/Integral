@@ -153,6 +153,8 @@ class ListPageWidget extends CWidget
 	
 	protected function pageBar()
 	{
+        $param = array('pageNum'=>1);
+        if (!empty($this->searchlinkparam)) $param = array_merge($param, $this->searchlinkparam);
 		$modelName = get_class($this->model);
 		$link = '/'.$this->controller->uniqueId.'/'.$this->controller->action->id;
 		$list = array(
@@ -165,7 +167,7 @@ class ListPageWidget extends CWidget
 		$fldname = $modelName.'[noOfItem]';
 		$layout = '<div class="col-sm-3">'.Yii::t('misc','Display').': '
 				.TbHtml::dropDownList($fldname,$this->model->noOfItem,$list,
-					array('submit'=>Yii::app()->createUrl($link),)
+					array('submit'=>Yii::app()->createUrl($link,$param),)
 				).'</div>';
 		return $layout;
 	}

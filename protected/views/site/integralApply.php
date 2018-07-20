@@ -12,22 +12,19 @@ $ftrbtn[] = TbHtml::button(Yii::t('integral','apply'), array('color'=>TbHtml::BU
 ?>
 
     <div class="form-group">
-        <?php echo TbHtml::hiddenField('CutForm[activity_id]',$activity_id,
-            array('id'=>'activity_id')
-        ); ?>
         <?php echo TbHtml::label(Yii::t('integral','Cut Name'),'',array('class'=>"col-sm-2 control-label")); ?>
         <div class="col-sm-4">
-            <?php echo TbHtml::hiddenField('CutForm[set_id]','',
-                array('id'=>'set_id')
+            <?php echo TbHtml::hiddenField('GiftRequestForm[gift_type]','',
+                array('id'=>'gift_type')
             ); ?>
-            <?php echo TbHtml::textField('CutForm[integral_name]','',
-                array('readonly'=>(true),'id'=>'integral_name')
+            <?php echo TbHtml::textField('GiftRequestForm[gift_name]','',
+                array('readonly'=>(true),'id'=>'gift_name')
             ); ?>
         </div>
         <?php echo TbHtml::label(Yii::t('integral','Cut Integral'),'',array('class'=>"col-sm-2 control-label")); ?>
         <div class="col-sm-4">
-            <?php echo TbHtml::numberField('CutForm[integral]','',
-                array('readonly'=>(true),'id'=>'integral')
+            <?php echo TbHtml::numberField('GiftRequestForm[bonus_point]','',
+                array('readonly'=>(true),'id'=>'bonus_point')
             ); ?>
         </div>
     </div>
@@ -35,7 +32,7 @@ $ftrbtn[] = TbHtml::button(Yii::t('integral','apply'), array('color'=>TbHtml::BU
     <div class="form-group">
         <?php echo TbHtml::label(Yii::t('integral','Number of applications'),'',array('class'=>"col-sm-2 control-label")); ?>
         <div class="col-sm-4">
-            <?php echo TbHtml::numberField('CutForm[apply_num]','1',
+            <?php echo TbHtml::numberField('GiftRequestForm[apply_num]','1',
                 array('readonly'=>(false))
             ); ?>
         </div>
@@ -44,7 +41,7 @@ $ftrbtn[] = TbHtml::button(Yii::t('integral','apply'), array('color'=>TbHtml::BU
     <div class="form-group">
         <?php echo TbHtml::label(Yii::t('integral','Remark'),'',array('class'=>"col-sm-2 control-label")); ?>
         <div class="col-sm-8">
-            <?php echo TbHtml::textArea('CutForm[remark]','',
+            <?php echo TbHtml::textArea('GiftRequestForm[remark]','',
                 array('rows'=>4,'cols'=>50,'maxlength'=>1000,'readonly'=>(false))
             ); ?>
         </div>

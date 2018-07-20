@@ -447,7 +447,6 @@ class DocMan {
 		$suffix = Yii::app()->params['envSuffix'];
 		$docId = $this->docId;
 		$sql = "update docman$suffix.dm_master set doc_id=$docId where id=$masterId";
-		var_dump($sql);
 		$connection->createCommand($sql)->execute();
 	}
 	

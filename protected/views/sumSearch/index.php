@@ -24,17 +24,19 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 <section class="content">
     <div class="box">
+        <div class="box-body">
+            <p class="pull-left">总学分 = 本年度的所有学分（5年有效期的学分 + 1年有效期的学分）</p>
+            <p class="pull-right">可用学分 = 总学分 - 申请奖金扣除的学分</p>
+        </div>
     </div>
     <?php
     $search = array(
-        'activity_name',
-        'integral',
         'city_name',
         'employee_name',
     );
     $search_add_html="";
     $modelName = get_class($model);
-    $search_add_html .= TbHtml::dropDownList($modelName.'[year]',$model->year,ReportY03Form::getYearList(),array("class"=>"form-control"));
+    $search_add_html .= TbHtml::dropDownList($modelName.'[year]',$model->year,$model->getYearList(),array("class"=>"form-control"));
 
     $this->widget('ext.layout.ListPageWidget', array(
         'title'=>Yii::t('integral','Credit list'),

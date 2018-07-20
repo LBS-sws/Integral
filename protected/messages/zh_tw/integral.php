@@ -4,6 +4,7 @@ return array(
 
     'Integral Add List' => '學分類型列表',
     'Integral Add Form' => '學分類型表單',
+    'Integral Code' => '學分編號',
     'Integral Name' => '學分名稱',
     'Integral Detail' => '學分明細',
     'Integral Ranking' => '學分排名',
@@ -92,5 +93,17 @@ return array(
     'Credit list'=>'學分列表',
     'effect'=>'有效',
 
+    //2018-07-10
+    'Level'=>'顯示次序',
+    'Prize Name'=>'獎項名稱',
+    'Prize Point'=>'獎項扣減學分數值',
+    'Sum Gift'=>'總積分',
+    'Available Gift'=>'可用積分',
+    'Apply Prize Form'=>'獎金申請表單',
+    'Prize Type List'=>'獎金類型列表',
+    'Prize Type Form'=>'獎金類型表單',
+    'sum credit num'=>'總學分',
+    'effect credit num'=>'可用學分',
+    'particular year'=>'年份',
 );
 ?>

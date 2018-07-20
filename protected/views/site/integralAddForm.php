@@ -1,31 +1,24 @@
 
 <div class="form-group">
-    <?php echo $form->labelEx($model,'activity_id',array('class'=>"col-sm-2 control-label")); ?>
-    <div class="col-sm-3">
-        <?php echo $form->hiddenField($model, 'activity_id'); ?>
-        <?php echo TbHtml::textField("test",ActivityAddForm::getActivityNameToId($model->activity_id),array("class"=>"form-control","readonly"=>true));?>
-    </div>
-</div>
-<div class="form-group">
     <?php echo $form->labelEx($model,'integral_type',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
-        <?php echo $form->dropDownList($model, 'integral_type',IntegralAddForm::getIntegralTypeAll(),
+        <?php echo $form->dropDownList($model, 'integral_type',CreditTypeForm::getCategoryAll(),
             array('readonly'=>($readonly),'id'=>'int_type')
         ); ?>
     </div>
 </div>
 <div class="form-group">
-    <?php echo $form->labelEx($model,'set_id',array('class'=>"col-sm-2 control-label")); ?>
+    <?php echo $form->labelEx($model,'credit_type',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
-        <?php echo $form->dropDownListTwo($model, 'set_id',IntegralAddForm::getIntegralAddList(),
+        <?php echo $form->dropDownListTwo($model, 'credit_type',CreditTypeForm::getCreditTypeList(),
             array('readonly'=>($readonly),'id'=>'set_id')
         ); ?>
     </div>
 </div>
 <div class="form-group">
-    <?php echo $form->labelEx($model,'integral',array('class'=>"col-sm-2 control-label")); ?>
+    <?php echo $form->labelEx($model,'credit_point',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
-        <?php echo $form->textField($model, 'integral',
+        <?php echo $form->textField($model, 'credit_point',
             array('readonly'=>(true),'id'=>'integral')
         ); ?>
     </div>
@@ -38,6 +31,16 @@
         ); ?>
     </div>
 </div>
+<?php if ($model->scenario!='new'): ?>
+    <div class="form-group">
+        <?php echo $form->labelEx($model,'apply_date',array('class'=>"col-sm-2 control-label")); ?>
+        <div class="col-sm-3">
+            <?php echo $form->textField($model, 'apply_date',
+                array('readonly'=>(true))
+            ); ?>
+        </div>
+    </div>
+<?php endif ?>
 
 <script>
     $(function () {

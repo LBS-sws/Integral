@@ -1,12 +1,5 @@
 
 <div class="form-group">
-    <?php echo $form->labelEx($model,'activity_id',array('class'=>"col-sm-2 control-label")); ?>
-    <div class="col-sm-3">
-        <?php echo TbHtml::textField("activity_name",ActivityCutForm::getActivityCutNameToId($model->activity_id),array("class"=>"form-control",'readonly'=>true));?>
-        <?php echo $form->hiddenField($model, 'activity_id'); ?>
-    </div>
-</div>
-<div class="form-group">
     <?php echo $form->labelEx($model,'employee_id',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
         <?php echo $form->textField($model, 'employee_name',
@@ -16,20 +9,20 @@
     </div>
 </div>
 <div class="form-group">
-    <?php echo $form->labelEx($model,'set_id',array('class'=>"col-sm-2 control-label")); ?>
+    <?php echo $form->labelEx($model,'gift_type',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
-        <?php echo $form->textField($model, 'set_name',
+        <?php echo $form->textField($model, 'gift_name',
             array('readonly'=>(true))
         ); ?>
-        <?php echo $form->hiddenField($model, 'set_id'); ?>
+        <?php echo $form->hiddenField($model, 'gift_type'); ?>
     </div>
-    <?php echo TbHtml::link(Yii::t("integral","Item details"),Yii::app()->createUrl('integralCut/view',array("index"=>$model->set_id)),array("target"=>"_blank")); ?>
+    <?php echo TbHtml::link(Yii::t("integral","Item details"),Yii::app()->createUrl('giftType/view',array("index"=>$model->gift_type)),array("target"=>"_blank")); ?>
 </div>
 <div class="form-group">
-    <?php echo $form->labelEx($model,'integral',array('class'=>"col-sm-2 control-label")); ?>
+    <?php echo $form->labelEx($model,'bonus_point',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
-        <?php echo $form->textField($model, 'integral',
-            array('readonly'=>(true),'id'=>'integral')
+        <?php echo $form->textField($model, 'bonus_point',
+            array('readonly'=>(true),'id'=>'bonus_point')
         ); ?>
     </div>
 </div>

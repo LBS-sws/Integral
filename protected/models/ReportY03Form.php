@@ -39,7 +39,7 @@ class ReportY03Form extends CReportForm
 	}
 
 	public function getYearList(){
-	    $arr=array();
+	    $arr=array(''=>'所有');
 	    for ($i=2015;$i<=2025;$i++){
 	        $arr[$i] = $i.Yii::t("integral","year");
         }
