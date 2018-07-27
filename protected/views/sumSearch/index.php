@@ -25,8 +25,8 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 <section class="content">
     <div class="box">
         <div class="box-body">
-            <p class="pull-left">总学分 = 本年度的所有学分（5年有效期的学分 + 1年有效期的学分）</p>
-            <p class="pull-right">可用学分 = 总学分 - 申请奖金扣除的学分</p>
+            <p class="pull-left"><?php echo Yii::t("integral","Total credits = all credits for the year");?></p>
+            <p class="pull-right"><?php echo Yii::t("integral","Available credits = total credits - credits deducted from the award application");?></p>
         </div>
     </div>
     <?php

@@ -1,5 +1,18 @@
 
 <div class="form-group">
+    <?php echo $form->labelEx($model,'apply_date',array('class'=>"col-sm-2 control-label")); ?>
+    <div class="col-sm-3">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <?php echo $form->textField($model, 'apply_date',
+                array('class'=>'form-control pull-right','readonly'=>($readonly),'id'=>"apply_date"));
+            ?>
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <?php echo $form->labelEx($model,'integral_type',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
         <?php echo $form->dropDownList($model, 'integral_type',CreditTypeForm::getCategoryAll(),
@@ -31,16 +44,6 @@
         ); ?>
     </div>
 </div>
-<?php if ($model->scenario!='new'): ?>
-    <div class="form-group">
-        <?php echo $form->labelEx($model,'apply_date',array('class'=>"col-sm-2 control-label")); ?>
-        <div class="col-sm-3">
-            <?php echo $form->textField($model, 'apply_date',
-                array('readonly'=>(true))
-            ); ?>
-        </div>
-    </div>
-<?php endif ?>
 
 <script>
     $(function () {

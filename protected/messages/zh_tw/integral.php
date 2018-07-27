@@ -1,6 +1,7 @@
 <?php
 return array(
     'the name of already exists'=>'名稱已經存在',
+    'the code of already exists'=>'編號已經存在',
 
     'Integral Add List' => '學分類型列表',
     'Integral Add Form' => '學分類型表單',
@@ -105,5 +106,8 @@ return array(
     'sum credit num'=>'總學分',
     'effect credit num'=>'可用學分',
     'particular year'=>'年份',
+    'has credit'=>'已有學分',
+    'Available credits = total credits - credits deducted from the award application'=>'可用學分 = 總學分 - 申請獎項扣除的學分',
+    'Total credits = all credits for the year'=>'總學分 = 本年度的所有學分',
 );
 ?>

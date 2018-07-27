@@ -17,7 +17,7 @@ class CreditRequestList extends CListPageModel
             'employee_name'=>Yii::t('integral','Employee Name'),
             'credit_type'=>Yii::t('integral','Integral Name'),
             'credit_name'=>Yii::t('integral','Integral Name'),
-            'credit_point'=>Yii::t('integral','Integral Num'),
+            'credit_point'=>Yii::t('integral','has credit'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
             'state'=>Yii::t('integral','Status'),

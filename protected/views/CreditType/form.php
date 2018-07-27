@@ -54,16 +54,14 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 			<?php echo $form->hiddenField($model, 'scenario'); ?>
 			<?php echo $form->hiddenField($model, 'id'); ?>
 
-            <?php if ($model->scenario!='new'): ?>
-                <div class="form-group">
-                    <?php echo $form->labelEx($model,'credit_code',array('class'=>"col-sm-2 control-label")); ?>
-                    <div class="col-sm-4">
-                        <?php echo $form->textField($model, 'credit_code',
-                            array('readonly'=>true)
-                        ); ?>
-                    </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'credit_code',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->textField($model, 'credit_code',
+                        array('readonly'=>$model->scenario=='view')
+                    ); ?>
                 </div>
-            <?php endif; ?>
+            </div>
             <div class="form-group">
                 <?php echo $form->labelEx($model,'credit_name',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-4">
@@ -105,14 +103,6 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                 </div>
             </div>
             <div class="form-group">
-                <?php echo $form->labelEx($model,'validity',array('class'=>"col-sm-2 control-label")); ?>
-                <div class="col-sm-4">
-                    <?php echo $form->dropDownList($model, 'validity',array(1=>1,5=>5),
-                        array('readonly'=>($model->scenario=='view'))
-                    ); ?>
-                </div>
-            </div>
-            <div class="form-group">
                 <?php echo $form->labelEx($model,'z_index',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-4">
                     <?php echo $form->numberField($model, 'z_index',
@@ -124,6 +114,15 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                 <?php echo $form->labelEx($model,'rule',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-6">
                     <?php echo $form->textArea($model, 'rule',
+                        array('readonly'=>($model->scenario=='view'),'rows'=>4)
+                    );
+                    ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'remark',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-6">
+                    <?php echo $form->textArea($model, 'remark',
                         array('readonly'=>($model->scenario=='view'),'rows'=>4)
                     );
                     ?>

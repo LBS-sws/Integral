@@ -68,6 +68,7 @@ class CreditRequestForm extends CFormModel
 		return array(
 			array('id, employee_id, employee_name, credit_type, credit_point, apply_date, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
 
+			array('apply_date','required'),
 			array('employee_id','required'),
             array('employee_id','validateEmployee'),
 			array('credit_type','required'),
@@ -251,7 +252,7 @@ class CreditRequestForm extends CFormModel
 		if (strpos($sql,':id')!==false)
 			$command->bindParam(':id',$this->id,PDO::PARAM_INT);
 		if (strpos($sql,':apply_date')!==false)
-			$command->bindParam(':apply_date',date("Y-m-d H:i:s"),PDO::PARAM_STR);
+			$command->bindParam(':apply_date',$this->apply_date,PDO::PARAM_STR);
 		if (strpos($sql,':employee_id')!==false)
 			$command->bindParam(':employee_id',$this->employee_id,PDO::PARAM_INT);
 		if (strpos($sql,':credit_type')!==false)

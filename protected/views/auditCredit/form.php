@@ -79,9 +79,9 @@ $this->pageTitle=Yii::app()->name . ' - auditCredit Info';
             ?>
             <legend></legend>
             <div class="form-group">
-                <?php echo $form->labelEx($model,'s_remark',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'rule',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-6">
-                    <?php echo $form->textArea($model, 's_remark',
+                    <?php echo $form->textArea($model, 'rule',
                         array('readonly'=>(true),'rows'=>4)
                     );
                     ?>

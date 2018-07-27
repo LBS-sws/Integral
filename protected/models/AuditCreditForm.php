@@ -19,7 +19,7 @@ class AuditCreditForm extends CFormModel
     public $lcd;
     public $lud;
     public $integral_type;
-    public $s_remark;
+    public $rule;
     public $validity;
 
 
@@ -50,7 +50,7 @@ class AuditCreditForm extends CFormModel
             'remark'=>Yii::t('integral','Remark'),
             'reject_note'=>Yii::t('integral','Reject Note'),
             'city'=>Yii::t('integral','City'),
-            's_remark'=>Yii::t('integral','integral conditions'),
+            'rule'=>Yii::t('integral','integral conditions'),
             'integral_type'=>Yii::t('integral','integral type'),
             'apply_date'=>Yii::t('integral','apply for time'),
         );
@@ -72,7 +72,7 @@ class AuditCreditForm extends CFormModel
     public function retrieveData($index) {
         $city_allow = Yii::app()->user->city_allow();
         $suffix = Yii::app()->params['envSuffix'];
-        $rows = Yii::app()->db->createCommand()->select("a.*,d.validity,b.name as employee_name,b.city as s_city,d.category,d.remark as s_remark,docman$suffix.countdoc('GRAL',a.id) as graldoc")
+        $rows = Yii::app()->db->createCommand()->select("a.*,d.validity,b.name as employee_name,b.city as s_city,d.category,d.rule,docman$suffix.countdoc('GRAL',a.id) as graldoc")
             ->from("gr_credit_request a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
             ->leftJoin("gr_credit_type d","a.credit_type = d.id")
@@ -89,6 +89,7 @@ class AuditCreditForm extends CFormModel
                 $this->remark = $row['remark'];
                 $this->reject_note = $row['reject_note'];
                 $this->state = $row['state'];
+                $this->rule = $row['rule'];
                 $this->lcu = $row['lcu'];
                 $this->luu = $row['luu'];
                 $this->lcd = $row['lcd'];
@@ -97,7 +98,6 @@ class AuditCreditForm extends CFormModel
                 $this->validity = $row['validity'];
                 $this->apply_date = CGeneral::toDate($row['apply_date']);
                 $this->integral_type = $row['category'];
-                $this->s_remark = $row['s_remark'];
                 $this->no_of_attm['gral'] = $row['graldoc'];
                 break;
             }

@@ -70,10 +70,11 @@ return array(
 
     //沈超添加开始
     'Audit'=>'审核',
-    'Exchange'=>'兑换',
+    'Credit'=>'学分',
+    'Exchange'=>'积分',
     'Search'=>'查询',
     'Credit type allocation'=>'学分申请配置',
-    'Cut type allocation'=>'学分兑换配置',
+    'Cut type allocation'=>'积分兑换配置',
     'Credit application'=>'学分申请',
     'Credits for'=>'积分兑换',
     'Credits search'=>'学分查询',
@@ -81,7 +82,7 @@ return array(
     'Total credit search'=>'总学分查询',
     'Credit review'=>'学分审核',
     'Exchange review'=>'积分兑换审核',
-    'Prize review'=>'奖金审核',
+    'Prize review'=>'奖项审核',
     'Credit detail'=>'学分详情',
     'Apply list'=>'申请列表',
     'Credit Apply list'=>'学分申请列表',

@@ -114,6 +114,11 @@ $this->renderPartial('//site/removedialog');
 <?php
 Script::genFileUpload($model,$form->id,'GRAL');
 
+$js = "
+$('#apply_date').datepicker({autoclose: true, format: 'yyyy-mm-dd',language: 'zh_cn'});
+";
+Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
+
 $js = Script::genDeleteData(Yii::app()->createUrl('creditRequest/delete'));
 Yii::app()->clientScript->registerScript('deleteRecord',$js,CClientScript::POS_READY);
 

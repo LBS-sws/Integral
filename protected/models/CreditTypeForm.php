@@ -11,7 +11,8 @@ class CreditTypeForm extends CFormModel
 	public $z_index;
 	public $year_sw=0;
 	public $year_max=0;
-	public $validity=1;
+	public $validity=5;
+	public $remark;
 
 	public function attributeLabels()
 	{
@@ -21,10 +22,10 @@ class CreditTypeForm extends CFormModel
             'credit_point'=>Yii::t('integral','Integral Num'),
             'rule'=>Yii::t('integral','integral conditions'),
             'category'=>Yii::t('integral','integral type'),
-            'validity'=>Yii::t('integral','validity'),
             'year_sw'=>Yii::t('integral','Age limit'),
             'year_max'=>Yii::t('integral','Limited number'),
             'z_index'=>Yii::t('integral','Level'),
+            'remark'=>Yii::t('integral','Remark'),
 		);
 	}
 
@@ -34,18 +35,32 @@ class CreditTypeForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id,credit_name,credit_point,category,rule,year_sw,year_max,validity,z_index','safe'),
+			array('id,credit_code,credit_name,credit_point,category,rule,year_sw,year_max,remark,z_index','safe'),
+            array('credit_code','required'),
             array('credit_name','required'),
             array('credit_point','required'),
+            array('category','required'),
             array('year_sw','required'),
-            array('validity','required'),
             array('year_max','validateYearNum'),
             array('year_sw', 'in', 'range' => array(0, 1)),
-            array('validity', 'in', 'range' => array(1,5)),
             array('credit_name','validateName'),
+            array('credit_code','validateCode'),
             array('credit_point', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('z_index', 'numerical', 'integerOnly'=>true),
 		);
+	}
+
+	public function validateCode($attribute, $params){
+        $id = -1;
+        if(!empty($this->id)){
+            $id = $this->id;
+        }
+        $rows = Yii::app()->db->createCommand()->select("id")->from("gr_credit_type")
+            ->where('credit_code=:credit_code and id!=:id', array(':credit_code'=>$this->credit_code,':id'=>$id))->queryAll();
+        if(count($rows)>0){
+            $message = Yii::t('integral','the code of already exists');
+            $this->addError($attribute,$message);
+        }
 	}
 
 	public function validateName($attribute, $params){
@@ -99,8 +114,9 @@ class CreditTypeForm extends CFormModel
                 $this->rule = $row['rule'];
                 $this->year_sw = $row['year_sw'];
                 $this->year_max = $row['year_max'];
-                $this->validity = $row['validity'];
                 $this->z_index = $row['z_index'];
+                $this->validity = $row['validity'];
+                $this->remark = $row['remark'];
                 break;
 			}
 		}
@@ -153,9 +169,9 @@ class CreditTypeForm extends CFormModel
                 break;
             case 'new':
                 $sql = "insert into gr_credit_type(
-							credit_name,credit_point, category, rule, year_sw, year_max, validity, z_index, lcu, city
+							credit_name,credit_point, category, rule, remark, year_sw, year_max, validity, z_index, lcu, city
 						) values (
-							:credit_name,:credit_point, :category, :rule, :year_sw, :year_max, :validity, :z_index, :lcu, :city
+							:credit_name,:credit_point, :category, :rule, :remark, :year_sw, :year_max, 5, :z_index, :lcu, :city
 						)";
                 break;
             case 'edit':
@@ -164,9 +180,10 @@ class CreditTypeForm extends CFormModel
 							credit_point = :credit_point, 
 							category = :category, 
 							rule = :rule, 
+							remark = :remark, 
 							year_sw = :year_sw, 
 							year_max = :year_max, 
-							validity = :validity, 
+							validity = 5, 
 							z_index = :z_index, 
 							luu = :luu
 						where id = :id
@@ -186,6 +203,8 @@ class CreditTypeForm extends CFormModel
             $command->bindParam(':credit_name',$this->credit_name,PDO::PARAM_STR);
         if (strpos($sql,':category')!==false)
             $command->bindParam(':category',$this->category,PDO::PARAM_INT);
+        if (strpos($sql,':remark')!==false)
+            $command->bindParam(':remark',$this->remark,PDO::PARAM_STR);
         if (strpos($sql,':rule')!==false)
             $command->bindParam(':rule',$this->rule,PDO::PARAM_STR);
         if (strpos($sql,':credit_point')!==false)
@@ -194,8 +213,6 @@ class CreditTypeForm extends CFormModel
             $command->bindParam(':year_sw',$this->year_sw,PDO::PARAM_INT);
         if (strpos($sql,':year_max')!==false)
             $command->bindParam(':year_max',$this->year_max,PDO::PARAM_INT);
-        if (strpos($sql,':validity')!==false)
-            $command->bindParam(':validity',$this->validity,PDO::PARAM_INT);
         if (strpos($sql,':z_index')!==false)
             $command->bindParam(':z_index',$this->z_index,PDO::PARAM_INT);
 

@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'Data Entry'=>array(
+    'Credit'=>array(
         'access'=>'DE',
         'items'=>array(
             'Credit application'=>array(
