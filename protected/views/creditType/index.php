@@ -34,6 +34,13 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                     ));
                 ?>
             </div>
+            <div class="btn-group pull-right" role="group">
+                <?php if (Yii::app()->user->validRWFunction('SS01')){
+                    //導入
+                    echo TbHtml::button('<span class="fa fa-file-text-o"></span> '.Yii::t('integral','Import File'), array(
+                        'data-toggle'=>'modal','data-target'=>'#importIntegral'));
+                } ?>
+            </div>
         </div>
     </div>
 	<?php $this->widget('ext.layout.ListPageWidget', array(
@@ -58,6 +65,10 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 ?>
 <?php $this->endWidget(); ?>
 
+<?php
+if (Yii::app()->user->validRWFunction('SS01'))
+    $this->renderPartial('//site/importIntegral',array('name'=>"UploadExcelForm","model"=>$model,"submit"=>Yii::app()->createUrl('creditType/importIntegral')));
+?>
 <?php
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);

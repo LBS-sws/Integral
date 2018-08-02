@@ -21,7 +21,7 @@ class CreditTypeController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('new','edit','delete','save'),
+                'actions'=>array('new','edit','delete','save','importIntegral'),
                 'expression'=>array('CreditTypeController','allowReadWrite'),
             ),
             array('allow',
@@ -121,4 +121,40 @@ class CreditTypeController extends Controller
         }
     }
 
+
+    //導入
+    public function actionImportIntegral(){
+        $model = new UploadExcelForm();
+        $img = CUploadedFile::getInstance($model,'file');
+        $city = Yii::app()->user->city();
+        $path =Yii::app()->basePath."/../upload/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path =Yii::app()->basePath."/../upload/excel/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path.=$city."/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        if(empty($img)){
+            Dialog::message(Yii::t('dialog','Validation Message'), "文件不能为空");
+            $this->redirect(Yii::app()->createUrl('question/index',array('index'=>$model->quiz_id)));
+        }
+        $url = "upload/excel/".$city."/".date("YmdHis").".".$img->getExtensionName();
+        $model->file = $img->getName();
+        if ($model->file) {
+            $img->saveAs($url);
+            $loadExcel = new LoadExcel($url);
+            $list = $loadExcel->getExcelList();
+            $model->loadCreditType($list);
+            $this->redirect(Yii::app()->createUrl('creditType/index'));
+        }else{
+            $message = CHtml::errorSummary($model);
+            Dialog::message(Yii::t('dialog','Validation Message'), $message);
+            $this->redirect(Yii::app()->createUrl('creditType/index'));
+        }
+    }
 }

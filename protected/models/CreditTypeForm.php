@@ -169,14 +169,15 @@ class CreditTypeForm extends CFormModel
                 break;
             case 'new':
                 $sql = "insert into gr_credit_type(
-							credit_name,credit_point, category, rule, remark, year_sw, year_max, validity, z_index, lcu, city
+							credit_name,credit_code,credit_point, category, rule, remark, year_sw, year_max, validity, z_index, lcu, city
 						) values (
-							:credit_name,:credit_point, :category, :rule, :remark, :year_sw, :year_max, 5, :z_index, :lcu, :city
+							:credit_name,:credit_code,:credit_point, :category, :rule, :remark, :year_sw, :year_max, 5, :z_index, :lcu, :city
 						)";
                 break;
             case 'edit':
                 $sql = "update gr_credit_type set
 							credit_name = :credit_name, 
+							credit_code = :credit_code, 
 							credit_point = :credit_point, 
 							category = :category, 
 							rule = :rule, 
@@ -199,6 +200,8 @@ class CreditTypeForm extends CFormModel
         $command=$connection->createCommand($sql);
         if (strpos($sql,':id')!==false)
             $command->bindParam(':id',$this->id,PDO::PARAM_INT);
+        if (strpos($sql,':credit_code')!==false)
+            $command->bindParam(':credit_code',$this->credit_code,PDO::PARAM_STR);
         if (strpos($sql,':credit_name')!==false)
             $command->bindParam(':credit_name',$this->credit_name,PDO::PARAM_STR);
         if (strpos($sql,':category')!==false)
@@ -226,10 +229,6 @@ class CreditTypeForm extends CFormModel
 
         if ($this->scenario=='new'){
             $this->id = Yii::app()->db->getLastInsertID();
-            $this->lenStr();
-            Yii::app()->db->createCommand()->update('gr_credit_type', array(
-                'credit_code'=>$this->credit_code
-            ), 'id=:id', array(':id'=>$this->id));
             $this->scenario = "edit";
         }
 		return true;

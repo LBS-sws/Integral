@@ -5,7 +5,7 @@
 
 <?php
 	$ftrbtn = array();
-    $ftrbtn[] = TbHtml::button(Yii::t('dialog','Upload'), array('id'=>"importUp",'submit'=>Yii::app()->createUrl('integralSearch/importIntegral')));
+    $ftrbtn[] = TbHtml::button(Yii::t('dialog','Upload'), array('id'=>"importUp",'submit'=>$submit));
     $ftrbtn[] = TbHtml::button(Yii::t('dialog','Close'), array('id'=>"btnWFClose",'data-dismiss'=>'modal','color'=>TbHtml::BUTTON_COLOR_PRIMARY));
 	$this->beginWidget('bootstrap.widgets.TbModal', array(
 					'id'=>'importIntegral',
@@ -21,11 +21,13 @@
         <?php echo TbHtml::fileField($name.'[file]',"",array("class"=>"form-control")); ?>
     </div>
 </div>
+<!--
 <div class="form-group">
     <div class="col-sm-10 col-sm-offset-1">
         <p class="form-control-static text-warning"><?php echo Yii::t("integral","The employee can only import once every year. If there are multiple data, please combine the credits. (prevent repeated imports)");?></p>
     </div>
 </div>
+-->
 
 <?php
 	$this->endWidget(); 
