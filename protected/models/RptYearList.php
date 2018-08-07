@@ -56,7 +56,7 @@ class RptYearList extends CReport {
 		if (count($rows) > 0) {
 			foreach ($rows as $row) {
 				$temp['employee_name'] = $row['employee_name'];
-				$temp['city'] = CGeneral::getCityName($row["s_city"]);
+				$temp['s_city'] = CGeneral::getCityName($row["s_city"]);
 				$temp['year'] = $row['year'].Yii::t("integral","year");
 				$temp['start_num'] = $row['start_num'];
 				$temp['end_num'] = $row['end_num'];
