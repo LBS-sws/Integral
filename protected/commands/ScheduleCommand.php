@@ -41,7 +41,7 @@ class ScheduleCommand extends CConsoleCommand {
 		$connection = Yii::app()->db;
 		$transaction=$connection->beginTransaction();
 		try {
-			$sql = "insert into hr_queue (rpt_desc, req_dt, username, status, rpt_type)
+			$sql = "insert into gr_queue (rpt_desc, req_dt, username, status, rpt_type)
 						values(:rpt_desc, :req_dt, :username, 'P', :rpt_type)
 					";
 			$now = date("Y-m-d H:i:s");
@@ -57,7 +57,7 @@ class ScheduleCommand extends CConsoleCommand {
 			$command->execute();
 			$qid = Yii::app()->db->getLastInsertID();
 	
-			$sql = "insert into hr_queue_param (queue_id, param_field, param_value)
+			$sql = "insert into gr_queue_param (queue_id, param_field, param_value)
 						values(:queue_id, :param_field, :param_value)
 					";
 			foreach ($this->data as $key=>$value) {
@@ -72,7 +72,7 @@ class ScheduleCommand extends CConsoleCommand {
 			}
 
 			if ($this->multiuser) {
-				$sql = "insert into hr_queue_user (queue_id, username)
+				$sql = "insert into gr_queue_user (queue_id, username)
 						values(:queue_id, :username)
 					";
 				if (!empty($this->users)) {
