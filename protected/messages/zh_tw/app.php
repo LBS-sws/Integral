@@ -100,6 +100,10 @@ return array(
     'Cut subsidiary List'=>'積分兌換明細報表',
     'Prize Type'=>'獎項類型',
     'Prize apply'=>'獎項申請',
+    'ranking list'=>'排行榜',
+    'All city ranking'=>'所有城市排行',
+    'City ranking'=>'地區排行 Top 5',
+    'National ranking'=>'大中華排行 Top 30',
     //沈超添加结束
 );
 ?>

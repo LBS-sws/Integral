@@ -69,6 +69,19 @@ class City extends CActiveRecord
 		}
 		return $rtn;
 	}
+
+	public function getCityList($code) {
+		$rtn = array();
+		$rows = $this->findAll(array("condition"=>"region='$code'"));
+		if (!empty($rows)) {
+			foreach ($rows as $row) {
+				$rtn[$row->code] = $row->name;
+				$descendant = $this->getCityList($row->code);
+				if (!empty($descendant)) $rtn = array_merge($rtn,$descendant);
+			}
+		}
+		return $rtn;
+	}
 	
 	public function getDescendantList($code) {
 		$rtn = '';

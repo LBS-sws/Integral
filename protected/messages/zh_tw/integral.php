@@ -109,5 +109,11 @@ return array(
     'has credit'=>'已有學分',
     'Available credits = total credits - credits deducted from the award application'=>'可用學分 = 總學分 - 申請獎項扣除的學分',
     'Total credits = all credits for the year'=>'總學分 = 本年度的所有學分',
+
+    'Employee Code' => '員工編號',
+    'export' => '導出',
+    'city not empty' => '請先選擇城市',
+    'down_city' => '地區排行',
+    'down_national' => '大中華排行',
 );
 ?>

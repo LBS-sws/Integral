@@ -48,6 +48,19 @@ return array(
             ),
         ),
     ),
+    'ranking list'=>array(
+        'access'=>'RL',
+        'items'=>array(
+            'City ranking'=>array(
+                'access'=>'RL01',
+                'url'=>'/rankCity/index',
+            ),
+            'National ranking'=>array(
+                'access'=>'RL02',
+                'url'=>'/rankNational/index',
+            ),
+        ),
+    ),
     'Audit'=>array(
         'access'=>'GA',
         'items'=>array(

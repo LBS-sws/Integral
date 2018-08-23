@@ -112,5 +112,10 @@ return array(
     'Total credits = all credits for the year'=>'总学分 = 本年度的所有学分',
 
 
+    'Employee Code' => '员工编号',
+    'export' => '导出',
+    'city not empty' => '请先选择城市',
+    'down_city' => '地区排行',
+    'down_national' => '大中华排行',
 );
 ?>
