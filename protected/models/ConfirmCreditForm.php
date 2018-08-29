@@ -1,6 +1,6 @@
 <?php
 
-class AuditCreditForm extends CFormModel
+class ConfirmCreditForm extends CFormModel
 {
     /* User Fields */
     public $id = 0;
@@ -76,7 +76,7 @@ class AuditCreditForm extends CFormModel
             ->from("gr_credit_request a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
             ->leftJoin("gr_credit_type d","a.credit_type = d.id")
-            ->where("a.id=:id and a.state = 4 and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
+            ->where("a.id=:id and a.state = 1 and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
         if (count($rows) > 0) {
             foreach ($rows as $row) {
                 $this->id = $row['id'];
@@ -121,17 +121,11 @@ class AuditCreditForm extends CFormModel
 
     /*  id;employee_id;employee_code;employee_name;reward_id;reward_name;reward_money;reward_goods;remark;city;*/
 	protected function saveGoods(&$connection) {
-
-        //添加學分及積分
-        if($this->scenario == "audit"){
-            $this->auditCredit();
-        }
-
 		$sql = '';
         switch ($this->scenario) {
             case 'audit':
                 $sql = "update gr_credit_request set
-							state = 3, 
+							state = 4, 
 							luu = :luu
 						where id = :id
 						";
@@ -165,74 +159,5 @@ class AuditCreditForm extends CFormModel
     //判斷輸入框能否修改
     public function getInputBool(){
         return true;
-    }
-
-    //審核通過后添加學分及積分
-    private function auditCredit(){
-        $remark = $this->remark;
-        $city_allow = Yii::app()->user->city_allow();
-        $suffix = Yii::app()->params['envSuffix'];
-        $row = Yii::app()->db->createCommand()->select("a.*,d.validity,b.name as employee_name,b.city as s_city,d.category")
-            ->from("gr_credit_request a")
-            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
-            ->leftJoin("gr_credit_type d","a.credit_type = d.id")
-            ->where("a.id=:id and a.state = 4 and b.city in ($city_allow) ", array(':id'=>$this->id))->queryRow();
-        if($row){
-            $startDate = $row["apply_date"];
-            $year = intval(date("Y",strtotime($startDate)));
-            $validity = intval($row["validity"]);
-            $row["city"] = $row["s_city"];
-            $this->attributes = $row;
-            //學分記錄
-            Yii::app()->db->createCommand()->insert('gr_credit_point', array(
-                'employee_id'=>$this->employee_id,
-                'credit_type'=>$this->credit_type,
-                'credit_point'=>$this->credit_point,
-                'rec_date'=>$startDate,
-                'expiry_date'=>date("Y-m-d",strtotime("$startDate + $validity year")),
-                'remark'=>$remark,
-                'credit_req_id'=>$this->id,
-                'city'=>$this->city,
-            ));
-            $point_id = Yii::app()->db->getLastInsertID();
-            //學分年度記錄
-            if($validity>1){
-                for($i = $year;$i<$year+$validity;$i++){
-                    Yii::app()->db->createCommand()->insert('gr_credit_point_ex', array(
-                        'employee_id'=>$this->employee_id,
-                        'point_id'=>$point_id,
-                        'long_type'=>$validity,
-                        'year'=>$i,
-                        'start_num'=>$this->credit_point,
-                        'end_num'=>$this->credit_point,
-                        'lcu'=>$row["lcu"]
-                    ));
-                }
-            }else{
-                Yii::app()->db->createCommand()->insert('gr_credit_point_ex', array(
-                    'employee_id'=>$this->employee_id,
-                    'point_id'=>$point_id,
-                    'long_type'=>1,
-                    'year'=>$year,
-                    'start_num'=>$this->credit_point,
-                    'end_num'=>$this->credit_point,
-                    'lcu'=>$row["lcu"]
-                ));
-            }
-
-            //積分記錄
-            Yii::app()->db->createCommand()->insert('gr_bonus_point', array(
-                'employee_id'=>$this->employee_id,
-                'credit_type'=>$this->credit_type,
-                'bonus_point'=>$this->credit_point,
-                'rec_date'=>$startDate,
-                'expiry_date'=>date("Y-m-d",strtotime("$startDate + 1 year")),
-                'req_id'=>$this->id,
-                'city'=>$this->city,
-            ));
-        }else{
-            throw new CHttpException(404,'Cannot update.222');
-            return false;
-        }
     }
 }

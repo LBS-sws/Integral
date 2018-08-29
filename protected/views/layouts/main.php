@@ -28,7 +28,7 @@
     </style>
 </head>
 
-<body class="hold-transition skin-black layout-top-nav">
+<body class="hold-transition skin-purple layout-top-nav">
 <div class="wrapper">
 
 	<header class="main-header">

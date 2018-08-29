@@ -13,7 +13,7 @@ class AuditCreditList extends CListPageModel
             'credit_point'=>Yii::t('integral','Integral Num'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
-            'state'=>Yii::t('integral','Status'),
+            'state'=>Yii::t('integral','Status'),//狀態 0：草稿 1：發送  2：拒絕  3：完成  4:確定
             'apply_date'=>Yii::t('integral','apply for time'),
             'category'=>Yii::t('integral','integral type'),
         );
@@ -27,12 +27,12 @@ class AuditCreditList extends CListPageModel
         $sql1 = "select a.*,b.category,b.credit_name,d.name AS employee_name,d.city AS s_city from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where (d.city IN ($city_allow) AND a.state = 1) 
+                where (d.city IN ($city_allow) AND a.state = 4) 
 			";
         $sql2 = "select count(a.id) from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where (d.city IN ($city_allow) AND a.state = 1) 
+                where (d.city IN ($city_allow) AND a.state = 4) 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {
@@ -93,7 +93,7 @@ class AuditCreditList extends CListPageModel
 
     public function getListStatus($status){
         switch ($status){
-            case 1:
+            case 4:
                 return array(
                     "status"=>Yii::t("integral","pending approval"),
                     "style"=>" text-yellow"

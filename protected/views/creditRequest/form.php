@@ -30,7 +30,7 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
                     'submit'=>Yii::app()->createUrl('creditRequest/index')));
                 ?>
 
-                <?php if ($model->scenario!='view' && $model->state != 1 && $model->state != 3): ?>
+                <?php if ($model->scenario!='view' && $model->state != 1 && $model->state != 3 && $model->state != 4): ?>
                     <?php echo TbHtml::button('<span class="fa fa-save"></span> '.Yii::t('misc','Save'), array(
                         'submit'=>Yii::app()->createUrl('creditRequest/save')));
                     ?>
@@ -76,7 +76,7 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
                 <div class="col-sm-3">
                     <?php if (Yii::app()->user->validFunction('ZR01')): ?>
                         <?php echo $form->dropDownList($model, 'employee_id',$model->getBindingList(),
-                            array('readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3))
+                            array('readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3||$model->state == 4))
                         ); ?>
                     <?php else:?>
                         <?php echo $form->textField($model, 'employee_name',
@@ -91,7 +91,7 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
             $this->renderPartial('//site/integralAddForm',array(
                 'form'=>$form,
                 'model'=>$model,
-                'readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3),
+                'readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3||$model->state == 4),
             ));
             ?>
 
@@ -105,7 +105,7 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
     'form'=>$form,
     'doctype'=>'GRAL',
     'header'=>Yii::t('dialog','File Attachment'),
-    'ronly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3),
+    'ronly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3||$model->state == 4),
 ));
 ?>
 <?php

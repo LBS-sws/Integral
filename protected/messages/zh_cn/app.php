@@ -100,6 +100,7 @@ return array(
     'All city ranking'=>'所有城市排行',
     'City ranking'=>'地区排行 Top 5',
     'National ranking'=>'大中华排行 Top 30',
+    'Confirm review'=>'学分专员确认',
     //沈超添加结束
 );
 ?>

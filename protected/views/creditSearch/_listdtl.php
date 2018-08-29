@@ -11,4 +11,5 @@
     <td><?php echo $this->record['credit_point']; ?></td>
     <td><?php echo $this->record['category']; ?></td>
     <td><?php echo $this->record['apply_date']; ?></td>
+    <td><?php echo $this->record['exp_date']; ?></td>
 </tr>

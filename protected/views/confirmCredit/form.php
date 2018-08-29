@@ -1,11 +1,11 @@
 <?php
 if (empty($model->id)&&$model->scenario == "edit"){
-    $this->redirect(Yii::app()->createUrl('auditCredit/index'));
+    $this->redirect(Yii::app()->createUrl('confirmCredit/index'));
 }
-$this->pageTitle=Yii::app()->name . ' - auditCredit Info';
+$this->pageTitle=Yii::app()->name . ' - confirmCredit Info';
 ?>
 <?php $form=$this->beginWidget('TbActiveForm', array(
-'id'=>'auditCredit-form',
+'id'=>'confirmCredit-form',
 'enableClientValidation'=>true,
 'clientOptions'=>array('validateOnSubmit'=>true,),
 'layout'=>TbHtml::FORM_LAYOUT_HORIZONTAL,
@@ -30,16 +30,16 @@ $this->pageTitle=Yii::app()->name . ' - auditCredit Info';
 	<div class="box"><div class="box-body">
 	<div class="btn-group" role="group">
 		<?php echo TbHtml::button('<span class="fa fa-reply"></span> '.Yii::t('misc','Back'), array(
-				'submit'=>Yii::app()->createUrl('auditCredit/index')));
+				'submit'=>Yii::app()->createUrl('confirmCredit/index')));
 		?>
-        <?php if ($model->scenario!='view' && $model->state == 4): ?>
-            <?php echo TbHtml::button('<span class="fa fa-save"></span> '.Yii::t('integral','Audit'), array(
-                'submit'=>Yii::app()->createUrl('auditCredit/audit')));
+        <?php if ($model->scenario!='view' && $model->state == 1): ?>
+            <?php echo TbHtml::button('<span class="fa fa-save"></span> '.Yii::t('dialog','Confirmation'), array(
+                'submit'=>Yii::app()->createUrl('confirmCredit/audit')));
             ?>
         <?php endif ?>
 	</div>
             <div class="btn-group pull-right" role="group">
-                <?php if ($model->scenario!='view' && $model->state == 4): ?>
+                <?php if ($model->scenario!='view' && $model->state == 1): ?>
                     <?php
                     echo TbHtml::button('<span class="fa fa-mail-reply-all"></span> '.Yii::t('integral','Rejected'), array(
                         'name'=>'btnJect','id'=>'btnJect','data-toggle'=>'modal','data-target'=>'#jectdialog'));
@@ -100,7 +100,7 @@ $this->pageTitle=Yii::app()->name . ' - auditCredit Info';
 ));
 ?>
 <?php
-$this->renderPartial('//site/ject',array('model'=>$model,'form'=>$form,'rejectName'=>"reject_note",'submit'=>Yii::app()->createUrl('auditCredit/reject')));
+$this->renderPartial('//site/ject',array('model'=>$model,'form'=>$form,'rejectName'=>"reject_note",'submit'=>Yii::app()->createUrl('confirmCredit/reject')));
 ?>
 <?php
 Script::genFileUpload($model,$form->id,'GRAL');

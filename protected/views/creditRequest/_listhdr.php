@@ -32,6 +32,11 @@
         ?>
     </th>
     <th>
+        <?php echo TbHtml::link($this->getLabelName('exp_date').$this->drawOrderArrow('a.lcd'),'#',$this->createOrderLink('creditRequest-list','a.lcd'))
+        ;
+        ?>
+    </th>
+    <th>
         <?php echo TbHtml::link($this->getLabelName('state').$this->drawOrderArrow('a.state'),'#',$this->createOrderLink('creditRequest-list','a.state'))
         ;
         ?>

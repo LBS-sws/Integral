@@ -20,9 +20,10 @@ class CreditRequestList extends CListPageModel
             'credit_point'=>Yii::t('integral','has credit'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
-            'state'=>Yii::t('integral','Status'),
+            'state'=>Yii::t('integral','Status'),//狀態 0：草稿 1：發送  2：拒絕  3：完成  4:確定
             'apply_date'=>Yii::t('integral','apply for time'),
             'category'=>Yii::t('integral','integral type'),
+            'exp_date'=>Yii::t('integral','expiration date'),
         );
     }
 
@@ -103,6 +104,7 @@ class CreditRequestList extends CListPageModel
                     'credit_name'=>$record['credit_name'],
                     'credit_point'=>$record['credit_point'],
                     'apply_date'=>date("Y-m-d",strtotime($record['apply_date'])),
+                    'exp_date'=>date("Y-12-31",strtotime($record['apply_date']." + 4 year")),
                     'status'=>$colorList["status"],
                     'city'=>CGeneral::getCityName($record["s_city"]),
                     'style'=>$colorList["style"],
@@ -120,12 +122,12 @@ class CreditRequestList extends CListPageModel
             // text-danger
             case 0:
                 return array(
-                    "status"=>Yii::t("integral","Draft"),
+                    "status"=>Yii::t("integral","Draft"),//草稿
                     "style"=>""
                 );
             case 1:
                 return array(
-                    "status"=>Yii::t("integral","Sent, pending approval"),//已發送，等待審核
+                    "status"=>Yii::t("integral","Sent, to be confirmed"),//已發送，待确认
                     "style"=>" text-primary"
                 );
             case 2:
@@ -137,6 +139,11 @@ class CreditRequestList extends CListPageModel
                 return array(
                     "status"=>Yii::t("integral","approve"),//批准
                     "style"=>" text-green"
+                );
+            case 4:
+                return array(
+                    "status"=>Yii::t("integral","Confirmed, pending review"),//已确认，等待審核
+                    "style"=>" text-warning"
                 );
         }
         return array(

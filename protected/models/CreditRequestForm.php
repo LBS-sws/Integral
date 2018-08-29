@@ -17,7 +17,7 @@ class CreditRequestForm extends CFormModel
 	public $apply_date;
 	public $remark;
 	public $reject_note;
-	public $state = 0;
+	public $state = 0;//狀態 0：草稿 1：發送  2：拒絕  3：完成  4:確定
 	public $city;
 	public $lcu;
 	public $luu;

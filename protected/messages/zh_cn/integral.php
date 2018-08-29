@@ -117,5 +117,10 @@ return array(
     'city not empty' => '请先选择城市',
     'down_city' => '地区排行',
     'down_national' => '大中华排行',
+
+    'expiration date' => '到期时间',
+    'Waiting for confirmation' => '待确认',
+    'Sent, to be confirmed' => '已发送，待确认',
+    'Confirmed, pending review' => '已确认，待审核',
 );
 ?>

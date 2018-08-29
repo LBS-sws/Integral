@@ -115,5 +115,10 @@ return array(
     'city not empty' => '請先選擇城市',
     'down_city' => '地區排行',
     'down_national' => '大中華排行',
+
+    'expiration date' => '到期時間',
+    'Waiting for confirmation' => '待確認',
+    'Sent, to be confirmed' => '已發送，待確認',
+    'Confirmed, pending review' => '已確認，待審核',
 );
 ?>

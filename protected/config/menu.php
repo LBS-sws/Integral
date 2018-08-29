@@ -64,6 +64,10 @@ return array(
     'Audit'=>array(
         'access'=>'GA',
         'items'=>array(
+            'Confirm review'=>array(
+                'access'=>'GA04',
+                'url'=>'/confirmCredit/index',
+            ),
             'Credit review'=>array(
                 'access'=>'GA01',
                 'url'=>'/auditCredit/index',
