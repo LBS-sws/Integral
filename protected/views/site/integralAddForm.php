@@ -13,6 +13,19 @@
     </div>
 </div>
 <div class="form-group">
+    <?php echo TbHtml::label(Yii::t('integral','expiration date'),"",array('class'=>"col-sm-2 control-label")); ?>
+    <div class="col-sm-3">
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <?php echo TbHtml::textField('exp_date','',
+                array('class'=>'form-control pull-right','readonly'=>(true),'id'=>"exp_date"));
+            ?>
+        </div>
+    </div>
+</div>
+<div class="form-group">
     <?php echo $form->labelEx($model,'integral_type',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
         <?php echo $form->dropDownList($model, 'integral_type',CreditTypeForm::getCategoryAll(),
@@ -61,6 +74,15 @@
                 $("#set_id>option").hide();
                 $("#set_id>option[gral='"+gral+"']").show();
             }
-        })
+        });
+        $("#apply_date").on("change",function () {
+            var value = $(this).val();
+            if(value != ""){
+                value = value.split("-")[0];
+                value = value.split("\/")[0];
+                value = parseInt(value,10)+4;
+                $("#exp_date").val(value+"-12-31");
+            }
+        }).trigger("change");
     })
 </script>
