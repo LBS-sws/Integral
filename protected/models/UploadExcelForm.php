@@ -279,6 +279,7 @@ class UploadExcelForm extends CFormModel
 
     private function getCreditTypeList(){
         $arr = array(
+            array("name"=>"学分配置id","sqlName"=>"id","empty"=>true,"fun"=>"validateCreditTypeOnlyID"),
             array("name"=>"学分编号","sqlName"=>"credit_code","empty"=>true,"fun"=>"validateCode"),
             array("name"=>"学分名称","sqlName"=>"credit_name","empty"=>true,"fun"=>"validateName"),
             array("name"=>"学分数值","sqlName"=>"credit_point","empty"=>true,"number"=>true),
@@ -293,7 +294,7 @@ class UploadExcelForm extends CFormModel
     private function getCreditRequestList(){
         $arr = array(
             array("name"=>"员工编号（旧）","sqlName"=>"employee_id","empty"=>true,"fun"=>"validateOldCode"),
-            array("name"=>"学分配置编号","sqlName"=>"credit_type","empty"=>true,"fun"=>"validateCreditTypeCode"),
+            array("name"=>"学分配置id","sqlName"=>"credit_type","empty"=>true,"fun"=>"validateCreditTypeID"),
             array("name"=>"学分数值","sqlName"=>"credit_point","empty"=>true,"number"=>true),
             array("name"=>"申请时间","sqlName"=>"apply_date","empty"=>true,"fun"=>"validateDate"),
             array("name"=>"过期时间","sqlName"=>"expiry_date","empty"=>true,"fun"=>"validateDate"),
@@ -322,13 +323,23 @@ class UploadExcelForm extends CFormModel
         }
     }
 
-    public function validateCreditTypeCode($value){
+    public function validateCreditTypeOnlyID($value){
         $rows = Yii::app()->db->createCommand()->select("id")->from("gr_credit_type")
-            ->where('credit_code=:credit_code', array(':credit_code'=>$value))->queryRow();
+            ->where('id=:id', array(':id'=>$value))->queryRow();
+        if($rows){
+            return array("status"=>0,"error"=>"学分配置id已存在:".$value);
+        }else{
+            return array("status"=>1,"data"=>$value);
+        }
+    }
+
+    public function validateCreditTypeID($value){
+        $rows = Yii::app()->db->createCommand()->select("id")->from("gr_credit_type")
+            ->where('id=:id', array(':id'=>$value))->queryRow();
         if($rows){
             return array("status"=>1,"data"=>$rows["id"]);
         }else{
-            return array("status"=>0,"error"=>"学分配置编号不存在:".$value);
+            return array("status"=>0,"error"=>"学分配置id不存在:".$value);
         }
     }
 
