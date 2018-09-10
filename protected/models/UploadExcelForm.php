@@ -100,6 +100,75 @@ class UploadExcelForm extends CFormModel
     }
 
 	//批量導入（學分）
+    public function loadCreditRequest($arr){
+	    $errNum = 0;//失敗條數
+	    $successNum = 0;//成功條數
+        $validateArr = $this->getCreditRequestList();
+        foreach ($validateArr as $vaList){
+            if(!in_array($vaList["name"],$arr["listHeader"])){
+                Dialog::message(Yii::t('dialog','Validation Message'), $vaList["name"]."沒找到");
+                return false;
+            }
+        }
+        foreach ($arr["listBody"] as $list){
+            $arrList = array();
+            $continue = true;
+            $this->start_title = current($list);//每行的第一個文本
+            foreach ($validateArr as $vaList){
+                $key = array_search($vaList["name"],$arr["listHeader"]);
+                $value = $this->validateStr($list[$key],$vaList);
+                if($value['status'] == 1){
+                    if($vaList["sqlName"] == "expiry_date"){
+                        $arrHisList["expiry_date"]=$value["data"];
+                    }else{
+                        $arrList[$vaList["sqlName"]] = $value["data"];
+                        if($vaList["sqlName"] != "apply_date"){
+                            $arrHisList[$vaList["sqlName"]] = $value["data"];
+                        }
+                    }
+                }else{
+                    $continue = false;
+                    array_push($this->error_list,$value["error"]);
+                    break;
+                }
+            }
+            if($continue){
+                $city = Yii::app()->user->city();
+                $uid = Yii::app()->user->id;
+                //新增(學分申請)
+                $arrList["lcu"] = $uid;
+                $arrList["audit_date"] = date("Y-m-d");
+                $arrList["reject_note"] = "系统导入，时间：".date("Y-m-d")."，用户id：".$uid;
+                $arrList["city"] = $city;
+                $arrList["state"] = 3;
+                Yii::app()->db->createCommand()->insert("gr_credit_request", $arrList);
+                //(學分記錄)
+                $arrHisList["credit_req_id"]=Yii::app()->db->getLastInsertID();
+                Yii::app()->db->createCommand()->insert("gr_credit_point", $arrHisList);
+                //所有年限學分添加
+                $startYear = intval(date("Y",strtotime($arrList["apply_date"])));
+                $endYear = intval(date("Y",strtotime($arrHisList["expiry_date"])));
+                $point_id = Yii::app()->db->getLastInsertID();
+                for ($i = $startYear;$i<=$endYear;$i++){
+                    Yii::app()->db->createCommand()->insert("gr_credit_point_ex", array(
+                        "employee_id"=>$arrHisList["employee_id"],
+                        "long_type"=>$endYear-$startYear+1,
+                        "year"=>$i,
+                        "start_num"=>$arrHisList["credit_point"],
+                        "end_num"=>$arrHisList["credit_point"],
+                        "point_id"=>$point_id,
+                    ));
+                }
+                $successNum++;
+            }else{
+                $errNum++;
+            }
+        }
+        $error = implode("<br>",$this->error_list);
+        Dialog::message(Yii::t('dialog','Information'), "成功数量：".$successNum."<br>失败数量：".$errNum."<br>".$error);
+    }
+
+	//批量導入（學分）
     public function loadGoods($arr){
 	    $this->reSetIntegralID(); //獲取導入學分的id
 	    $errNum = 0;//失敗條數
@@ -219,6 +288,48 @@ class UploadExcelForm extends CFormModel
             array("name"=>"备注","sqlName"=>"remark","empty"=>false),
         );
         return $arr;
+    }
+
+    private function getCreditRequestList(){
+        $arr = array(
+            array("name"=>"员工编号（旧）","sqlName"=>"employee_id","empty"=>true,"fun"=>"validateOldCode"),
+            array("name"=>"学分配置编号","sqlName"=>"credit_type","empty"=>true,"fun"=>"validateCreditTypeCode"),
+            array("name"=>"学分数值","sqlName"=>"credit_point","empty"=>true,"number"=>true),
+            array("name"=>"申请时间","sqlName"=>"apply_date","empty"=>true,"fun"=>"validateDate"),
+            array("name"=>"过期时间","sqlName"=>"expiry_date","empty"=>true,"fun"=>"validateDate"),
+            array("name"=>"备注","sqlName"=>"remark","empty"=>false),
+        );
+        return $arr;
+    }
+
+    public function validateDate($value){
+        $time = strtotime($value);
+        if($time>0){
+            return array("status"=>1,"data"=>date("Y-m-d H:i:s",$time));
+        }else{
+            return array("status"=>0,"error"=>"时间格式不正确:".$value);
+        }
+    }
+
+    public function validateOldCode($value){
+        $suffix = Yii::app()->params['envSuffix'];
+        $rows = Yii::app()->db->createCommand()->select("id")->from("hr$suffix.hr_employee")
+            ->where('code_old=:code_old AND staff_status = 0',array(':code_old'=>$value))->queryRow();
+        if(!$rows){
+            return array("status"=>0,"error"=>"员工编号不存在:".$value);
+        }else{
+            return array("status"=>1,"data"=>$rows["id"]);
+        }
+    }
+
+    public function validateCreditTypeCode($value){
+        $rows = Yii::app()->db->createCommand()->select("id")->from("gr_credit_type")
+            ->where('credit_code=:credit_code', array(':credit_code'=>$value))->queryRow();
+        if($rows){
+            return array("status"=>1,"data"=>$rows["id"]);
+        }else{
+            return array("status"=>0,"error"=>"学分配置编号不存在:".$value);
+        }
     }
 
     public function validateCode($value){

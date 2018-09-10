@@ -79,6 +79,30 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                     ); ?>
                 </div>
             </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'min_point',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+                    <?php echo $form->numberField($model, 'min_point',
+                        array('min'=>1,'readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'tries_limit',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <?php echo $form->dropDownList($model, 'tries_limit',$model->getTriesLimtList(),
+                                array('min'=>1,'id'=>"tries_limit",'readonly'=>($model->scenario=='view'),"style"=>"width:150px;")
+                            ); ?>
+                        </div>
+                        <?php echo $form->numberField($model, 'limit_number',
+                            array('min'=>1,'id'=>"limit_number",'readonly'=>($model->scenario=='view'),"style"=>"display:none")
+                        ); ?>
+                    </div>
+                </div>
+            </div>
 		</div>
 	</div>
 </section>
@@ -94,7 +118,13 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 <?php
 $js = "
-
+    $('#tries_limit').on('change',function(){
+        if($(this).val()==0){
+            $('#limit_number').hide();
+        }else{
+            $('#limit_number').show();
+        }
+    }).trigger('change');
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 Script::genFileUpload($model,$form->id,'IPRIZE');

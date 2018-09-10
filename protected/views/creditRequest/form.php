@@ -75,7 +75,7 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
                 <?php echo $form->labelEx($model,'employee_id',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <?php if (Yii::app()->user->validFunction('ZR01')): ?>
-                        <?php echo $form->dropDownList($model, 'employee_id',$model->getBindingList(),
+                        <?php echo $form->dropDownList($model, 'employee_id',$model->getBindingList($model->employee_id),
                             array('readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3||$model->state == 4))
                         ); ?>
                     <?php else:?>

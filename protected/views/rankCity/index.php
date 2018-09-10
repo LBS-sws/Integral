@@ -34,15 +34,9 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
             </div>
         </div>
     </div>
-    <div class="box">
-        <div class="box-body">
-        <?php
-        $modelName = get_class($model);
-        echo TbHtml::radioButtonList($modelName.'[city]',$model->city,$model->getCityList(),array("class"=>"changeCity"));
-        ?>
-        </div>
-    </div>
     <?php
+    $modelName = get_class($model);
+    $search_add_html = TbHtml::dropDownList($modelName.'[city]',$model->city,$model->getCityList(),array("class"=>"changeCity"));
     $search = array(
             "employee_code",
             "employee_name"
@@ -55,6 +49,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
         'viewdtl'=>'//rankCity/_listdtl',
         'gridsize'=>'24',
         'height'=>'600',
+        'search_add_html'=>$search_add_html,
         'search'=>$search,
     ));
     ?>

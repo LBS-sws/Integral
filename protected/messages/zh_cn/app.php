@@ -86,7 +86,7 @@ return array(
     'Credit detail'=>'学分详情',
     'Apply list'=>'申请列表',
     'Credit Apply list'=>'学分申请列表',
-    'Credit exchange prize'=>'学分兑换奖金',
+    'Credit exchange prize'=>'金银铜奖项申请',
     'Change list'=>'积分兑换列表',
     'Application for credit'=>'代申请学分',
     'Credit activities'=>'学分活动',
@@ -101,6 +101,7 @@ return array(
     'City ranking'=>'地区排行 Top 5',
     'National ranking'=>'大中华排行 Top 30',
     'Confirm review'=>'学分专员确认',
+    'Import credits'=>'导入学分',
     //沈超添加结束
 );
 ?>

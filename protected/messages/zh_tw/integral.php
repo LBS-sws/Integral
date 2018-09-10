@@ -120,5 +120,12 @@ return array(
     'Waiting for confirmation' => '待確認',
     'Sent, to be confirmed' => '已發送，待確認',
     'Confirmed, pending review' => '已確認，待審核',
+    'min point' => '最小总学分',
+    'Tries Limit' => '次數限制',
+    'unlimited' => '無限制',
+    'have limits' => '有限制',
+    'The minimum credits allowed by the award are' => '該獎項允許的最小學分是：',
+    'The number of applications for the award is' => '該獎項的申請次數是：',
+    'available credits are' => '可用學分是：',
 );
 ?>

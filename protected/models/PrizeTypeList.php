@@ -7,6 +7,8 @@ class PrizeTypeList extends CListPageModel
 		return array(
 			'prize_name'=>Yii::t('integral','Prize Name'),
 			'prize_point'=>Yii::t('integral','Prize Point'),
+			'min_point'=>Yii::t('integral','min point'),
+            'tries_limit'=>Yii::t('integral','Tries Limit'),
 		);
 	}
 	
@@ -50,11 +52,14 @@ class PrizeTypeList extends CListPageModel
 		
 		$this->attr = array();
 		if (count($records) > 0) {
+		    $limitList = PrizeTypeForm::getTriesLimtList();
 			foreach ($records as $k=>$record) {
 					$this->attr[] = array(
 						'id'=>$record['id'],
 						'prize_name'=>$record['prize_name'],
 						'prize_point'=>$record['prize_point'],
+						'tries_limit'=>$record['tries_limit'] == 0?$limitList[0]:$limitList[1],
+						'min_point'=>$record['min_point'],
 					);
 			}
 		}

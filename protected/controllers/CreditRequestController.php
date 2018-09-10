@@ -28,10 +28,18 @@ class CreditRequestController extends Controller
                 'actions'=>array('index','edit','view','fileDownload'),
                 'expression'=>array('CreditRequestController','allowReadOnly'),
             ),
+            array('allow',
+                'actions'=>array('importCredit'),
+                'expression'=>array('CreditRequestController','allowImport'),
+            ),
             array('deny',  // deny all users
                 'users'=>array('*'),
             ),
         );
+    }
+
+    public static function allowImport() {
+        return Yii::app()->user->validRWFunction('ZR03');
     }
 
     public static function allowReadWrite() {
@@ -190,6 +198,43 @@ class CreditRequestController extends Controller
             }
         } else {
             throw new CHttpException(404,'Record not found.');
+        }
+    }
+
+
+    //導入
+    public function actionImportCredit(){
+        $model = new UploadExcelForm();
+        $img = CUploadedFile::getInstance($model,'file');
+        $city = Yii::app()->user->city();
+        $path =Yii::app()->basePath."/../upload/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path =Yii::app()->basePath."/../upload/excel/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path.=$city."/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        if(empty($img)){
+            Dialog::message(Yii::t('dialog','Validation Message'), "文件不能为空");
+            $this->redirect(Yii::app()->createUrl('creditRequest/index'));
+        }
+        $url = "upload/excel/".$city."/".date("YmdHis").".".$img->getExtensionName();
+        $model->file = $img->getName();
+        if ($model->file) {
+            $img->saveAs($url);
+            $loadExcel = new LoadExcel($url);
+            $list = $loadExcel->getExcelList();
+            $model->loadCreditRequest($list);
+            $this->redirect(Yii::app()->createUrl('creditRequest/index'));
+        }else{
+            $message = CHtml::errorSummary($model);
+            Dialog::message(Yii::t('dialog','Validation Message'), $message);
+            $this->redirect(Yii::app()->createUrl('creditRequest/index'));
         }
     }
 }

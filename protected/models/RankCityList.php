@@ -123,6 +123,7 @@ class RankCityList extends CListPageModel
             $city = Yii::app()->user->city();
             $arr = City::model()->getCityList($city);
         }
+        array_unshift($arr,"-- ".Yii::t("user","City")." --");
         return $arr;
     }
 

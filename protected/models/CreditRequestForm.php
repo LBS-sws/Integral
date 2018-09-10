@@ -126,12 +126,12 @@ class CreditRequestForm extends CFormModel
     }
 
     //獲取所有已绑定员工的账号列表
-	public function getBindingList(){
+	public function getBindingList($staff_id = 0){
         $city_allow = Yii::app()->user->city_allow();
         $suffix = Yii::app()->params['envSuffix'];
         $bindList = Yii::app()->db->createCommand()->select("b.id,b.name")->from("hr$suffix.hr_binding a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
-            ->where("b.city in ($city_allow)")->queryAll();
+            ->where("b.city in ($city_allow) or b.id = :id",array(":id"=>$staff_id))->queryAll();
         $arr = array(""=>"");
         if($bindList){
             foreach ($bindList as $row){

@@ -2,7 +2,7 @@
 <div class="form-group">
     <?php echo $form->labelEx($model,'employee_id',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
-        <?php echo $form->dropDownList($model, 'employee_id',CreditRequestForm::getBindingList(),
+        <?php echo $form->dropDownList($model, 'employee_id',CreditRequestForm::getBindingList($model->employee_id),
             array('readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3))
         ); ?>
     </div>
@@ -22,6 +22,12 @@
         <?php echo $form->textField($model, 'prize_point',
             array('readonly'=>(true),'id'=>'prize_point')
         ); ?>
+    </div>
+</div>
+<div class="form-group">
+    <?php echo TbHtml::label(Yii::t("integral","min point"),"",array('class'=>"col-sm-2 control-label")); ?>
+    <div class="col-sm-3">
+        <?php echo TbHtml::textField("min_point","",array('readonly'=>(true),'id'=>'min_point')); ?>
     </div>
 </div>
 <div class="form-group">
@@ -47,7 +53,9 @@
     $(function () {
         $("#prize_type").on("change",function () {
             var num = $(this).find("option:selected").attr("num");
+            var min_point = $(this).find("option:selected").attr("min_point");
             $("#prize_point").val(num);
-        })
+            $("#min_point").val(min_point);
+        }).trigger("change");
     })
 </script>
