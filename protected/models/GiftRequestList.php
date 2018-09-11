@@ -69,7 +69,7 @@ class GiftRequestList extends CListPageModel
 					$clause .= General::getSqlConditionClause('a.lcd',$svalue);
 					break;
                 case 'city_name':
-                    $clause .= ' and d.city in '.IntegralForm::getCityCodeSqlLikeName($svalue);
+                    $clause .= ' and d.city in '.CreditRequestList::getCityCodeSqlLikeName($svalue);
                     break;
 			}
 		}

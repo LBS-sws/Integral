@@ -53,7 +53,7 @@ class RankNationalList extends CListPageModel
                     $clause .= General::getSqlConditionClause('d.name',$svalue);
                     break;
                 case 'city_name':
-                    $clause .= ' and d.city in '.IntegralForm::getCityCodeSqlLikeName($svalue);
+                    $clause .= ' and d.city in '.CreditRequestList::getCityCodeSqlLikeName($svalue);
                     break;
             }
         }
