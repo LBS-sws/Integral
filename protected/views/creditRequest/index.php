@@ -76,7 +76,7 @@ $('#start_time').datepicker({autoclose: true, format: 'yyyy/mm/dd',language: 'zh
 $('#end_time').datepicker({autoclose: true, format: 'yyyy/mm/dd',language: 'zh_cn'});
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
-if (Yii::app()->user->validRWFunction('ZR03'))
+if (Yii::app()->user->validFunction('ZR03'))
     $this->renderPartial('//site/importIntegral',array('name'=>"UploadExcelForm","model"=>$model,"submit"=>Yii::app()->createUrl('creditRequest/importCredit')));
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);

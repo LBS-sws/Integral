@@ -7,6 +7,7 @@ class GiftTypeForm extends CFormModel
 	public $bonus_point;
 	public $inventory;
 	public $remark;
+	public $city;
 
 
     public $no_of_attm = array(
@@ -27,6 +28,7 @@ class GiftTypeForm extends CFormModel
             'bonus_point'=>Yii::t('integral','Cut Integral'),
             'inventory'=>Yii::t('integral','inventory'),
             'remark'=>Yii::t('integral','Remark'),
+            'city'=>Yii::t('integral','City'),
         );
 	}
 
@@ -36,15 +38,27 @@ class GiftTypeForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, gift_name,bonus_point,inventory,remark','safe'),
+			array('id, gift_name,bonus_point,inventory,remark,city','safe'),
             array('gift_name','required'),
             array('bonus_point','required'),
             array('inventory','required'),
 			array('gift_name','validateName'),
+			array('city','validateCity'),
             array('bonus_point', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('inventory', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('files, removeFileId, docMasterId, no_of_attm','safe'),
 		);
+	}
+
+	public function validateCity($attribute, $params){
+	    if(Yii::app()->user->isSingleCity()){ //沒有管轄城市
+            $this->city = Yii::app()->user->city();
+        }else{
+	        if (!CGeneral::getCityName($this->city)){
+                $message = Yii::t('integral','City').Yii::t('integral',' Did not find');
+                $this->addError($attribute,$message);
+            }
+        }
 	}
 
 	public function validateName($attribute, $params){
@@ -61,9 +75,10 @@ class GiftTypeForm extends CFormModel
 	}
 
 	public function retrieveData($index) {
+        $city_allow = Yii::app()->user->city_allow();
         $suffix = Yii::app()->params['envSuffix'];
 		$rows = Yii::app()->db->createCommand()->select("*,docman$suffix.countdoc('ICUT',id) as icutdoc")
-            ->from("gr_gift_type")->where("id=:id",array(":id"=>$index))->queryAll();
+            ->from("gr_gift_type")->where("id=:id and city in($city_allow)",array(":id"=>$index))->queryAll();
 		if (count($rows) > 0) {
 			foreach ($rows as $row) {
                 $this->id = $row['id'];
@@ -71,6 +86,7 @@ class GiftTypeForm extends CFormModel
                 $this->bonus_point = $row['bonus_point'];
                 $this->inventory = $row['inventory'];
                 $this->remark = $row['remark'];
+                $this->city = $row['city'];
                 $this->no_of_attm['icut'] = $row['icutdoc'];
                 break;
 			}
@@ -152,6 +168,7 @@ class GiftTypeForm extends CFormModel
 							bonus_point = :bonus_point, 
 							inventory = :inventory, 
 							remark = :remark, 
+							city = :city, 
 							luu = :luu
 						where id = :id
 						";
@@ -176,7 +193,7 @@ class GiftTypeForm extends CFormModel
             $command->bindParam(':remark',$this->remark,PDO::PARAM_STR);
 
         if (strpos($sql,':city')!==false)
-            $command->bindParam(':city',$city,PDO::PARAM_STR);
+            $command->bindParam(':city',$this->city,PDO::PARAM_STR);
         if (strpos($sql,':luu')!==false)
             $command->bindParam(':luu',$uid,PDO::PARAM_STR);
         if (strpos($sql,':lcu')!==false)

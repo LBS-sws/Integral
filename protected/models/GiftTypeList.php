@@ -8,19 +8,22 @@ class GiftTypeList extends CListPageModel
 			'gift_name'=>Yii::t('integral','Cut Name'),
             'bonus_point'=>Yii::t('integral','Cut Integral'),
             'inventory'=>Yii::t('integral','inventory'),
+            'city'=>Yii::t('integral','City'),
+            'city_name'=>Yii::t('integral','City'),
 		);
 	}
 	
 	public function retrieveDataByPage($pageNum=1)
 	{
+        $city_allow = Yii::app()->user->city_allow();
 		$city = Yii::app()->user->city();
 		$sql1 = "select *
 				from gr_gift_type
-				where id >= 0 
+				where city in ($city_allow) 
 			";
 		$sql2 = "select count(id)
 				from gr_gift_type
-				where id >= 0 
+				where city in ($city_allow) 
 			";
 		$clause = "";
 		if (!empty($this->searchField) && !empty($this->searchValue)) {
@@ -32,6 +35,9 @@ class GiftTypeList extends CListPageModel
 				case 'bonus_point':
 					$clause .= General::getSqlConditionClause('bonus_point', $svalue);
 					break;
+                case 'city_name':
+                    $clause .= ' and city in '.CreditRequestList::getCityCodeSqlLikeName($svalue);
+                    break;
 			}
 		}
 		
@@ -57,6 +63,7 @@ class GiftTypeList extends CListPageModel
 						'gift_name'=>$record['gift_name'],
 						'bonus_point'=>$record['bonus_point'],
 						'inventory'=>$record['inventory'],
+                        'city'=>CGeneral::getCityName($record["city"]),
 					);
 			}
 		}

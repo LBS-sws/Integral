@@ -44,6 +44,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
         'search'=>array(
             'gift_name',
             'bonus_point',
+            'city_name',
         ),
     ));
 	?>

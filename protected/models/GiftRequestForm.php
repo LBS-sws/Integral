@@ -58,8 +58,9 @@ class GiftRequestForm extends CFormModel
 	}
 
 	public function validateIntegral($attribute, $params){
+        $city = Yii::app()->user->city();
         $rows = Yii::app()->db->createCommand()->select("bonus_point,inventory")->from("gr_gift_type")
-            ->where("id=:id", array(':id'=>$this->gift_type))->queryRow();
+            ->where("id=:id and city = '$city'", array(':id'=>$this->gift_type))->queryRow();
         if ($rows){
             $num = GiftList::getNowIntegral();
             $num = $num['cut'];
