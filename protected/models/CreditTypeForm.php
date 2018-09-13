@@ -98,6 +98,7 @@ class CreditTypeForm extends CFormModel
             3=>Yii::t("integral","the body"),
             4=>Yii::t("integral","group of"),
             5=>Yii::t("integral","beauty"),
+            6=>Yii::t("integral","2014 year Credit"),
         );
     }
 
