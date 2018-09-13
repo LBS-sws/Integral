@@ -42,8 +42,8 @@ class GiftTypeForm extends CFormModel
             array('gift_name','required'),
             array('bonus_point','required'),
             array('inventory','required'),
+            array('city','validateCity'),
 			array('gift_name','validateName'),
-			array('city','validateCity'),
             array('bonus_point', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('inventory', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('files, removeFileId, docMasterId, no_of_attm','safe'),
@@ -67,7 +67,7 @@ class GiftTypeForm extends CFormModel
             $id = $this->id;
         }
         $rows = Yii::app()->db->createCommand()->select("id")->from("gr_gift_type")
-            ->where('gift_name=:gift_name and id!=:id', array(':gift_name'=>$this->gift_name,':id'=>$id))->queryAll();
+            ->where('gift_name=:gift_name and city=:city and id!=:id', array(':gift_name'=>$this->gift_name,':id'=>$id,':city'=>$this->city))->queryAll();
         if(count($rows)>0){
             $message = Yii::t('integral','the name of already exists');
             $this->addError($attribute,$message);
