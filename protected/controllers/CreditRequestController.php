@@ -43,11 +43,11 @@ class CreditRequestController extends Controller
     }
 
     public static function allowCancelled() {
-        return Yii::app()->user->validRWFunction('ZR04');
+        return Yii::app()->user->validFunction('ZR04');
     }
 
     public static function allowImport() {
-        return Yii::app()->user->validRWFunction('ZR03');
+        return Yii::app()->user->validFunction('ZR03');
     }
 
     public static function allowReadWrite() {
