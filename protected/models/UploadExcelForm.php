@@ -159,6 +159,16 @@ class UploadExcelForm extends CFormModel
                         "point_id"=>$point_id,
                     ));
                 }
+                //添加積分
+                Yii::app()->db->createCommand()->insert('gr_bonus_point', array(
+                    'employee_id'=>$arrHisList["employee_id"],
+                    'credit_type'=>$arrHisList["credit_type"],
+                    'bonus_point'=>$arrHisList["credit_point"],
+                    'rec_date'=>date("Y-m-d",strtotime($arrList["apply_date"])),
+                    'expiry_date'=>date("Y-m-d",strtotime($arrList["apply_date"]." + 1 year")),
+                    'req_id'=>$arrHisList["credit_req_id"],
+                    'city'=>$city,
+                ));
                 $successNum++;
             }else{
                 $errNum++;

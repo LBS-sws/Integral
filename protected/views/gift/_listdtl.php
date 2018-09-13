@@ -6,7 +6,7 @@
     <td><?php echo $this->record['inventory']; ?></td>
     <td>
         <?php
-        echo TbHtml::button('<span class="fa  fa-cube"></span> '.Yii::t('app','Exchange'), array(
+        echo TbHtml::button('<span class="fa  fa-cube"></span> '.Yii::t('integral','Exchange'), array(
                 'class'=>'btnIntegralApply','data-id'=>$this->record['id'])
         );
         ?>

@@ -77,6 +77,8 @@ class RankNationalList extends CListPageModel
         }
 
         $sql = $sql1.$clause.$group.$order;
+        $this->pageNum = 1;
+        $this->noOfItem = 30;
         $sql = $this->sqlWithPageCriteria($sql, $this->pageNum);
         $records = Yii::app()->db->createCommand($sql)->queryAll();
 

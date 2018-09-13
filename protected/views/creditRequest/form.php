@@ -44,6 +44,12 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
                     );
                     ?>
                 <?php endif; ?>
+                <?php if (Yii::app()->user->validFunction('ZR04')&&$model->state == 3): ?>
+                    <?php echo TbHtml::button('<span class="fa fa-remove"></span> '.Yii::t('dialog','Cancel'), array(
+                            'name'=>'btnDelete','id'=>'btnDelete','data-toggle'=>'modal','data-target'=>'#canceldialog',)
+                    );
+                    ?>
+                <?php endif; ?>
             </div>
             <div class="btn-group pull-right" role="group">
                 <?php
@@ -110,11 +116,18 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
 ?>
 <?php
 $this->renderPartial('//site/removedialog');
+$this->renderPartial('//site/canceldialog');
 ?>
 <?php
 Script::genFileUpload($model,$form->id,'GRAL');
 
 $js = "
+//取消事件
+$('#btnCancelData').on('click',function() {
+	$('#canceldialog').modal('hide');
+	var elm=$('#btnCancelData');
+	jQuery.yii.submitForm(elm,'".Yii::app()->createUrl('creditRequest/cancel')."',{});
+});
 $('#apply_date').datepicker({autoclose: true, format: 'yyyy-mm-dd',language: 'zh_cn'});
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);

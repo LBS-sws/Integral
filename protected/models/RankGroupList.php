@@ -1,8 +1,8 @@
 <?php
 
-class RankCityList extends CListPageModel
+class RankGroupList extends CListPageModel
 {
-    public $city;//城市
+    public $category =1;//積分類型： 1：德  2：智 3：體 4：群 5：美
     /**
      * Declares customized attribute labels.
      * If not declared here, an attribute would have a label that is
@@ -19,6 +19,7 @@ class RankCityList extends CListPageModel
             'year'=>Yii::t('integral','particular year'),
             'start_num'=>Yii::t('integral','sum credit num'),
             'end_num'=>Yii::t('integral','effect credit num'),
+            'category'=>Yii::t('integral','integral type'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
         );
@@ -27,7 +28,7 @@ class RankCityList extends CListPageModel
     public function rules()
     {
         return array(
-            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, city','safe',),
+            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, category','safe',),
         );
     }
 
@@ -35,19 +36,25 @@ class RankCityList extends CListPageModel
     {
         $suffix = Yii::app()->params['envSuffix'];
         //$city_allow = Yii::app()->user->city_allow();
-        $city = $this->city;
+        $category = $this->category;
         $year = date("Y");
-        if(empty($city)){
+        if(empty($category)){
             $this->attr = array();
             return true;
         }
-        $sql1 = "select a.year,d.code AS employee_code,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
+        $sql1 = "select a.year,a.year,d.code AS employee_code,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num 
+                from gr_credit_point_ex a
+                LEFT JOIN gr_credit_point e ON a.point_id = e.id
+                LEFT JOIN gr_credit_type f ON e.credit_type = f.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city = '$city' and a.year = '$year' 
+                where f.category = '$category' and a.year = '$year' 
 			";
-        $sql2 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
+        $sql2 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num 
+                from gr_credit_point_ex a
+                LEFT JOIN gr_credit_point e ON a.point_id = e.id
+                LEFT JOIN gr_credit_type f ON e.credit_type = f.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city = '$city' and a.year = '$year' 
+                where f.category = '$category' and a.year = '$year' 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {
@@ -85,7 +92,7 @@ class RankCityList extends CListPageModel
 
         $sql = $sql1.$clause.$group.$order;
         $this->pageNum = 1;
-        $this->noOfItem = 5;
+        $this->noOfItem = 20;
         $sql = $this->sqlWithPageCriteria($sql, $this->pageNum);
         $records = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -93,6 +100,10 @@ class RankCityList extends CListPageModel
         $this->attr = array();
         if (count($records) > 0) {
             $key = 0;//名次
+            $categoryList = CreditTypeForm::getCategoryAll();
+            if(key_exists($category,$categoryList)){
+                $category = $categoryList[$category];
+            }
             foreach ($records as $k=>$record) {
                 $key++;
                 $this->attr[] = array(
@@ -101,32 +112,13 @@ class RankCityList extends CListPageModel
                     'employee_name'=>$record['employee_name'],
                     'city'=>CGeneral::getCityName($record["s_city"]),
                     'start_num'=>$record['start_num'],
+                    'category'=>$category,
                 );
             }
         }
         $session = Yii::app()->session;
-        $session['rankCity_op01'] = $this->getCriteria();
+        $session['rankGroup_op01'] = $this->getCriteria();
         return true;
-    }
-
-    public function getCityList(){
-        $arr = array();
-        if(Yii::app()->user->validFunction('ZR02')){
-            //允許查看所有城市
-            $suffix = Yii::app()->params['envSuffix'];
-            $rows = Yii::app()->db->createCommand()->select("code,name")->from("security$suffix.sec_city")->queryAll();
-            if($rows){
-                foreach ($rows as $row){
-                    $arr[$row["code"]] = $row["name"];
-                }
-            }
-        }else{
-            //僅限本城市
-            $city = Yii::app()->user->city();
-            $arr = City::model()->getCityList($city);
-        }
-        array_unshift($arr,"-- ".Yii::t("user","City")." --");
-        return $arr;
     }
 
     //導出excel

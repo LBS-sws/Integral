@@ -129,5 +129,9 @@ return array(
     'The minimum credits allowed by the award are' => '该奖项允许的最小学分是：',
     'The number of applications for the award is' => '该奖项的申请次数是：',
     'available credits are' => '可用学分是：',
+    'Credit does not exist' => '学分不存在',
+    'The credit has been used and cannot be cancelled' => '该学分已经被使用，无法取消',
+    'The credits associated with this credit have been used and cannot be cancelled' => '该学分关联的积分已经被使用，无法取消',
+    'Exchange'=>'兑换',
 );
 ?>

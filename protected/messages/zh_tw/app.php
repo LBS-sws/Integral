@@ -106,6 +106,8 @@ return array(
     'National ranking'=>'大中華排行 Top 30',
     'Confirm review'=>'學分專員確認',
     'Import credits'=>'導入學分',
+    'Cancel the credits'=>'取消學分',
+    'Dezhi body group beauty Top20'=>'德智體群美 Top20',
     //沈超添加结束
 );
 ?>

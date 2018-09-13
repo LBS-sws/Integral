@@ -44,7 +44,7 @@ if (!$ronly) {
 		'name'=>$doc->inputName,
 		'model'=>$model,
 		'attribute'=>'files',
-		'accept'=>'jpg|gif|png|xlsx|xls|docx|doc|pdf|tif',
+		'accept'=>'jpg|gif|png|xlsx|xls|docx|doc|pdf|jpeg|tif',
 		'remove'=>Yii::t('dialog','Remove'),
 		'file'=>' $file',
 		'options'=>array(

@@ -202,8 +202,34 @@ class GiftRequestForm extends CFormModel
             //扣除庫存
             Yii::app()->db->createCommand("update gr_gift_type set inventory=inventory-".$this->apply_num." where id=".$this->gift_type)->execute();
         }
+
+        $this->sendEmail();
         return true;
 	}
+
+    //發送郵件
+    protected function sendEmail(){
+        if($this->state == 1){
+            $email = new Email();
+            $suffix = Yii::app()->params['envSuffix'];
+            $row = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,b.code as employee_code,b.city as s_city")
+                ->from("gr_gift_request a")
+                ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                ->where("a.id=:id", array(':id'=>$this->id))->queryRow();
+            $description="积分兑换申请 - ".$row["employee_name"];
+            $subject="积分兑换申请 - ".$row["employee_name"];
+            $message="<p>员工编号：".$row["employee_code"]."</p>";
+            $message.="<p>员工姓名：".$row["employee_name"]."</p>";
+            $message.="<p>员工城市：".CGeneral::getCityName($row["s_city"])."</p>";
+            $message.="<p>申请时间：".CGeneral::toDate($row["apply_date"])."</p>";
+            $message.="<p>扣除积分：".(floatval($row["bonus_point"])*floatval($row["apply_num"]))."</p>";
+            $email->setDescription($description);
+            $email->setMessage($message);
+            $email->setSubject($subject);
+            $email->addEmailToPrefixAndCity("GA02",$row["s_city"]);
+            $email->sent();
+        }
+    }
 
 
     //驗證當前用戶的權限

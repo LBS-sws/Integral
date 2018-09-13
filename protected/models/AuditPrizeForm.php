@@ -151,8 +151,40 @@ class AuditPrizeForm extends CFormModel
         if (strpos($sql,':luu')!==false)
             $command->bindParam(':luu',$uid,PDO::PARAM_STR);
         $command->execute();
+
+        $this->sendEmail();
 		return true;
 	}
+
+    //發送郵件
+    protected function sendEmail(){
+        if($this->scenario == "audit"){
+            $str = "奖金申请审核通过";
+        }else{
+            $str = "奖金申请被拒绝";
+        }
+        $email = new Email();
+        $suffix = Yii::app()->params['envSuffix'];
+        $row = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,b.code as employee_code,b.city as s_city")
+            ->from("gr_prize_request a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("a.id=:id", array(':id'=>$this->id))->queryRow();
+        $description="$str - ".$row["employee_name"];
+        $subject="$str - ".$row["employee_name"];
+        $message="<p>员工编号：".$row["employee_code"]."</p>";
+        $message.="<p>员工姓名：".$row["employee_name"]."</p>";
+        $message.="<p>员工城市：".CGeneral::getCityName($row["s_city"])."</p>";
+        $message.="<p>申请时间：".CGeneral::toDate($row["apply_date"])."</p>";
+        $message.="<p>扣除学分：".$row["prize_point"]."</p>";
+        if($this->scenario != "audit"){
+            $message.="<p>拒绝原因：".$row["reject_note"]."</p>";
+        }
+        $email->setDescription($description);
+        $email->setMessage($message);
+        $email->setSubject($subject);
+        $email->addEmailToStaffId($row["employee_id"]);
+        $email->sent();
+    }
 
     //判斷輸入框能否修改
     public function getInputBool(){

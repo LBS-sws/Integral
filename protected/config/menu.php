@@ -59,6 +59,10 @@ return array(
                 'access'=>'RL02',
                 'url'=>'/rankNational/index',
             ),
+            'Dezhi body group beauty Top20'=>array(
+                'access'=>'RL03',
+                'url'=>'/rankGroup/index',
+            ),
         ),
     ),
     'Audit'=>array(

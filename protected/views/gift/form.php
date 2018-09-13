@@ -31,7 +31,7 @@ $this->pageTitle=Yii::app()->name . ' - Credits for';
 				'submit'=>Yii::app()->createUrl('gift/index')));
 		?>
         <?php
-        echo TbHtml::button('<span class="fa  fa-cube"></span> '.Yii::t('app','Exchange'), array(
+        echo TbHtml::button('<span class="fa  fa-cube"></span> '.Yii::t('integral','Exchange'), array(
                 'class'=>'btnIntegralApply','data-id'=>$model->id)
         );
         ?>

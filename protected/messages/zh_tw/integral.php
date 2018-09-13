@@ -127,5 +127,9 @@ return array(
     'The minimum credits allowed by the award are' => '該獎項允許的最小學分是：',
     'The number of applications for the award is' => '該獎項的申請次數是：',
     'available credits are' => '可用學分是：',
+    'Credit does not exist' => '學分不存在',
+    'The credit has been used and cannot be cancelled' => '該學分已被使用，無法取消',
+    'The credits associated with this credit have been used and cannot be cancelled' => '該學分關聯的積分已被使用，無法取消',
+    'Exchange'=>'兌換',
 );
 ?>

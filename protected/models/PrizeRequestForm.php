@@ -258,8 +258,33 @@ class PrizeRequestForm extends CFormModel
         if ($this->scenario=='new'){
             $this->id = Yii::app()->db->getLastInsertID();
         }
+        $this->sendEmail();
         return true;
 	}
+
+    //發送郵件
+    protected function sendEmail(){
+        if($this->state == 1){
+            $email = new Email();
+            $suffix = Yii::app()->params['envSuffix'];
+            $row = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,b.code as employee_code,b.city as s_city")
+                ->from("gr_prize_request a")
+                ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                ->where("a.id=:id", array(':id'=>$this->id))->queryRow();
+            $description="金银铜奖项申请 - ".$row["employee_name"];
+            $subject="金银铜奖项申请 - ".$row["employee_name"];
+            $message="<p>员工编号：".$row["employee_code"]."</p>";
+            $message.="<p>员工姓名：".$row["employee_name"]."</p>";
+            $message.="<p>员工城市：".CGeneral::getCityName($row["s_city"])."</p>";
+            $message.="<p>申请时间：".CGeneral::toDate($row["apply_date"])."</p>";
+            $message.="<p>奖项扣减学分数值：".$row["prize_point"]."</p>";
+            $email->setDescription($description);
+            $email->setMessage($message);
+            $email->setSubject($subject);
+            $email->addEmailToPrefixAndCity("GA03",$row["s_city"]);
+            $email->sent();
+        }
+    }
 
 	//獲取某員工的某年度的總學分
     public function getCreditSumToYear($employee_id="",$year=""){

@@ -125,6 +125,50 @@ class CreditRequestForm extends CFormModel
         return array();
     }
 
+    //學分取消驗證
+	public function validateCancel(){
+        $city_allow = Yii::app()->user->city_allow();
+        $suffix = Yii::app()->params['envSuffix'];
+        $row = Yii::app()->db->createCommand()->select("a.id,a.credit_point,a.employee_id,a.employee_id,a.rec_date")->from("gr_credit_point a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("a.credit_req_id=:id and b.city in ($city_allow)", array(':id'=>$this->id))->queryRow();
+        if ($row) {
+            //學分關聯的積分是否使用
+            $listArrIntegral = GiftList::getNowIntegral($row["employee_id"],$row["rec_date"]);
+            if(floatval($listArrIntegral["cut"]) < floatval($row["credit_point"])){
+                return array(
+                    "status"=>false,
+                    "message"=>Yii::t("integral","The credits associated with this credit have been used and cannot be cancelled")
+                );
+            }
+
+            //學分關聯的獎金是否使用
+            $rows = Yii::app()->db->createCommand()->select("*")->from("gr_credit_point_ex")
+                ->where("point_id=:id", array(':id'=>$row["id"]))->order("year asc")->queryRow();
+            if($rows["start_num"] != $rows["end_num"]){
+                return array(
+                    "status"=>false,
+                    "message"=>Yii::t("integral","The credit has been used and cannot be cancelled")
+                );
+            }
+
+            //學分取消
+            Yii::app()->db->createCommand()->delete('gr_credit_request', 'id=:id', array(':id'=>$this->id));//刪除學分申請表
+            Yii::app()->db->createCommand()->delete('gr_bonus_point', 'req_id=:id', array(':id'=>$this->id));//刪除積分表
+            Yii::app()->db->createCommand()->delete('gr_credit_point', 'credit_req_id=:id', array(':id'=>$this->id));//刪除學分記錄表
+            Yii::app()->db->createCommand()->delete('gr_credit_point_ex', 'point_id=:id', array(':id'=>$row["id"]));//刪除學分查詢表
+
+            return array(
+                "status"=>true
+            );
+        }else{
+            return array(
+                "status"=>false,
+                "message"=>Yii::t("integral","Credit does not exist")
+            );
+        }
+    }
+
     //獲取所有已绑定员工的账号列表
 	public function getBindingList($staff_id = 0){
         $city_allow = Yii::app()->user->city_allow();
@@ -276,8 +320,33 @@ class CreditRequestForm extends CFormModel
         if ($this->scenario=='new'){
             $this->id = Yii::app()->db->getLastInsertID();
         }
+        $this->sendEmail();
         return true;
 	}
+
+    //發送郵件
+    protected function sendEmail(){
+        if($this->state == 1){
+            $email = new Email();
+            $suffix = Yii::app()->params['envSuffix'];
+            $row = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,b.code as employee_code,b.city as s_city")
+                ->from("gr_credit_request a")
+                ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                ->where("a.id=:id", array(':id'=>$this->id))->queryRow();
+            $description="学分申请 - ".$row["employee_name"];
+            $subject="学分申请 - ".$row["employee_name"];
+            $message="<p>员工编号：".$row["employee_code"]."</p>";
+            $message.="<p>员工姓名：".$row["employee_name"]."</p>";
+            $message.="<p>员工城市：".CGeneral::getCityName($row["s_city"])."</p>";
+            $message.="<p>申请时间：".CGeneral::toDate($row["apply_date"])."</p>";
+            $message.="<p>学分数值：".$row["credit_point"]."</p>";
+            $email->setDescription($description);
+            $email->setMessage($message);
+            $email->setSubject($subject);
+            $email->addEmailToPrefixAndCity("GA04",$row["s_city"]);
+            $email->sent();
+        }
+    }
 
     //驗證當前用戶的權限
 	public function validateNowUser($bool = false){

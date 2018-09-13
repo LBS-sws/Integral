@@ -32,10 +32,18 @@ class CreditRequestController extends Controller
                 'actions'=>array('importCredit'),
                 'expression'=>array('CreditRequestController','allowImport'),
             ),
+            array('allow',
+                'actions'=>array('cancel'),
+                'expression'=>array('CreditRequestController','allowCancelled'),
+            ),
             array('deny',  // deny all users
                 'users'=>array('*'),
             ),
         );
+    }
+
+    public static function allowCancelled() {
+        return Yii::app()->user->validRWFunction('ZR04');
     }
 
     public static function allowImport() {
@@ -235,6 +243,23 @@ class CreditRequestController extends Controller
             $message = CHtml::errorSummary($model);
             Dialog::message(Yii::t('dialog','Validation Message'), $message);
             $this->redirect(Yii::app()->createUrl('creditRequest/index'));
+        }
+    }
+
+    //取消
+    public function actionCancel(){
+        $model = new CreditRequestForm('cancel');
+        if (isset($_POST['CreditRequestForm'])) {
+            $model->attributes = $_POST['CreditRequestForm'];
+            $date = $model->validateCancel();
+            if($date["status"]){
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Cancel Done'));
+                $this->redirect(Yii::app()->createUrl('creditRequest/index'));
+            }else{
+                //$message = CHtml::errorSummary($model);
+                Dialog::message(Yii::t('dialog','Information'), $date["message"]);
+                $this->redirect(Yii::app()->createUrl('creditRequest/edit',array('index'=>$model->id)));
+            }
         }
     }
 }

@@ -146,6 +146,38 @@ class AuditGiftForm extends CFormModel
             //庫存补回
             Yii::app()->db->createCommand("update gr_gift_type set inventory=inventory+".$model->apply_num." where id=".$model->gift_type)->execute();
         }
+
+        $this->sendEmail();
         return true;
 	}
+
+    //發送郵件
+    protected function sendEmail(){
+        $email = new Email();
+        if($this->scenario == "audit"){
+            $str = "积分兑换审核通过";
+        }else{
+            $str = "积分兑换被拒绝";
+        }
+        $suffix = Yii::app()->params['envSuffix'];
+        $row = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,b.code as employee_code,b.city as s_city")
+            ->from("gr_gift_request a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("a.id=:id", array(':id'=>$this->id))->queryRow();
+        $description="$str - ".$row["employee_name"];
+        $subject="$str - ".$row["employee_name"];
+        $message="<p>员工编号：".$row["employee_code"]."</p>";
+        $message.="<p>员工姓名：".$row["employee_name"]."</p>";
+        $message.="<p>员工城市：".CGeneral::getCityName($row["s_city"])."</p>";
+        $message.="<p>申请时间：".CGeneral::toDate($row["apply_date"])."</p>";
+        $message.="<p>扣除积分：".(floatval($row["bonus_point"])*floatval($row["apply_num"]))."</p>";
+        if($this->scenario != "audit"){
+            $message.="<p>拒绝原因：".$row["reject_note"]."</p>";
+        }
+        $email->setDescription($description);
+        $email->setMessage($message);
+        $email->setSubject($subject);
+        $email->addEmailToStaffId($row["employee_id"]);
+        $email->sent();
+    }
 }
