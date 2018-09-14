@@ -330,10 +330,13 @@ class UploadExcelForm extends CFormModel
         $rows = Yii::app()->db->createCommand()->select("id")->from("hr$suffix.hr_employee")
             ->where('code_old=:code_old AND staff_status in (0,-1) ',array(':code_old'=>$value))->queryRow();
         if(!$rows){
-            return array("status"=>0,"error"=>"员工编号不存在:".$value);
-        }else{
-            return array("status"=>1,"data"=>$rows["id"]);
+            $rows = Yii::app()->db->createCommand()->select("id")->from("hr$suffix.hr_employee")
+                ->where('code=:code AND staff_status in (0,-1) ',array(':code'=>$value))->queryRow();
+            if(!$rows){
+                return array("status"=>0,"error"=>"员工编号不存在:".$value);
+            }
         }
+        return array("status"=>1,"data"=>$rows["id"]);
     }
 
     public function validateCreditTypeOnlyID($value){
