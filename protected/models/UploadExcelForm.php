@@ -124,6 +124,8 @@ class UploadExcelForm extends CFormModel
                         $arrList[$vaList["sqlName"]] = $value["data"];
                         if($vaList["sqlName"] != "apply_date"){
                             $arrHisList[$vaList["sqlName"]] = $value["data"];
+                        }else{
+                            $arrHisList["rec_date"] = $value["data"];
                         }
                     }
                 }else{
@@ -140,6 +142,7 @@ class UploadExcelForm extends CFormModel
                 $arrList["audit_date"] = date("Y-m-d");
                 $arrList["reject_note"] = "系统导入，时间：".date("Y-m-d")."，用户id：".$uid;
                 $arrList["city"] = $city;
+                $arrHisList["city"] = $city;
                 $arrList["state"] = 3;
                 Yii::app()->db->createCommand()->insert("gr_credit_request", $arrList);
                 //(學分記錄)
@@ -325,7 +328,7 @@ class UploadExcelForm extends CFormModel
     public function validateOldCode($value){
         $suffix = Yii::app()->params['envSuffix'];
         $rows = Yii::app()->db->createCommand()->select("id")->from("hr$suffix.hr_employee")
-            ->where('code_old=:code_old AND staff_status = 0',array(':code_old'=>$value))->queryRow();
+            ->where('code_old=:code_old AND staff_status in (0,-1) ',array(':code_old'=>$value))->queryRow();
         if(!$rows){
             return array("status"=>0,"error"=>"员工编号不存在:".$value);
         }else{
