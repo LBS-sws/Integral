@@ -25,7 +25,7 @@ class PrizeRequestController extends Controller
                 'expression'=>array('PrizeRequestController','allowReadWrite'),
             ),
             array('allow',
-                'actions'=>array('index','edit','view','fileDownload'),
+                'actions'=>array('index','edit','view','ajaxStaffGift','fileDownload'),
                 'expression'=>array('PrizeRequestController','allowReadOnly'),
             ),
             array('deny',  // deny all users
@@ -178,6 +178,20 @@ class PrizeRequestController extends Controller
             }
         } else {
             throw new CHttpException(404,'Record not found.');
+        }
+    }
+
+    //員工可用學分的異步獲取
+    public function actionAjaxStaffGift(){
+        if(Yii::app()->request->isAjaxRequest) {//是否ajax请求
+            $staff_id = $_POST["employee_id"];
+            if(empty($staff_id)){
+                $staff_id = -1;
+            }
+            $credit = PrizeRequestForm::getCreditSumToYear($staff_id);
+            echo CJSON::encode(array("status"=>1,"val"=>$credit["end_num"]));
+        }else{
+            $this->redirect(Yii::app()->createUrl('prizeRequest/index'));
         }
     }
 }

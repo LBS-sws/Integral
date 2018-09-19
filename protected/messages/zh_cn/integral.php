@@ -101,7 +101,7 @@ return array(
     'Prize Point'=>'奖项扣减学分数值',
     'Sum Gift'=>'总积分',
     'Available Gift'=>'可用积分',
-    'Apply Prize Form'=>'奖金申请表单',
+    'Apply Prize Form'=>'金银铜奖项申请',//奖金申请表单
     'Prize Type List'=>'奖金类型列表',
     'Prize Type Form'=>'奖金类型表单',
     'sum credit num'=>'总学分',

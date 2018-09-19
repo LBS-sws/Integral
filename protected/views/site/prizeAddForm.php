@@ -3,9 +3,15 @@
     <?php echo $form->labelEx($model,'employee_id',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
         <?php echo $form->dropDownList($model, 'employee_id',CreditRequestForm::getBindingList($model->employee_id),
-            array('readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3))
+            array('readonly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3),"id"=>"employee_id")
         ); ?>
     </div>
+    <?php if (get_class($model) == "PrizeRequestForm"&&!$readonly): ?>
+        <?php echo TbHtml::label(Yii::t("integral","Available Gift"),"",array('class'=>"col-sm-2 control-label")); ?>
+        <div class="col-sm-3">
+            <?php echo TbHtml::textField("available","",array('readonly'=>(true),'id'=>'available')); ?>
+        </div>
+    <?php endif; ?>
 </div>
 
 <div class="form-group">
@@ -56,6 +62,25 @@
             var min_point = $(this).find("option:selected").attr("min_point");
             $("#prize_point").val(num);
             $("#min_point").val(min_point);
+        }).trigger("change");
+
+        $("#employee_id").on("change",function () {
+            if($("#available").length>0){
+                $("#available").val("");
+                $.ajax({
+                    type: 'post',
+                    url: '<?php echo Yii::app()->createUrl("prizeRequest/ajaxStaffGift")?>',
+                    dataType: 'json',
+                    data: {
+                        "employee_id":$("#employee_id").val()
+                    },
+                    success: function(json) {
+                        if(json["status"] == 1){
+                            $("#available").val(json["val"]);
+                        }
+                    }
+                });
+            }
         }).trigger("change");
     })
 </script>
