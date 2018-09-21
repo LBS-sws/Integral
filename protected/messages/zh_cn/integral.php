@@ -134,5 +134,6 @@ return array(
     'The credits associated with this credit have been used and cannot be cancelled' => '该学分关联的积分已经被使用，无法取消',
     'Exchange'=>'兑换',
     '2014 year Credit'=>'2014年学分',
+    'Total credits available'=>'现有有效总学分',
 );
 ?>

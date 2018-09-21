@@ -7,7 +7,7 @@
         ); ?>
     </div>
     <?php if (get_class($model) == "PrizeRequestForm"&&!$readonly): ?>
-        <?php echo TbHtml::label(Yii::t("integral","Available Gift"),"",array('class'=>"col-sm-2 control-label")); ?>
+        <?php echo TbHtml::label(Yii::t("integral","Total credits available"),"",array('class'=>"col-sm-2 control-label")); ?>
         <div class="col-sm-3">
             <?php echo TbHtml::textField("available","",array('readonly'=>(true),'id'=>'available')); ?>
         </div>
