@@ -78,7 +78,8 @@ class RankCityList extends CListPageModel
         $sql = $sql1.$clause.$group;
         $count = Yii::app()->db->createCommand($sql)->queryAll();
         if($count){
-            $this->totalRow = count($count);
+            $count = count($count);
+            $this->totalRow = $count>5?5:$count;
         }else{
             $this->totalRow = 0;
         }
