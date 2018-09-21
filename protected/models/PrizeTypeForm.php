@@ -4,10 +4,10 @@ class PrizeTypeForm extends CFormModel
 {
 	public $id;
 	public $prize_name;
-	public $prize_point;
-	public $tries_limit;
-	public $limit_number;
-	public $min_point;
+	public $prize_point = 0;
+	public $tries_limit = 0;
+	public $limit_number = 0;
+	public $min_point = 0;
 
 
     public $no_of_attm = array(
