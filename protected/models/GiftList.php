@@ -17,14 +17,15 @@ class GiftList extends CListPageModel
     public function retrieveDataByPage($pageNum=1)
     {
         //$city_allow = Yii::app()->user->city_allow();
-        $city = Yii::app()->user->city();
+        $city_allow = Yii::app()->user->city_allow();
+        //$city = Yii::app()->user->city();
         $sql1 = "select *
 				from gr_gift_type
-				where city ='$city' 
+				where city IN ($city_allow) 
 			";
         $sql2 = "select count(id)
 				from gr_gift_type
-				where city ='$city' 
+				where city IN ($city_allow) 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {

@@ -108,7 +108,7 @@ return array(
     'particular year'=>'年份',
     'has credit'=>'已有學分',
     'Available credits = total credits - credits deducted from the award application'=>'可用學分 = 總學分 - 申請獎項扣除的學分',
-    'Total credits = all credits for the year'=>'總學分 = 本年度的所有學分',
+    'Total credits = all credits for the year'=>'總學分 = 截止到本年度的所有學分',
 
     'Employee Code' => '員工編號',
     'export' => '導出',
