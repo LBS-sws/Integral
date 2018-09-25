@@ -8,7 +8,7 @@ class CreditTypeForm extends CFormModel
 	public $credit_point;
 	public $category;
 	public $rule;
-	public $z_index;
+	public $z_index=0;
 	public $year_sw=0;
 	public $year_max=0;
 	public $validity=5;
