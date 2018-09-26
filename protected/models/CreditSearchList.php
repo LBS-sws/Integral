@@ -41,12 +41,12 @@ class CreditSearchList extends CListPageModel
         $sql1 = "select a.*,b.category,b.credit_name,d.name AS employee_name,d.city AS s_city from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) AND a.state = 3  
+                where d.city IN ($city_allow) AND a.state = 3 and d.staff_status = 0 
 			";
         $sql2 = "select count(a.id) from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) AND a.state = 3  
+                where d.city IN ($city_allow) AND a.state = 3 and d.staff_status = 0 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {

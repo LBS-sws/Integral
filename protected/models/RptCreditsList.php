@@ -58,7 +58,7 @@ class RptCreditsList extends CReport {
                 from gr_credit_request a 
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 LEFT JOIN gr_credit_type e ON a.credit_type = e.id
-                where d.city in($citylist) and a.state=3 
+                where d.city in($citylist) and a.state=3  and d.staff_status = 0 
                 $cond_staff $cond_time
 				order by d.city desc, a.id desc
 			";

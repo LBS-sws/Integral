@@ -38,12 +38,12 @@ class PrizeRequestList extends CListPageModel
         $sql1 = "select a.*,b.prize_name,d.name AS employee_name,d.city AS s_city from gr_prize_request a
                 LEFT JOIN gr_prize_type b ON a.prize_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) 
+                where d.city IN ($city_allow)  and d.staff_status = 0 
 			";
         $sql2 = "select count(a.id) from gr_prize_request a
                 LEFT JOIN gr_prize_type b ON a.prize_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) 
+                where d.city IN ($city_allow)  and d.staff_status = 0 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {

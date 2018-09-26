@@ -43,11 +43,11 @@ class RankCityList extends CListPageModel
         }
         $sql1 = "select a.year,d.code AS employee_code,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city = '$city' and a.year = '$year' 
+                where d.city = '$city' and a.year = '$year' and d.staff_status = 0 
 			";
         $sql2 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city = '$city' and a.year = '$year' 
+                where d.city = '$city' and a.year = '$year' and d.staff_status = 0 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {

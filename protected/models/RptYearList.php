@@ -48,7 +48,7 @@ class RptYearList extends CReport {
 		}
         $sql = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($citylist) 
+                where d.city IN ($citylist)  and d.staff_status = 0 
                 $cond_staff $dateSql
                 GROUP BY a.employee_id,a.year 
 			";

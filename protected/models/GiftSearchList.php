@@ -39,12 +39,12 @@ class GiftSearchList extends CListPageModel
         $sql1 = "select a.*,b.gift_name,d.name AS employee_name,d.city AS s_city from gr_gift_request a
                 LEFT JOIN gr_gift_type b ON a.gift_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) and a.state = 3 
+                where d.city IN ($city_allow) and a.state = 3 and d.staff_status = 0 
 			";
         $sql2 = "select count(a.id) from gr_gift_request a
                 LEFT JOIN gr_gift_type b ON a.gift_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) and a.state = 3 
+                where d.city IN ($city_allow) and a.state = 3 and d.staff_status = 0 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {

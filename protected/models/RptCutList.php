@@ -59,7 +59,7 @@ class RptCutList extends CReport {
         $sql = "select a.*,b.gift_name,d.name AS employee_name,d.city AS s_city from gr_gift_request a
                 LEFT JOIN gr_gift_type b ON a.gift_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city in($citylist) 
+                where d.city in($citylist)  and d.staff_status = 0 
                 $cond_staff $cond_time
 			";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
