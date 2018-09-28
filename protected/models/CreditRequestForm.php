@@ -82,8 +82,9 @@ class CreditRequestForm extends CFormModel
             ->where("id=:id", array(':id'=>$this->credit_type))->queryRow();
         if ($rows){
             if($rows["year_sw"]==1){
+                $year = date("Y");
                 $count = Yii::app()->db->createCommand()->select("count(*)")->from("gr_credit_request")
-                    ->where("credit_type=:credit_type and employee_id=:employee_id and state in (1,3)",
+                    ->where("credit_type=:credit_type and employee_id=:employee_id and state in (1,3,4) and date_format(apply_date,'%Y') ='$year'",
                         array(':credit_type'=>$this->credit_type,':employee_id'=>$this->employee_id))->queryScalar();
                 if($count > $rows["year_max"]){
                     $message = "该学分每年申請次數不能大于".$rows["year_max"];
@@ -102,8 +103,14 @@ class CreditRequestForm extends CFormModel
         $suffix = Yii::app()->params['envSuffix'];
         $from = "hr".$suffix.".hr_employee";
         $city_allow = Yii::app()->user->city_allow();
+        $sql = "";
+        if(Yii::app()->user->validFunction('ZR01')){//允許代申請學分
+            $sql = " and city in ($city_allow)";
+        }else{
+            $this->employee_id = Yii::app()->user->staff_id();//
+        }
         $rows = Yii::app()->db->createCommand()->select("name,city")->from($from)
-            ->where("id=:id and city in ($city_allow) and staff_status=0 ", array(':id'=>$this->employee_id))->queryRow();
+            ->where("id=:id and staff_status=0 $sql", array(':id'=>$this->employee_id))->queryRow();
         if ($rows){
             $this->city = $rows["city"];
         }else{

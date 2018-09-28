@@ -85,7 +85,7 @@ class PrizeRequestForm extends CFormModel
             }
             $prizeNum = intval($creditList["end_num"])-intval($prizeNum);
             if($this->state == 1){
-                if($rows["tries_limit"]!=0){
+                if($rows["tries_limit"]!=0){//判斷是否有次數限制
                     $sumNum = Yii::app()->db->createCommand()->select("count(*)")->from("gr_prize_request")
                         ->where("employee_id=:employee_id and prize_type=:prize_type and state in (1,3)",
                             array(':prize_type'=>$this->prize_type,':employee_id'=>$this->employee_id))->queryScalar();
@@ -95,15 +95,31 @@ class PrizeRequestForm extends CFormModel
                         return false;
                     }
                 }
-                if($prizeNum<intval($rows["prize_point"])){
+                if($prizeNum<intval($rows["prize_point"])){//判斷學分是否足夠扣除
                     $message = $this->employee_name.Yii::t("integral","available credits are").$prizeNum;
                     $this->addError($attribute,$message);
                     return false;
                 }
-                if ($prizeNum<intval($rows["min_point"])){
+                if ($prizeNum<intval($rows["min_point"])){//判斷學分是否滿足最小學分
                     $message = Yii::t("integral","The minimum credits allowed by the award are").$rows["min_point"];
                     $this->addError($attribute,$message);
                     return false;
+                }
+                if($rows["full_time"] == 1){//申請時需要含有德智體群美5種學分
+                    $dateSql = date("Y-m-d");
+                    $dateSql = date("Y-01-01",strtotime("$dateSql - 5 years"));
+                    $categoryList = CreditTypeForm::getCategoryAll();
+                    for ($i=1;$i<6;$i++){
+                        $rs = Yii::app()->db->createCommand()->select("a.id")->from("gr_credit_request a")
+                            ->leftJoin("gr_credit_type b","a.credit_type = b.id")
+                            ->where("a.employee_id=:employee_id and a.state = 3 and a.apply_date>='$dateSql' and b.category=$i",
+                                array(':employee_id'=>$this->employee_id))->queryRow();
+                        if(!$rs){
+                            $message = Yii::t("integral","The employee lacks a credit type:").$categoryList[$i];
+                            $this->addError($attribute,$message);
+                            return false;
+                        }
+                    }
                 }
             }
         }else{

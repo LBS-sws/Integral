@@ -8,6 +8,7 @@ class PrizeTypeForm extends CFormModel
 	public $tries_limit = 0;
 	public $limit_number = 0;
 	public $min_point = 0;
+	public $full_time = 0;
 
 
     public $no_of_attm = array(
@@ -28,6 +29,7 @@ class PrizeTypeForm extends CFormModel
             'prize_point'=>Yii::t('integral','Prize Point'),
             'min_point'=>Yii::t('integral','min point'),
             'tries_limit'=>Yii::t('integral','Tries Limit'),
+            'full_time'=>Yii::t('integral','Full time'),
 		);
 	}
 
@@ -37,13 +39,14 @@ class PrizeTypeForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, prize_name, min_point, prize_point, tries_limit, limit_number','safe'),
+			array('id, prize_name, min_point, prize_point, tries_limit, limit_number, full_time','safe'),
             array('prize_name','required'),
             array('prize_point','required'),
             array('prize_point', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('min_point', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('limit_number', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('tries_limit', 'numerical', 'min'=>0, 'integerOnly'=>true),
+            array('full_time', 'numerical', 'min'=>0, 'integerOnly'=>true),
             array('prize_name','validateName'),
             array('files, removeFileId, docMasterId, no_of_attm','safe'),
 		);
@@ -74,6 +77,7 @@ class PrizeTypeForm extends CFormModel
                 $this->min_point = $row['min_point'];
                 $this->tries_limit = $row['tries_limit'];
                 $this->limit_number = $row['limit_number'];
+                $this->full_time = $row['full_time'];
                 $this->no_of_attm['iprize'] = $row['iprizedoc'];
                 break;
 			}
@@ -180,9 +184,9 @@ class PrizeTypeForm extends CFormModel
                 break;
             case 'new':
                 $sql = "insert into gr_prize_type(
-							prize_name, prize_point, min_point, tries_limit, limit_number, lcu
+							prize_name, prize_point, min_point, tries_limit, limit_number, full_time, lcu
 						) values (
-							:prize_name, :prize_point, :min_point, :tries_limit, :limit_number, :lcu
+							:prize_name, :prize_point, :min_point, :tries_limit, :limit_number, :full_time, :lcu
 						)";
                 break;
             case 'edit':
@@ -192,6 +196,7 @@ class PrizeTypeForm extends CFormModel
 							min_point = :min_point, 
 							tries_limit = :tries_limit, 
 							limit_number = :limit_number, 
+							full_time = :full_time, 
 							luu = :luu
 						where id = :id
 						";
@@ -216,6 +221,8 @@ class PrizeTypeForm extends CFormModel
             $command->bindParam(':tries_limit',$this->tries_limit,PDO::PARAM_INT);
         if (strpos($sql,':limit_number')!==false)
             $command->bindParam(':limit_number',$this->limit_number,PDO::PARAM_INT);
+        if (strpos($sql,':full_time')!==false)
+            $command->bindParam(':full_time',$this->full_time,PDO::PARAM_INT);
 
         if (strpos($sql,':luu')!==false)
             $command->bindParam(':luu',$uid,PDO::PARAM_STR);

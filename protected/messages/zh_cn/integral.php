@@ -135,5 +135,7 @@ return array(
     'Exchange'=>'兑换',
     '2014 year Credit'=>'2014年学分',
     'Total credits available'=>'现有有效总学分',
+    'Full time'=>'德智体群美全勤',
+    'The employee lacks a credit type:'=>'该员工缺少学分类型：',
 );
 ?>
