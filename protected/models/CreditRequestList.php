@@ -39,9 +39,9 @@ class CreditRequestList extends CListPageModel
         $suffix = Yii::app()->params['envSuffix'];
         $city = Yii::app()->user->city();
         $uid = Yii::app()->user->id;
-        $staffId = Yii::app()->user->employee_id();//
+        $staffId = Yii::app()->user->staff_id();//
         //$city_allow = Yii::app()->user->city_allow();
-        $city_allow = Yii::app()->user->employee_city_all();
+        $city_allow = Yii::app()->user->getEmployeeCityAll();
         $sql1 = "select a.*,b.category,b.credit_name,d.name AS employee_name,d.city AS s_city from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
