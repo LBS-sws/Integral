@@ -137,5 +137,6 @@ return array(
     'Total credits available'=>'现有有效总学分',
     'Full time'=>'德智体群美全勤',
     'The employee lacks a credit type:'=>'该员工缺少学分类型：',
+    'apply time shall not exceed the date of the today'=>'申请时间不得超过今天的日期',
 );
 ?>

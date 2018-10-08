@@ -140,6 +140,7 @@ class CreditRequestController extends Controller
     public function actionNew()
     {
         $model = new CreditRequestForm('new');
+        $model->apply_date = date("Y-m-d");
         if($model->validateNowUser(true)){
             $this->render('form',array('model'=>$model));
         }else{

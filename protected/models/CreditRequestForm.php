@@ -71,6 +71,7 @@ class CreditRequestForm extends CFormModel
 			array('apply_date','required'),
 			array('employee_id','required'),
             array('employee_id','validateEmployee'),
+            array('apply_date','validateApplyDate'),
 			array('credit_type','required'),
 			array('credit_type','validateIntegral'),
             array('files, removeFileId, docMasterId, no_of_attm','safe'),
@@ -116,6 +117,17 @@ class CreditRequestForm extends CFormModel
         }else{
             $message = Yii::t('integral','Employee Name'). Yii::t('integral',' Did not find');
             $this->addError($attribute,$message);
+        }
+    }
+
+	public function validateApplyDate($attribute, $params){
+	    if(!empty($this->apply_date)){
+            $date = date("Y-m-d");
+            $thisDate = date("Y-m-d",strtotime($this->apply_date));
+            if ($thisDate>$date){
+                $message = Yii::t('integral','apply time shall not exceed the date of the today');
+                $this->addError($attribute,$message);
+            }
         }
     }
 

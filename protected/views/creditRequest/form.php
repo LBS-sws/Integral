@@ -9,6 +9,9 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
     'layout'=>TbHtml::FORM_LAYOUT_HORIZONTAL,
     'htmlOptions'=>array('enctype' => 'multipart/form-data')
 )); ?>
+<style>
+    td.disabled.day{color: #c7c7c7;}
+</style>
 
 <section class="content-header">
     <h1>
@@ -128,7 +131,7 @@ $('#btnCancelData').on('click',function() {
 	var elm=$('#btnCancelData');
 	jQuery.yii.submitForm(elm,'".Yii::app()->createUrl('creditRequest/cancel')."',{});
 });
-$('#apply_date').datepicker({autoclose: true, format: 'yyyy-mm-dd',language: 'zh_cn'});
+$('#apply_date').datepicker({autoclose: true, format: 'yyyy-mm-dd',language: 'zh_cn',endDate:new Date()});
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 
