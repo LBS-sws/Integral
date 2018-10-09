@@ -34,6 +34,14 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                     ));
                 ?>
             </div>
+            <?php if (Yii::app()->user->validFunction('ZR03')): ?>
+                <div class="btn-group pull-right" role="group">
+                    <?php
+                    echo TbHtml::button('<span class="fa fa-file-text-o"></span> '.Yii::t('integral','Import File'), array(
+                        'data-toggle'=>'modal','data-target'=>'#importIntegral'));
+                    ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
     <?php
@@ -77,6 +85,8 @@ $('#start_time').datepicker({autoclose: true, format: 'yyyy/mm/dd',language: 'zh
 $('#end_time').datepicker({autoclose: true, format: 'yyyy/mm/dd',language: 'zh_cn'});
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
+if (Yii::app()->user->validFunction('ZR03'))
+    $this->renderPartial('//site/importIntegral',array('name'=>"UploadExcelForm","model"=>$model,"submit"=>Yii::app()->createUrl('prizeRequest/importPrize')));
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);
 ?>

@@ -28,6 +28,10 @@ class PrizeRequestController extends Controller
                 'actions'=>array('index','edit','view','ajaxStaffGift','fileDownload'),
                 'expression'=>array('PrizeRequestController','allowReadOnly'),
             ),
+            array('allow',
+                'actions'=>array('importPrize'),
+                'expression'=>array('PrizeRequestController','allowImport'),
+            ),
             array('deny',  // deny all users
                 'users'=>array('*'),
             ),
@@ -36,6 +40,10 @@ class PrizeRequestController extends Controller
 
     public static function allowReadWrite() {
         return Yii::app()->user->validRWFunction('DE03');
+    }
+
+    public static function allowImport() {
+        return Yii::app()->user->validFunction('ZR03');
     }
 
     public static function allowReadOnly() {
@@ -191,6 +199,42 @@ class PrizeRequestController extends Controller
             $credit = PrizeRequestForm::getCreditSumToYear($staff_id);
             echo CJSON::encode(array("status"=>1,"val"=>$credit["end_num"]));
         }else{
+            $this->redirect(Yii::app()->createUrl('prizeRequest/index'));
+        }
+    }
+
+    //導入
+    public function actionImportPrize(){
+        $model = new UploadExcelForm();
+        $img = CUploadedFile::getInstance($model,'file');
+        $city = Yii::app()->user->city();
+        $path =Yii::app()->basePath."/../upload/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path =Yii::app()->basePath."/../upload/excel/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        $path.=$city."/";
+        if (!file_exists($path)){
+            mkdir($path);
+        }
+        if(empty($img)){
+            Dialog::message(Yii::t('dialog','Validation Message'), "文件不能为空");
+            $this->redirect(Yii::app()->createUrl('prizeRequest/index'));
+        }
+        $url = "upload/excel/".$city."/".date("YmdHis").".".$img->getExtensionName();
+        $model->file = $img->getName();
+        if ($model->file) {
+            $img->saveAs($url);
+            $loadExcel = new LoadExcel($url);
+            $list = $loadExcel->getExcelList();
+            $model->loadPrizeRequest($list);
+            $this->redirect(Yii::app()->createUrl('prizeRequest/index'));
+        }else{
+            $message = CHtml::errorSummary($model);
+            Dialog::message(Yii::t('dialog','Validation Message'), $message);
             $this->redirect(Yii::app()->createUrl('prizeRequest/index'));
         }
     }

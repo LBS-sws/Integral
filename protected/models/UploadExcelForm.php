@@ -15,6 +15,10 @@ class UploadExcelForm extends CFormModel
 	public $staff_code="";//員工編號
 	public $staff_name="";//員工名字
 	public $set_id="";//積分名稱id
+	public $apply_year="";//申請年份
+	public $apply_date="";//申請時間
+	public $prize_point="";
+	public $creditList="";
 
 	/**
      *
@@ -181,6 +185,86 @@ class UploadExcelForm extends CFormModel
         Dialog::message(Yii::t('dialog','Information'), "成功数量：".$successNum."<br>失败数量：".$errNum."<br>".$error);
     }
 
+	//批量導入（獎項）
+    public function loadPrizeRequest($arr){
+	    $errNum = 0;//失敗條數
+	    $successNum = 0;//成功條數
+        $validateArr = $this->getPrizeRequestList();
+        foreach ($validateArr as $vaList){
+            if(!in_array($vaList["name"],$arr["listHeader"])){
+                Dialog::message(Yii::t('dialog','Validation Message'), $vaList["name"]."沒找到");
+                return false;
+            }
+        }
+        foreach ($arr["listBody"] as $list){
+            $arrList = array();
+            $continue = true;
+            $this->start_title = current($list);//每行的第一個文本
+            foreach ($validateArr as $vaList){
+                $key = array_search($vaList["name"],$arr["listHeader"]);
+                $value = $this->validateStr($list[$key],$vaList);
+                if($value['status'] == 1){
+                    $arrList[$vaList["sqlName"]] = $value["data"];
+                    if($vaList["sqlName"] == "prize_type"){
+                        $arrList["prize_point"]=$this->prize_point;
+                    }
+                }else{
+                    $continue = false;
+                    array_push($this->error_list,$value["error"]);
+                    break;
+                }
+            }
+            if($continue){
+                $city = Yii::app()->user->city();
+                $uid = Yii::app()->user->id;
+                //新增(獎金申請)
+                $arrList["lcu"] = $uid;
+                $arrList["audit_date"] = date("Y-m-d");
+                $arrList["reject_note"] = "系统导入，时间：".date("Y-m-d")."，用户id：".$uid;
+                $arrList["city"] = $city;
+                $arrList["state"] = 3;
+                Yii::app()->db->createCommand()->insert("gr_prize_request", $arrList);
+                //扣減學分
+                $sum = $arrList["prize_point"];
+                if(!empty($sum)){
+                    $sum = intval($sum);//需要扣減的總學分
+                    $year = $this->apply_year;//申請的年份
+                    $creditList = Yii::app()->db->createCommand()->select("id,long_type,end_num,point_id")->from("gr_credit_point_ex")
+                        ->where("employee_id=:employee_id and year=:year and end_num>0",array(":employee_id"=>$arrList["employee_id"],":year"=>$year))
+                        ->order('long_type,lcu asc')->queryAll();
+                    $num = 0;//已經扣減的學分
+                    if($creditList){
+                        foreach ($creditList as $credit){
+                            $nowNum = intval($credit["end_num"]);
+                            $num+=$nowNum;
+                            $updateNum = $num<$sum?0:$num-$sum;
+                            Yii::app()->db->createCommand()->update('gr_credit_point_ex', array(
+                                'end_num'=>$updateNum,
+                            ), 'id=:id', array(':id'=>$credit["id"]));
+                            if(intval($credit["long_type"]) > 1){ //需要修改5年限的學分
+                                Yii::app()->db->createCommand()->update('gr_credit_point_ex', array(
+                                    //'start_num'=>$updateNum,//總積分不應該變
+                                    'end_num'=>$updateNum,
+                                ), 'point_id=:point_id and year > :year', array(':point_id'=>$credit["point_id"],':year'=>$year));
+                            }
+                            if($num>=$sum){
+                                break;
+                            }
+                        }
+                    }else{
+                        throw new CHttpException(404,'Cannot update.33333');
+                    }
+                }
+
+                $successNum++;
+            }else{
+                $errNum++;
+            }
+        }
+        $error = implode("<br>",$this->error_list);
+        Dialog::message(Yii::t('dialog','Information'), "成功数量：".$successNum."<br>失败数量：".$errNum."<br>".$error);
+    }
+
 	//批量導入（學分）
     public function loadGoods($arr){
 	    $this->reSetIntegralID(); //獲取導入學分的id
@@ -316,6 +400,93 @@ class UploadExcelForm extends CFormModel
         return $arr;
     }
 
+    private function getPrizeRequestList(){
+        $arr = array(
+            array("name"=>"员工编号（旧）","sqlName"=>"employee_id","empty"=>true,"fun"=>"validatePrizeOldCode"),
+            array("name"=>"申请时间","sqlName"=>"apply_date","empty"=>true,"fun"=>"validatePrizeDate"),
+            array("name"=>"奖项名称","sqlName"=>"prize_type","empty"=>true,"fun"=>"validatePrize"),
+            array("name"=>"备注","sqlName"=>"remark","empty"=>false),
+        );
+        return $arr;
+    }
+
+    public function validatePrize($value){
+        $rows = Yii::app()->db->createCommand()->select("*")->from("gr_prize_type")
+            ->where("prize_name=:prize_name", array(':prize_name'=>$value))->queryRow();
+        if ($rows){
+            if(!empty($this->staff_code)&&!empty($this->creditList)){
+                $creditList = $this->creditList;
+            }else{
+                $creditList = PrizeRequestForm::getCreditSumToYear($this->staff_id,$this->apply_year);
+                $this->creditList = $creditList;
+            }
+            $prizeRow = Yii::app()->db->createCommand()->select("sum(prize_point) as prize_point")->from("gr_prize_request")
+                ->where("employee_id=:employee_id and state = 1", array(':employee_id'=>$this->staff_id))->queryRow();
+            $prizeNum = 0;//申請時當前用戶的總學分
+            if($prizeRow){
+                $prizeNum = $prizeRow["prize_point"];
+            }
+            $prizeNum = intval($creditList["end_num"])-intval($prizeNum);
+            if($rows["tries_limit"]!=0){//判斷是否有次數限制
+                $sumNum = Yii::app()->db->createCommand()->select("count(*)")->from("gr_prize_request")
+                    ->where("employee_id=:employee_id and prize_type=:prize_type and state in (1,3)",
+                        array(':prize_type'=>$rows["id"],':employee_id'=>$this->staff_id))->queryScalar();
+                if(intval($rows["limit_number"])<=$sumNum){
+                    $message = "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","The number of applications for the award is").$rows["limit_number"];
+                    return array("status"=>0,"error"=>$message);
+                }
+            }
+            if($prizeNum<intval($rows["prize_point"])){//判斷學分是否足夠扣除
+                $message = "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","available credits are").$prizeNum;
+                return array("status"=>0,"error"=>$message);
+            }
+            if ($prizeNum<intval($rows["min_point"])){//判斷學分是否滿足最小學分
+                $message = "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","The minimum credits allowed by the award are").$rows["min_point"];
+                return array("status"=>0,"error"=>$message);
+            }
+            if($rows["full_time"] == 1){//申請時需要含有德智體群美5種學分
+                $dateSql = $this->apply_date;
+                $dateSql = date("Y-01-01",strtotime("$dateSql - 5 years"));
+                $categoryList = CreditTypeForm::getCategoryAll();
+                for ($i=1;$i<6;$i++){
+                    $rs = Yii::app()->db->createCommand()->select("a.id")->from("gr_credit_request a")
+                        ->leftJoin("gr_credit_type b","a.credit_type = b.id")
+                        ->where("a.employee_id=:employee_id and a.state = 3 and a.apply_date>='$dateSql' and b.category=$i",
+                            array(':employee_id'=>$this->staff_id))->queryRow();
+                    if(!$rs){
+                        $message =  "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","The employee lacks a credit type:").$categoryList[$i];
+                        return array("status"=>0,"error"=>$message);
+                    }
+                }
+            }
+        }else{
+            $message = "（".$this->start_title."）".$value."-".Yii::t('integral','Prize Name'). Yii::t('integral',' Did not find');
+            return array("status"=>0,"error"=>$message);
+        }
+        $this->prize_point = $rows["prize_point"];
+        return array("status"=>1,"data"=>$rows["id"]);
+    }
+
+    public function validatePrizeDate($value){
+        if(is_numeric($value)){
+            $value .="-01-01 01:00:00";
+        }
+        $time = strtotime($value);
+        if($time>0){
+            if($this->apply_year != date("Y",$time)||empty($this->staff_code)){
+                $this->staff_code = "";
+            }
+            $this->apply_year = date("Y",$time);
+            $this->apply_date = date("Y-m-d",$time);
+            return array("status"=>1,"data"=>date("Y-m-d H:i:s",$time));
+        }else{
+            $this->apply_year = "";
+            $this->apply_date = "";
+            $this->staff_code = "";
+            return array("status"=>0,"error"=>"时间格式不正确:".$value);
+        }
+    }
+
     public function validateDate($value){
         $time = strtotime($value);
         if($time>0){
@@ -325,9 +496,33 @@ class UploadExcelForm extends CFormModel
         }
     }
 
+    public function validatePrizeOldCode($value){
+        $suffix = Yii::app()->params['envSuffix'];
+        $rows = Yii::app()->db->createCommand()->select("id,code,name")->from("hr$suffix.hr_employee")
+            ->where('code_old=:code_old AND staff_status in (0,-1) ',array(':code_old'=>$value))->queryRow();
+        if(!$rows){
+            $rows = Yii::app()->db->createCommand()->select("id")->from("hr$suffix.hr_employee")
+                ->where('code=:code AND staff_status in (0,-1) ',array(':code'=>$value))->queryRow();
+            if(!$rows){
+                $this->staff_code = "";
+                $this->staff_id = "";
+                $this->staff_name = "";
+                return array("status"=>0,"error"=>"员工编号不存在:".$value);
+            }
+        }
+        if($this->staff_id == $rows["id"]){
+            $this->staff_code = $rows["code"];
+        }else{
+            $this->staff_code = "";
+        }
+        $this->staff_name = $rows["name"];
+        $this->staff_id = $rows["id"];
+        return array("status"=>1,"data"=>$rows["id"]);
+    }
+
     public function validateOldCode($value){
         $suffix = Yii::app()->params['envSuffix'];
-        $rows = Yii::app()->db->createCommand()->select("id")->from("hr$suffix.hr_employee")
+        $rows = Yii::app()->db->createCommand()->select("id,code,name")->from("hr$suffix.hr_employee")
             ->where('code_old=:code_old AND staff_status in (0,-1) ',array(':code_old'=>$value))->queryRow();
         if(!$rows){
             $rows = Yii::app()->db->createCommand()->select("id")->from("hr$suffix.hr_employee")
