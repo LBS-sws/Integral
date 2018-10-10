@@ -26,6 +26,7 @@ return array(
 
     ' Did not find' => '沒找到',
     'Employee Name' => '員工名字',
+    'Employee List' => '員工列表',
     'Remark' => '備註',
     'Reject Note' => '拒絕原因',
     'Status'=>'狀態',
@@ -136,5 +137,6 @@ return array(
     'Full time'=>'德智體群美全勤',
     'The employee lacks a credit type:'=>'該員工缺少學分類型：',
     'apply time shall not exceed the date of the today'=>'申請時間不得超過今天的日期',
+    'Three consecutive championships'=>'三連冠次數',
 );
 ?>

@@ -86,6 +86,7 @@ return array(
     'Total credit search'=>'總學分查詢',
     'Credit review'=>'學分審核',
     'Exchange review'=>'積分兌換審核',
+    'Stretch search'=>'學分三冠王查詢',
     'Prize review'=>'獎項審核',
     'Credit detail'=>'學分詳情',
     'Apply list'=>'申請列表',

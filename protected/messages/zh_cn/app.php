@@ -79,6 +79,7 @@ return array(
     'Credits for'=>'积分兑换',
     'Credits search'=>'学分查询',
     'Exchange search'=>'积分兑换查询',
+    'Stretch search'=>'学分三冠王查询',
     'Total credit search'=>'总学分查询',
     'Credit review'=>'学分审核',
     'Exchange review'=>'积分兑换审核',

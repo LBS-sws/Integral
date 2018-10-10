@@ -46,6 +46,10 @@ return array(
                 'access'=>'SR03',
                 'url'=>'/giftSearch/index',
             ),
+            'Stretch search'=>array(
+                'access'=>'SR04',
+                'url'=>'/StretchSearch/index',
+            ),
         ),
     ),
     'ranking list'=>array(
