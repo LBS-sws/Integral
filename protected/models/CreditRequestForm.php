@@ -220,7 +220,7 @@ class CreditRequestForm extends CFormModel
         $suffix = Yii::app()->params['envSuffix'];
         //$city_allow = Yii::app()->user->city_allow();
         $city_allow = Yii::app()->user->getEmployeeCityAll();
-        $rows = Yii::app()->db->createCommand()->select("a.*,d.category,d.remark as s_remark,docman$suffix.countdoc('GRAL',a.id) as graldoc")
+        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,d.category,d.remark as s_remark,docman$suffix.countdoc('GRAL',a.id) as graldoc")
             ->from("gr_credit_request a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
             ->leftJoin("gr_credit_type d","a.credit_type = d.id")
@@ -231,6 +231,7 @@ class CreditRequestForm extends CFormModel
 			{
 				$this->id = $row['id'];
 				$this->employee_id = $row['employee_id'];
+				$this->employee_name = $row['employee_name'];
                 $this->credit_type = $row['credit_type'];
                 $this->credit_point = $row['credit_point'];
                 $this->apply_date = $row['apply_date'];
