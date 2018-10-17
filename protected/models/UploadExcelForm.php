@@ -414,12 +414,7 @@ class UploadExcelForm extends CFormModel
         $rows = Yii::app()->db->createCommand()->select("*")->from("gr_prize_type")
             ->where("prize_name=:prize_name", array(':prize_name'=>$value))->queryRow();
         if ($rows){
-            if(!empty($this->staff_code)&&!empty($this->creditList)){
-                $creditList = $this->creditList;
-            }else{
-                $creditList = PrizeRequestForm::getCreditSumToYear($this->staff_id,$this->apply_year);
-                $this->creditList = $creditList;
-            }
+            $creditList = PrizeRequestForm::getCreditSumToYear($this->staff_id,$this->apply_year);
             $prizeRow = Yii::app()->db->createCommand()->select("sum(prize_point) as prize_point")->from("gr_prize_request")
                 ->where("employee_id=:employee_id and state = 1", array(':employee_id'=>$this->staff_id))->queryRow();
             $prizeNum = 0;//申請時當前用戶的總學分
@@ -432,16 +427,16 @@ class UploadExcelForm extends CFormModel
                     ->where("employee_id=:employee_id and prize_type=:prize_type and state in (1,3)",
                         array(':prize_type'=>$rows["id"],':employee_id'=>$this->staff_id))->queryScalar();
                 if(intval($rows["limit_number"])<=$sumNum){
-                    $message = "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","The number of applications for the award is").$rows["limit_number"];
+                    $message = "（".$this->start_title."）".$this->staff_name."(".$this->staff_id.")"."（".$this->apply_year."-".$value."）".Yii::t("integral","The number of applications for the award is").$rows["limit_number"];
                     return array("status"=>0,"error"=>$message);
                 }
             }
             if($prizeNum<intval($rows["prize_point"])){//判斷學分是否足夠扣除
-                $message = "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","available credits are").$prizeNum;
+                $message = "（".$this->start_title."）".$this->staff_name."(".$this->staff_id.")"."（".$this->apply_year."-".$value."）".Yii::t("integral","available credits are").$prizeNum;
                 return array("status"=>0,"error"=>$message);
             }
             if ($prizeNum<intval($rows["min_point"])){//判斷學分是否滿足最小學分
-                $message = "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","The minimum credits allowed by the award are").$rows["min_point"];
+                $message = "（".$this->start_title."）".$this->staff_name."(".$this->staff_id.")"."（".$this->apply_year."-".$value."）".Yii::t("integral","The minimum credits allowed by the award are").$rows["min_point"]."($prizeNum)";
                 return array("status"=>0,"error"=>$message);
             }
             if($rows["full_time"] == 1){//申請時需要含有德智體群美5種學分
@@ -454,7 +449,7 @@ class UploadExcelForm extends CFormModel
                         ->where("a.employee_id=:employee_id and a.state = 3 and a.apply_date>='$dateSql' and b.category=$i",
                             array(':employee_id'=>$this->staff_id))->queryRow();
                     if(!$rs){
-                        $message =  "（".$this->start_title."）".$this->staff_name."（".$this->apply_year."-".$value."）".Yii::t("integral","The employee lacks a credit type:").$categoryList[$i];
+                        $message =  "（".$this->start_title."）".$this->staff_name."(".$this->staff_id.")"."（".$this->apply_year."-".$value."）".Yii::t("integral","The employee lacks a credit type:").$categoryList[$i];
                         return array("status"=>0,"error"=>$message);
                     }
                 }

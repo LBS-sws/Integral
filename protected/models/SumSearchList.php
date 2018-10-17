@@ -13,6 +13,7 @@ class SumSearchList extends CListPageModel
         return array(
             'id'=>Yii::t('integral','ID'),
             'employee_id'=>Yii::t('integral','Employee Name'),
+            'employee_code'=>Yii::t('integral','Employee Code'),
             'employee_name'=>Yii::t('integral','Employee Name'),
             'year'=>Yii::t('integral','particular year'),
             'start_num'=>Yii::t('integral','sum credit num'),
@@ -33,7 +34,7 @@ class SumSearchList extends CListPageModel
     {
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $sql1 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
+        $sql1 = "select a.year,d.code AS employee_code,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city IN ($city_allow)  and d.staff_status = 0 
 			";
@@ -88,6 +89,7 @@ class SumSearchList extends CListPageModel
         if (count($records) > 0) {
             foreach ($records as $k=>$record) {
                 $this->attr[] = array(
+                    'employee_code'=>$record['employee_code'],
                     'employee_name'=>$record['employee_name'],
                     'start_num'=>$record['start_num'],
                     'end_num'=>$record['end_num'],

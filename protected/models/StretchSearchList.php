@@ -15,6 +15,7 @@ class StretchSearchList extends CListPageModel
         return array(
             'id'=>Yii::t('integral','ID'),
             'employee_id'=>Yii::t('integral','Employee Name'),
+            'employee_code'=>Yii::t('integral','Employee Code'),
             'employee_name'=>Yii::t('integral','Employee Name'),
             'year'=>Yii::t('integral','particular year'),
             'start_num'=>Yii::t('integral','sum credit num'),
@@ -37,7 +38,7 @@ class StretchSearchList extends CListPageModel
         $prize_sql = $this->prize_sql;
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $sql1 = "select d.name AS employee_name,d.city AS s_city$prize_sql from gr_prize_request a
+        $sql1 = "select d.code AS employee_code,d.name AS employee_name,d.city AS s_city$prize_sql from gr_prize_request a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city IN ($city_allow)  and d.staff_status = 0 
 			";
@@ -90,6 +91,7 @@ class StretchSearchList extends CListPageModel
             foreach ($records as $k=>$record) {
                 $prize_sum = 0;
                 $arr = array(
+                    'employee_code'=>$record['employee_code'],
                     'employee_name'=>$record['employee_name'],
                     'city'=>CGeneral::getCityName($record["s_city"]),
                 );
