@@ -56,7 +56,7 @@ class Email {
         }
         $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_user_access a")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
-            ->where("a.system_id='$systemId' and a.a_read_write like '%$str%' $sql and b.email != ''")
+            ->where("a.system_id='$systemId' and a.a_read_write like '%$str%' $sql and b.email != '' and b.status='A'")
             ->queryAll();
         if($rs){
             foreach ($rs as $row){
@@ -72,7 +72,7 @@ class Email {
         $suffix = Yii::app()->params['envSuffix'];
         $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_city a")
             ->leftJoin("security$suffix.sec_user b","a.incharge=b.username")
-            ->where("a.code='$city' and b.email != ''")
+            ->where("a.code='$city' and b.email != '' and b.status='A'")
             ->queryRow();
         if($rs){
             if(!empty($rs["email"])){
@@ -121,7 +121,7 @@ class Email {
         }
         $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_user_access a")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
-            ->where("a.system_id='$systemId' $likeSql $sql and b.email != ''")
+            ->where("a.system_id='$systemId' $likeSql $sql and b.email != '' and b.status='A'")
             ->queryAll();
         if($rs){
             foreach ($rs as $row){
@@ -152,7 +152,7 @@ class Email {
         }
         $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_user_access a")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
-            ->where("a.system_id='$systemId' $likeSql $sql and b.email != ''")
+            ->where("a.system_id='$systemId' $likeSql $sql and b.email != '' and b.status='A'")
             ->queryAll();
         if($rs){
             foreach ($rs as $row){
@@ -185,7 +185,7 @@ class Email {
             ->leftJoin("hr$suffix.hr_employee d","d.id = e.employee_id")
             ->leftJoin("security$suffix.sec_user_access a","a.username = e.user_id")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
-            ->where("a.system_id='$systemId' $likeSql $sql and b.email != ''")
+            ->where("a.system_id='$systemId' $likeSql $sql and b.email != '' and b.status='A'")
             ->queryAll();
         if($rs){
             foreach ($rs as $row){
