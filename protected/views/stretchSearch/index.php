@@ -23,6 +23,14 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 </section>
 
 <section class="content">
+    <div class="box">
+        <div class="box-body">
+            <div class="btn-group text-info" role="group">
+                <p>1、累积取得3次学分目标金奖的史伟莎人</p>
+                <p>2、领奖后将重新累积学分目标金奖次数</p>
+            </div>
+        </div>
+    </div>
     <?php
     $search = array(
         'employee_name',

@@ -68,6 +68,9 @@ class CreditRequestList extends CListPageModel
                 case 'city_name':
                     $clause .= ' and d.city in '.$this->getCityCodeSqlLikeName($svalue);
                     break;
+                case 'state':
+                    $clause .= $this->getStatusSqlLikeName(' and a.state in ',$svalue);
+                    break;
             }
         }
         if (!empty($this->searchTimeStart) && !empty($this->searchTimeStart)) {
@@ -167,6 +170,28 @@ class CreditRequestList extends CListPageModel
         }else{
             $arr = implode(",",$arr);
             return "($arr)";
+        }
+    }
+
+//获取地区編號（模糊查詢）
+    public function getStatusSqlLikeName($sql,$name){
+        $statusList=array(
+            4=>Yii::t("integral","Confirmed, pending review"),
+            3=>Yii::t("integral","approve"),
+            2=>Yii::t("integral","Rejected"),
+            1=>Yii::t("integral","Sent, to be confirmed"),
+            0=>Yii::t("integral","Draft"),
+        );
+        $arr = array();
+        foreach ($statusList as $key=>$value){
+            if (strpos($value,$name)!==false)
+                $arr[] = "'".$key."'";
+        }
+        if(empty($arr)){
+            return "";
+        }else{
+            $arr = implode(",",$arr);
+            return $sql."($arr)";
         }
     }
 }
