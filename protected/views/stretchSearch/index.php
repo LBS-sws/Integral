@@ -26,8 +26,9 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
     <div class="box">
         <div class="box-body">
             <div class="btn-group text-info" role="group">
-                <p>1、累积取得3次学分目标金奖的史伟莎人</p>
-                <p>2、领奖后将重新累积学分目标金奖次数</p>
+                <p><b><?php echo Yii::t('integral','define'); ?>：</b></p>
+                <p style="text-indent: 15px;"><?php echo Yii::t('integral','Swisher who has accumulated 3 gold awards for academic target'); ?></p>
+                <p style="text-indent: 15px;"><?php echo Yii::t('integral','After receiving the award, the gold number of the credit target will be reaccumulated'); ?></p>
             </div>
         </div>
     </div>
