@@ -283,9 +283,10 @@ class PrizeRequestForm extends CFormModel
         if($this->state == 1){
             $email = new Email();
             $suffix = Yii::app()->params['envSuffix'];
-            $row = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,b.code as employee_code,b.city as s_city")
+            $row = Yii::app()->db->createCommand()->select("a.*,c.prize_name,b.name as employee_name,b.code as employee_code,b.city as s_city")
                 ->from("gr_prize_request a")
                 ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                ->leftJoin("gr_prize_type c","a.prize_type = c.id")
                 ->where("a.id=:id", array(':id'=>$this->id))->queryRow();
             $description="金银铜奖项申请 - ".$row["employee_name"];
             $subject="金银铜奖项申请 - ".$row["employee_name"];
@@ -293,6 +294,7 @@ class PrizeRequestForm extends CFormModel
             $message.="<p>员工姓名：".$row["employee_name"]."</p>";
             $message.="<p>员工城市：".CGeneral::getCityName($row["s_city"])."</p>";
             $message.="<p>申请时间：".CGeneral::toDate($row["apply_date"])."</p>";
+            $message.="<p>奖项名称：".$row["prize_name"]."</p>";
             $message.="<p>奖项扣减学分数值：".$row["prize_point"]."</p>";
             $email->setDescription($description);
             $email->setMessage($message);

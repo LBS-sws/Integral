@@ -159,15 +159,16 @@ class AuditPrizeForm extends CFormModel
     //發送郵件
     protected function sendEmail(){
         if($this->scenario == "audit"){
-            $str = "奖金申请审核通过";
+            $str = "金银铜奖项申请审核通过";
         }else{
-            $str = "奖金申请被拒绝";
+            $str = "金银铜奖项申请被拒绝";
         }
         $email = new Email();
         $suffix = Yii::app()->params['envSuffix'];
-        $row = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,b.code as employee_code,b.city as s_city")
+        $row = Yii::app()->db->createCommand()->select("a.*,c.prize_name,b.name as employee_name,b.code as employee_code,b.city as s_city")
             ->from("gr_prize_request a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->leftJoin("gr_prize_type c","a.prize_type = c.id")
             ->where("a.id=:id", array(':id'=>$this->id))->queryRow();
         $description="$str - ".$row["employee_name"];
         $subject="$str - ".$row["employee_name"];
@@ -175,6 +176,7 @@ class AuditPrizeForm extends CFormModel
         $message.="<p>员工姓名：".$row["employee_name"]."</p>";
         $message.="<p>员工城市：".CGeneral::getCityName($row["s_city"])."</p>";
         $message.="<p>申请时间：".CGeneral::toDate($row["apply_date"])."</p>";
+        $message.="<p>奖项名称：".$row["prize_name"]."</p>";
         $message.="<p>扣除学分：".$row["prize_point"]."</p>";
         if($this->scenario != "audit"){
             $message.="<p>拒绝原因：".$row["reject_note"]."</p>";
