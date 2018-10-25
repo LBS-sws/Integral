@@ -109,6 +109,8 @@ return array(
     'Import credits'=>'導入學分',
     'Cancel the credits'=>'取消學分',
     'Dezhi body group beauty Top20'=>'德智體群美 Top20',
+    'Prize List Report'=>'金銀銅獎項申請報表',
+    'Stretch List Report'=>'學分三冠王報表',
     //沈超添加结束
 );
 ?>

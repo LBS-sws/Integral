@@ -134,6 +134,7 @@ return array(
     'The credit has been used and cannot be cancelled' => '该学分已经被使用，无法取消',
     'The credits associated with this credit have been used and cannot be cancelled' => '该学分关联的积分已经被使用，无法取消',
     'Exchange'=>'兑换',
+    'z_index'=>'层级',
     '2014 year Credit'=>'2014年学分',
     'Total credits available'=>'现有有效总学分',
     'Full time'=>'德智体群美全勤',

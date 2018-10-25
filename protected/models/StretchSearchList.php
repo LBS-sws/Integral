@@ -123,7 +123,7 @@ class StretchSearchList extends CListPageModel
     }
 
     private function getPrizeAll(){
-        $rows = Yii::app()->db->createCommand()->select("id,prize_name")->from("gr_prize_type")->order("id asc")->queryAll();
+        $rows = Yii::app()->db->createCommand()->select("id,prize_name")->from("gr_prize_type")->order("z_index desc")->queryAll();
         $sql = "";
         if($rows){
             foreach ($rows as $row){

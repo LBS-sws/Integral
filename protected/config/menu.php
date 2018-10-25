@@ -122,6 +122,14 @@ return array(
                 'access'=>'YB04',
                 'url'=>'/report/cutlist',
             ),
+            'Prize List Report'=>array(
+                'access'=>'YB05',
+                'url'=>'/report/prizelist',
+            ),
+            'Stretch List Report'=>array(
+                'access'=>'YB06',
+                'url'=>'/report/stretchlist',
+            ),
             'Report Manager'=>array(
                 'access'=>'YB01',
                 'url'=>'/queue/index',

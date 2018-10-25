@@ -6,6 +6,8 @@ class ReportController extends Controller
 						'creditslist'=>'YB02',
 						'yearlist'=>'YB03',
 						'cutlist'=>'YB04',
+						'prizelist'=>'YB05',
+						'stretchlist'=>'YB06',
 					);
 	
 	public function filters()
@@ -89,7 +91,39 @@ class ReportController extends Controller
                 Dialog::message(Yii::t('dialog','Validation Message'), $message);
             }
         }
-        $this->render('form_y04',array('model'=>$model));
+        $this->render('form_y04',array('model'=>$model,'submit'=>Yii::app()->createUrl('report/cutlist')));
+    }
+
+    public function actionPrizelist() {
+        $model = new ReportY04Form;
+        $model->id="RptPrizeList";
+        $model->name=Yii::t("app","Prize List Report");
+        if (isset($_POST['ReportY04Form'])) {
+            $model->attributes = $_POST['ReportY04Form'];
+            if ($model->validate()) {
+                $model->addQueueItem();
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Report submitted. Please go to Report Manager to retrieve the output.'));
+            } else {
+                $message = CHtml::errorSummary($model);
+                Dialog::message(Yii::t('dialog','Validation Message'), $message);
+            }
+        }
+        $this->render('form_y04',array('model'=>$model,'submit'=>Yii::app()->createUrl('report/prizelist')));
+    }
+
+    public function actionStretchlist() {
+        $model = new ReportY05Form;
+        if (isset($_POST['ReportY05Form'])) {
+            $model->attributes = $_POST['ReportY05Form'];
+            if ($model->validate()) {
+                $model->addQueueItem();
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Report submitted. Please go to Report Manager to retrieve the output.'));
+            } else {
+                $message = CHtml::errorSummary($model);
+                Dialog::message(Yii::t('dialog','Validation Message'), $message);
+            }
+        }
+        $this->render('form_y05',array('model'=>$model,'submit'=>Yii::app()->createUrl('report/stretchlist')));
     }
 
 	public static function allowExecute() {
