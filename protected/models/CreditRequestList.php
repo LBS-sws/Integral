@@ -42,15 +42,20 @@ class CreditRequestList extends CListPageModel
         $staffId = Yii::app()->user->staff_id();//
         //$city_allow = Yii::app()->user->city_allow();
         $city_allow = Yii::app()->user->getEmployeeCityAll();
+        if(Yii::app()->user->validRWFunction('GA04')||Yii::app()->user->validRWFunction('GA01')){
+            $whereSql = "d.city IN ($city_allow) AND (a.state != 0 or(a.state = 0 AND a.lcu='$uid') or(a.state = 0 AND a.employee_id='$staffId')) and d.staff_status = 0";
+        }else{
+            $whereSql = "(a.lcu='$uid' or a.employee_id='$staffId')";
+        }
         $sql1 = "select a.*,b.category,b.credit_name,d.name AS employee_name,d.city AS s_city from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) AND (a.state != 0 or(a.state = 0 AND a.lcu='$uid') or(a.state = 0 AND a.employee_id='$staffId')) and d.staff_status = 0 
+                where $whereSql 
 			";
         $sql2 = "select count(a.id) from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow) AND (a.state != 0 or(a.state = 0 AND a.lcu='$uid') or(a.state = 0 AND a.employee_id='$staffId')) and d.staff_status = 0 
+                where $whereSql 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {
