@@ -5,7 +5,6 @@ class RptStretchList extends CReport {
 			'employee_code'=>array('label'=>Yii::t('integral','Employee Code'),'width'=>22,'align'=>'L'),
 			'employee_name'=>array('label'=>Yii::t('integral','Employee Name'),'width'=>22,'align'=>'L'),
             's_city'=>array('label'=>Yii::t('integral','City'),'width'=>20,'align'=>'L'),
-            's_city'=>array('label'=>Yii::t('integral','Three consecutive championships'),'width'=>20,'align'=>'L'),
 		);
         $rows = Yii::app()->db->createCommand()->select("id,prize_name")->from("gr_prize_type")->order("z_index desc")->queryAll();
         if($rows){
