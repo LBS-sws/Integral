@@ -59,7 +59,7 @@ class RptPrizeList extends CReport {
         $sql = "select a.*,b.prize_name,d.code AS employee_code,d.name AS employee_name,d.city AS s_city from gr_prize_request a
                 LEFT JOIN gr_prize_type b ON a.prize_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city in($citylist)  and d.staff_status = 0 
+                where d.city in($citylist) and d.staff_status = 0  and a.state = 3 
                 $cond_staff $cond_time ORDER BY d.city DESC 
 			";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();

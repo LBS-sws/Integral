@@ -58,7 +58,7 @@ class RptStretchList extends CReport {
 
         $sql = "select d.code AS employee_code,d.name AS employee_name,d.city AS s_city$prize_sql from gr_prize_request a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($citylist)  and d.staff_status = 0 $cond_staff 
+                where d.city IN ($citylist) and d.staff_status = 0 and a.state = 3 $cond_staff 
                 GROUP BY a.employee_id 
                 ORDER BY d.city DESC 
 			";

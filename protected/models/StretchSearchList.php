@@ -40,7 +40,7 @@ class StretchSearchList extends CListPageModel
         $city_allow = Yii::app()->user->city_allow();
         $sql1 = "select d.code AS employee_code,d.name AS employee_name,d.city AS s_city$prize_sql from gr_prize_request a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow)  and d.staff_status = 0 
+                where d.city IN ($city_allow)  and d.staff_status = 0 and a.state = 3 
 			";
         $sql2 = "select d.name AS employee_name$prize_sql from gr_prize_request a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
