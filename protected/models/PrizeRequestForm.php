@@ -128,12 +128,40 @@ class PrizeRequestForm extends CFormModel
         }
     }
 
+    //驗證當前用戶的權限
+    public function validateNowUser($bool = false){
+        if(Yii::app()->user->validFunction('ZR01')){
+            return true;//允許待申請
+        }else{
+            $uid = Yii::app()->user->id;
+            $suffix = Yii::app()->params['envSuffix'];
+            $rs = Yii::app()->db->createCommand()->select("b.id,b.name")->from("hr$suffix.hr_binding a")
+                ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                ->where("a.user_id ='$uid'")->queryRow();
+            if($rs){
+                if($bool){
+                    $this->employee_id = $rs["id"];
+                    $this->employee_name = $rs["name"];
+                }
+                return true; //已綁定員工
+            }else{
+                return false;
+            }
+        }
+    }
+
 	public function validateEmployee($attribute, $params){
         $suffix = Yii::app()->params['envSuffix'];
         $from = "hr".$suffix.".hr_employee";
         $city_allow = Yii::app()->user->city_allow();
+        $sql="";
+        if(Yii::app()->user->validFunction('ZR01')){//允許代申請
+            $sql = " and city in ($city_allow)";
+        }else{
+            $this->employee_id = Yii::app()->user->staff_id();//
+        }
         $rows = Yii::app()->db->createCommand()->select("name,city")->from($from)
-            ->where("id=:id and city in ($city_allow) and staff_status=0 ", array(':id'=>$this->employee_id))->queryRow();
+            ->where("id=:id $sql and staff_status=0 ", array(':id'=>$this->employee_id))->queryRow();
         if ($rows){
             $this->employee_name = $rows["name"];
             $this->city = $rows["city"];

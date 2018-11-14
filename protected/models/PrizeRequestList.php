@@ -35,15 +35,22 @@ class PrizeRequestList extends CListPageModel
     {
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
+        $uid = Yii::app()->user->id;
+        $staffId = Yii::app()->user->staff_id();//
+        if(Yii::app()->user->validFunction('ZR01')||Yii::app()->user->validRWFunction('GA01')||Yii::app()->user->validRWFunction('GA03')||Yii::app()->user->validRWFunction('GA04')){
+            $whereSql = "d.city IN ($city_allow) AND (a.state != 0 or (a.state = 0 AND a.lcu='$uid') or(a.state = 0 AND a.employee_id='$staffId'))";
+        }else{
+            $whereSql = "(a.lcu='$uid' or a.employee_id='$staffId')";
+        }
         $sql1 = "select a.*,b.prize_name,d.name AS employee_name,d.city AS s_city from gr_prize_request a
                 LEFT JOIN gr_prize_type b ON a.prize_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow)  and d.staff_status = 0 
+                where $whereSql  and d.staff_status = 0 
 			";
         $sql2 = "select count(a.id) from gr_prize_request a
                 LEFT JOIN gr_prize_type b ON a.prize_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($city_allow)  and d.staff_status = 0 
+                where $whereSql  and d.staff_status = 0 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {

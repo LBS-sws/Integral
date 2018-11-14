@@ -124,7 +124,11 @@ class PrizeRequestController extends Controller
     public function actionNew()
     {
         $model = new PrizeRequestForm('new');
-        $this->render('form',array('model'=>$model));
+        if($model->validateNowUser(true)){
+            $this->render('form',array('model'=>$model));
+        }else{
+            throw new CHttpException(404,'您的账号未绑定员工，请与管理员联系');
+        }
     }
     //刪除
     public function actionDelete(){
