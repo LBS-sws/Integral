@@ -68,7 +68,7 @@ class AuditPrizeForm extends CFormModel
         $city = Yii::app()->user->city();
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $rows = Yii::app()->db->createCommand()->select("a.*,docman$suffix.countdoc('RPRI',a.id) as rpridoc")
+        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,docman$suffix.countdoc('RPRI',a.id) as rpridoc")
             ->from("gr_prize_request a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
             ->where("a.id=:id and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
@@ -78,6 +78,7 @@ class AuditPrizeForm extends CFormModel
             {
                 $this->id = $row['id'];
                 $this->employee_id = $row['employee_id'];
+                $this->employee_name = $row['employee_name'];
                 $this->prize_type = $row['prize_type'];
                 $this->prize_point = $row['prize_point'];
                 $this->apply_date = $row['apply_date'];

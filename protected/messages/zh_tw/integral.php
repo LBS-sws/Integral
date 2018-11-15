@@ -140,6 +140,8 @@ return array(
     'apply time shall not exceed the date of the today'=>'申請時間不得超過今天的日期',
     'Three consecutive championships'=>'三連冠次數',
     'define'=>'定義',
+    'Back'=>'退回',
+    'Return to success.'=>'退回成功。',
     'Swisher who has accumulated 3 gold awards for academic target'=>'累積取得3次學分目標金獎的史偉莎人',
     'After receiving the award, the gold number of the credit target will be reaccumulated'=>'領獎后將重新累積學分目標金獎次數',
 );

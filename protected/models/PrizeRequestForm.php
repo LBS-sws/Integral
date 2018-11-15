@@ -181,12 +181,67 @@ class PrizeRequestForm extends CFormModel
         return false;
     }
 
+    //獎金退回
+	public function backPrize(){
+        if(!Yii::app()->user->validFunction('ZR05')){//沒有權限
+            return false;
+        }
+        $row = Yii::app()->db->createCommand()->select()->from("gr_prize_request")
+            ->where('id=:id and state = 3', array(':id'=>$this->id))->queryRow();
+        if ($row){
+            $sum = $row["prize_point"];
+            if(!empty($sum)){
+                $sum = intval($sum);//需要扣減的總學分
+                $year = date("Y",strtotime($row["apply_date"]));//申請的年份
+                $creditList = Yii::app()->db->createCommand()->select("id,long_type,start_num,end_num,point_id")->from("gr_credit_point_ex")
+                    ->where("employee_id=:employee_id and year=:year and end_num<start_num",array(":employee_id"=>$row["employee_id"],":year"=>$year))
+                    ->order('long_type,lcu asc')->queryAll();
+                $num = 0;//已經退回的學分
+                if($creditList){
+                    foreach ($creditList as $credit){
+                        $nowNum = intval($credit["start_num"])-intval($credit["end_num"]);
+                        if($nowNum<=$sum-$num){
+                            $updateNum=$nowNum;
+                        }else{
+                            $updateNum=$sum-$num;
+                        }
+                        $num+=$updateNum;
+                        $updateNum+=intval($credit["end_num"]);
+                        Yii::app()->db->createCommand()->update('gr_credit_point_ex', array(
+                            'end_num'=>$updateNum,
+                        ), 'id=:id', array(':id'=>$credit["id"]));
+                        if(intval($credit["long_type"]) > 1){ //需要修改5年限的學分
+                            Yii::app()->db->createCommand()->update('gr_credit_point_ex', array(
+                                //'start_num'=>$updateNum,//總積分不應該變
+                                'end_num'=>$updateNum,
+                            ), 'point_id=:point_id and year > :year', array(':point_id'=>$credit["point_id"],':year'=>$year));
+                        }
+                        if($num>=$sum){
+                            break;
+                        }
+                    }
+                    if($num<$sum){
+                        //異常
+                    }
+                }else{
+                    return false;
+                }
+            }
+            Yii::app()->db->createCommand()->update('gr_prize_request', array(
+                'state'=>0,
+                //'reject_note'=>$this->reject_note,
+            ), 'id=:id', array(':id'=>$this->id));
+            return true; //允許退回
+        }
+        return false;
+    }
+
 	public function retrieveData($index)
 	{
         $city = Yii::app()->user->city();
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $rows = Yii::app()->db->createCommand()->select("a.*,docman$suffix.countdoc('RPRI',a.id) as rpridoc")
+        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,docman$suffix.countdoc('RPRI',a.id) as rpridoc")
             ->from("gr_prize_request a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
             ->where("a.id=:id and b.city in ($city_allow) ", array(':id'=>$index))->queryAll();
@@ -196,6 +251,7 @@ class PrizeRequestForm extends CFormModel
 			{
 				$this->id = $row['id'];
 				$this->employee_id = $row['employee_id'];
+				$this->employee_name = $row['employee_name'];
                 $this->prize_type = $row['prize_type'];
                 $this->prize_point = $row['prize_point'];
                 $this->apply_date = $row['apply_date'];

@@ -111,6 +111,7 @@ return array(
     'Dezhi body group beauty Top20'=>'德智體群美 Top20',
     'Prize List Report'=>'金銀銅獎項申請報表',
     'Stretch List Report'=>'學分三冠王報表',
+    'Back Prize'=>'退回金銀銅獎',
     //沈超添加结束
 );
 ?>

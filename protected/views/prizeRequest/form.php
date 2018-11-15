@@ -38,7 +38,7 @@ $this->pageTitle=Yii::app()->name . ' - prizeRequest Form';
                         'submit'=>Yii::app()->createUrl('prizeRequest/audit')));
                     ?>
                 <?php endif ?>
-                <?php if ($model->scenario=='edit'&& $model->state == 0): ?>
+                <?php if ($model->scenario=='edit'&& ($model->state == 0||$model->state == 2)): ?>
                     <?php echo TbHtml::button('<span class="fa fa-remove"></span> '.Yii::t('misc','Delete'), array(
                             'name'=>'btnDelete','id'=>'btnDelete','data-toggle'=>'modal','data-target'=>'#removedialog',)
                     );
@@ -46,6 +46,12 @@ $this->pageTitle=Yii::app()->name . ' - prizeRequest Form';
                 <?php endif; ?>
             </div>
             <div class="btn-group pull-right" role="group">
+                <?php if ($model->scenario=='edit'&& $model->state == 3&& Yii::app()->user->validFunction('ZR05')): ?>
+                    <?php echo TbHtml::button('<span class="fa fa-reply"></span> '.Yii::t('integral','Back'), array(
+                            'name'=>'btnBack','id'=>'btnBack','data-toggle'=>'modal','data-target'=>'#backdialog',)
+                    );
+                    ?>
+                <?php endif; ?>
                 <?php
                 $counter = ($model->no_of_attm['rpri'] > 0) ? ' <span id="docrpri" class="label label-info">'.$model->no_of_attm['rpri'].'</span>' : ' <span id="docrpri"></span>';
                 echo TbHtml::button('<span class="fa  fa-file-text-o"></span> '.Yii::t('misc','Attachment').$counter, array(
@@ -95,6 +101,9 @@ $this->pageTitle=Yii::app()->name . ' - prizeRequest Form';
 ?>
 <?php
 $this->renderPartial('//site/removedialog');
+if($model->scenario=='edit'&& $model->state == 3&& Yii::app()->user->validFunction('ZR05')){
+    $this->renderPartial('//site/confirmdialog',array("submit"=>Yii::app()->createUrl('prizeRequest/backPrize')));
+}
 ?>
 <?php
 Script::genFileUpload($model,$form->id,'RPRI');

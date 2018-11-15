@@ -2,6 +2,7 @@
 return array(
 	'Are you sure?' => '确定保存?',
 	'Are you sure to cancel?'=>'确定取消?',
+	'Are you sure to back?'=>'确定退回?',
 	'Cancel Record'=>'取消记录',
 	'Cancel'=>'取消',
 	'Incorrect old password.' => '旧密码不正确',
@@ -22,6 +23,7 @@ return array(
 	'Are you sure to delete?'=>'确定要删除?',
 	'Record Deleted'=>'删除记录完成',
 	'Delete Record'=>'删除记录',
+	'Back Record'=>'退回记录',
 	'This record is used by some user records'=>'这纪录正被其他帐户纪录使用',
 	'Close'=>'关闭',
 	'Select'=>'选择',

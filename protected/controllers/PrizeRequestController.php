@@ -32,6 +32,10 @@ class PrizeRequestController extends Controller
                 'actions'=>array('importPrize'),
                 'expression'=>array('PrizeRequestController','allowImport'),
             ),
+            array('allow',
+                'actions'=>array('backPrize'),
+                'expression'=>array('PrizeRequestController','allowBackPrize'),
+            ),
             array('deny',  // deny all users
                 'users'=>array('*'),
             ),
@@ -48,6 +52,10 @@ class PrizeRequestController extends Controller
 
     public static function allowReadOnly() {
         return Yii::app()->user->validFunction('DE03');
+    }
+
+    public static function allowBackPrize() {
+        return Yii::app()->user->validFunction('ZR05');
     }
 	public function actionIndex($pageNum=0) 
 	{
@@ -240,6 +248,22 @@ class PrizeRequestController extends Controller
             $message = CHtml::errorSummary($model);
             Dialog::message(Yii::t('dialog','Validation Message'), $message);
             $this->redirect(Yii::app()->createUrl('prizeRequest/index'));
+        }
+    }
+//退回
+    public function actionBackPrize()
+    {
+        if (isset($_POST['PrizeRequestForm'])) {
+            $model = new PrizeRequestForm($_POST['PrizeRequestForm']['scenario']);
+            $model->attributes = $_POST['PrizeRequestForm'];
+            if($model->backPrize()){
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('integral','Return to success.'));
+                $this->redirect(Yii::app()->createUrl('prizeRequest/edit',array('index'=>$model->id)));
+            }else{
+                $message="退回失敗，請與管理員聯繫";
+                Dialog::message(Yii::t('dialog','Validation Message'), $message);
+                $this->render('form',array('model'=>$model,));
+            }
         }
     }
 }
