@@ -50,6 +50,14 @@
     </div>
 </div>
 <div class="form-group">
+    <?php echo $form->labelEx($model,'rule',array('class'=>"col-sm-2 control-label")); ?>
+    <div class="col-sm-5">
+        <?php echo $form->textArea($model, 'rule',
+            array('readonly'=>(true),'rows'=>4,'cols'=>50,'id'=>'rule')
+        ); ?>
+    </div>
+</div>
+<div class="form-group">
     <?php echo $form->labelEx($model,'remark',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-5">
         <?php echo $form->textArea($model, 'remark',
@@ -61,11 +69,22 @@
 <script>
     $(function () {
         $("#set_id").on("change",function () {
-            var num = $(this).find("option:selected").attr("num");
-            var gral = $(this).find("option:selected").attr("gral");
-            $("#integral").val(num);
-            $("#int_type").val(gral);
-        })
+            var id = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "<?php echo Yii::app()->createUrl('creditRequest/ajaxCreditType');?>",
+                data: {"creditType":id},
+                dataType: "json",
+                success: function(data){
+                    if(data.status == 1){
+                        var list = data.list;
+                        $("#integral").val(list["credit_point"]);
+                        $("#int_type").val(list["category"]);
+                        $("#rule").val(list["rule"]);
+                    }
+                }
+            });
+        });
         $("#int_type").on("change",function () {
             var gral = $(this).val();
             if(gral==""){

@@ -129,10 +129,22 @@ class CreditTypeForm extends CFormModel
 	    $arr = array(
 	        ""=>array("name"=>"","num"=>"","gral"=>"")
         );
-        $rs = Yii::app()->db->createCommand()->select()->from("gr_credit_type")->queryAll();
+        $rs = Yii::app()->db->createCommand()->select()->from("gr_credit_type")->order("z_index desc")->queryAll();
         if($rs){
-            foreach ($rs as $row){
+            foreach ($rs as $row){//&amp;nbsp;
                 $arr[$row["id"]] =array("name"=>$row["credit_code"]." - ".$row["credit_name"],"num"=>$row["credit_point"],"gral"=>$row["category"]);
+            }
+        }
+        return $arr;
+    }
+
+    //獲取積分類型詳情
+    public function getCreditTypeListToCreditType($creditType=""){
+        $arr = array();
+        if(!empty($creditType)){
+            $rs = Yii::app()->db->createCommand()->select()->from("gr_credit_type")->where("id=:id",array(":id"=>$creditType))->queryRow();
+            if($rs){
+                $arr = $rs;
             }
         }
         return $arr;

@@ -21,7 +21,7 @@ class CreditRequestController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('new','save','delete','audit','fileupload','fileRemove'),
+                'actions'=>array('new','save','delete','audit','fileupload','fileRemove','ajaxCreditType'),
                 'expression'=>array('CreditRequestController','allowReadWrite'),
             ),
             array('allow',
@@ -260,6 +260,19 @@ class CreditRequestController extends Controller
                 //$message = CHtml::errorSummary($model);
                 Dialog::message(Yii::t('dialog','Information'), $date["message"]);
                 $this->redirect(Yii::app()->createUrl('creditRequest/edit',array('index'=>$model->id)));
+            }
+        }
+    }
+
+    //ajax
+    public function actionAjaxCreditType(){
+        if(Yii::app()->request->isAjaxRequest){
+            $creditType = $_POST["creditType"];
+            $arr = CreditTypeForm::getCreditTypeListToCreditType($creditType);
+            if(empty($arr)){
+                echo CJSON::encode(array("status"=>0));
+            }else{
+                echo  CJSON::encode(array("status"=>1,"list"=>$arr));
             }
         }
     }

@@ -19,6 +19,7 @@ class CreditRequestForm extends CFormModel
 	public $reject_note;
 	public $state = 0;//狀態 0：草稿 1：發送  2：拒絕  3：完成  4:確定
 	public $city;
+    public $rule;
 	public $lcu;
 	public $luu;
 	public $lcd;
@@ -51,6 +52,7 @@ class CreditRequestForm extends CFormModel
             'employee_name'=>Yii::t('integral','Employee Name'),
             'credit_type'=>Yii::t('integral','Integral Name'),
             'credit_point'=>Yii::t('integral','Integral Num'),
+            'rule'=>Yii::t('integral','integral conditions'),
 			'remark'=>Yii::t('integral','Remark'),
             'reject_note'=>Yii::t('integral','Reject Note'),
             'city'=>Yii::t('integral','City'),
@@ -66,7 +68,7 @@ class CreditRequestForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, employee_id, employee_name, credit_type, credit_point, apply_date, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
+			array('id, employee_id, employee_name, credit_type, credit_point, apply_date, images_url, rule, remark, reject_note, lcu, luu, lcd, lud','safe'),
 
 			array('apply_date','required'),
 			array('employee_id','required'),
@@ -93,6 +95,7 @@ class CreditRequestForm extends CFormModel
                 }
             }else{
                 $this->credit_point = $rows["credit_point"];
+                $this->rule = $rows["rule"];
             }
         }else{
             $message = Yii::t('integral','Integral Name'). Yii::t('integral',' Did not find');
@@ -220,7 +223,7 @@ class CreditRequestForm extends CFormModel
         $suffix = Yii::app()->params['envSuffix'];
         //$city_allow = Yii::app()->user->city_allow();
         $city_allow = Yii::app()->user->getEmployeeCityAll();
-        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,d.category,d.remark as s_remark,docman$suffix.countdoc('GRAL',a.id) as graldoc")
+        $rows = Yii::app()->db->createCommand()->select("a.*,b.name as employee_name,d.rule,d.category,d.remark as s_remark,docman$suffix.countdoc('GRAL',a.id) as graldoc")
             ->from("gr_credit_request a")
             ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
             ->leftJoin("gr_credit_type d","a.credit_type = d.id")
@@ -240,6 +243,7 @@ class CreditRequestForm extends CFormModel
                 $this->reject_note = $row['reject_note'];
                 $this->state = $row['state'];
                 $this->lcu = $row['lcu'];
+                $this->rule = $row['rule'];
                 $this->luu = $row['luu'];
                 $this->lcd = $row['lcd'];
                 $this->lud = $row['lud'];
