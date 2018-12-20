@@ -199,14 +199,15 @@ class GiftRequestForm extends CFormModel
 
 		$command->execute();
 
+        if ($this->scenario=='apply'){
+            $this->id = Yii::app()->db->getLastInsertID();
+        }
+
         if ($this->scenario=='apply'||$this->scenario=='audit'){
             //扣除庫存
             Yii::app()->db->createCommand("update gr_gift_type set inventory=inventory-".$this->apply_num." where id=".$this->gift_type)->execute();
         }
 
-        if ($this->scenario=='new'){
-            $this->id = Yii::app()->db->getLastInsertID();
-        }
         $this->sendEmail();
         return true;
 	}
