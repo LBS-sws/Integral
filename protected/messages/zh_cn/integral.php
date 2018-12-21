@@ -101,6 +101,7 @@ return array(
     'Prize Name'=>'奖项名称',
     'Prize Point'=>'奖项扣减学分数值',
     'Sum Gift'=>'总积分',
+    'Apply Gift'=>'已使用积分',
     'Available Gift'=>'可用积分',
     'Apply Prize Form'=>'金银铜奖项申请',//奖金申请表单
     'Prize Type List'=>'奖金类型列表',

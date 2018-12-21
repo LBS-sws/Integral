@@ -46,6 +46,10 @@ return array(
                 'access'=>'SR03',
                 'url'=>'/giftSearch/index',
             ),
+            'Sum Gift search'=>array(
+                'access'=>'SR05',
+                'url'=>'/SumGiftSearch/index',
+            ),
             'Stretch search'=>array(
                 'access'=>'SR04',
                 'url'=>'/StretchSearch/index',

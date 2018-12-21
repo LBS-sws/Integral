@@ -65,6 +65,7 @@ class ConfirmCreditForm extends CFormModel
             array('id, employee_id, employee_name, credit_type, credit_point, city, validity, apply_date, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
 
             array('reject_note','required',"on"=>"reject"),
+            array('id','required',"on"=>"reject"),
         );
     }
 

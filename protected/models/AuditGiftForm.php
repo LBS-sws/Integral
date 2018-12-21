@@ -51,6 +51,7 @@ class AuditGiftForm extends CFormModel
 		return array(
 			array('id, employee_id, employee_name, gift_type, bonus_point, remark, reject_not, apply_num, reject_note, gift_name, lcu, luu, lcd, lud','safe'),
             array('reject_note','required',"on"=>"reject"),
+            array('id','required',"on"=>"reject"),
 		);
 	}
 
@@ -142,7 +143,6 @@ class AuditGiftForm extends CFormModel
 		$command->execute();
 
         if ($this->scenario=='reject'){
-            $this->id = Yii::app()->db->getLastInsertID();
             //庫存补回
             Yii::app()->db->createCommand("update gr_gift_type set inventory=inventory+".$model->apply_num." where id=".$model->gift_type)->execute();
         }

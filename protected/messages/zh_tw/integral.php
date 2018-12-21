@@ -100,6 +100,7 @@ return array(
     'Prize Name'=>'獎項名稱',
     'Prize Point'=>'獎項扣減學分數值',
     'Sum Gift'=>'總積分',
+    'Apply Gift'=>'已使用積分',
     'Available Gift'=>'可用積分',
     'Apply Prize Form'=>'金銀銅獎項申請',//獎金申請表單
     'Prize Type List'=>'獎金類型列表',
