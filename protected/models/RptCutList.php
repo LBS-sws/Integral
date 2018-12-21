@@ -68,7 +68,7 @@ class RptCutList extends CReport {
 				$temp = array();
 				$temp['employee_name'] = $row['employee_name'];
                 $temp['s_city'] = CGeneral::getCityName($row['s_city']);
-				$temp['gift_type'] = $row['gift_type'];
+				$temp['gift_type'] = $row['gift_name'];
 				$temp['bonus_point'] = $row['bonus_point'];
                 $temp['apply_num'] = $row['apply_num'];
                 $temp['integral_sum'] = intval($row['apply_num'])*intval($row['bonus_point']);

@@ -225,6 +225,9 @@ class Email {
 
     //發送郵件
     public function sent($uid=""){
+        if(empty($this->to_addr)){
+            return false;
+        }
         $to_addr = empty($this->to_addr)?json_encode(array("it@lbsgroup.com.hk")):json_encode($this->to_addr);
         if(empty($uid)){
             $uid = Yii::app()->user->id;
