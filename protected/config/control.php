@@ -6,4 +6,5 @@ return array(
     'Import credits'=>array('access'=>'ZR03',),//導入學分
     'Cancel the credits'=>array('access'=>'ZR04',),//學分取消
     'Back Prize'=>array('access'=>'ZR05',),//退回獎金
+    'Back Gift'=>array('access'=>'ZR06',),//退回積分
 );

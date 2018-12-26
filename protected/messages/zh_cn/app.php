@@ -108,6 +108,7 @@ return array(
     'Prize List Report'=>'金银铜奖项申请报表',
     'Stretch List Report'=>'学分三冠王报表',
     'Back Prize'=>'退回金银铜奖',
+    'Back Gift'=>'退回积分',
     'Sum Gift search'=>'总积分查询',
     //沈超添加结束
 );

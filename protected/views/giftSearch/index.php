@@ -28,6 +28,7 @@ $this->pageTitle=Yii::app()->name . ' - Apply';
         'employee_name',
         'gift_name',
         'bonus_point',
+        'city_name',
     );
     $search_add_html="";
     $modelName = get_class($model);

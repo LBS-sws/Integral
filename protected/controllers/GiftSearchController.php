@@ -29,12 +29,19 @@ class GiftSearchController extends Controller
                 'actions'=>array('index','view'),
                 'expression'=>array('GiftSearchController','allowAddReadOnly'),
             ),
+            array('allow',
+                'actions'=>array('cancel'),
+                'expression'=>array('GiftSearchController','allowCancel'),
+            ),
             array('deny',  // deny all users
                 'users'=>array('*'),
             ),
         );
     }
 
+    public static function allowCancel() {
+        return Yii::app()->user->validFunction('ZR06');
+    }
     public static function allowAddReadOnly() {
         return Yii::app()->user->validFunction('SR03');
     }
@@ -61,6 +68,21 @@ class GiftSearchController extends Controller
             throw new CHttpException(404,'The requested page does not exist.');
         } else {
             $this->render('form',array('model'=>$model,));
+        }
+    }
+
+    //取消
+    public function actionCancel(){
+        $model = new GiftSearchForm('cancel');
+        if (isset($_POST['GiftSearchForm'])) {
+            $index = $_POST['GiftSearchForm']["id"];
+            if (!$model->retrieveData($index)) {
+                throw new CHttpException(404,'该积分无法取消');
+            } else {
+                $model->giftCancel();
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Cancel Done'));
+                $this->redirect(Yii::app()->createUrl('GiftSearch/index'));
+            }
         }
     }
 }

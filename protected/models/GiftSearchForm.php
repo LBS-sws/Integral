@@ -90,4 +90,12 @@ class GiftSearchForm extends CFormModel
         }
         return true;
     }
+
+
+    //積分取消
+    public function giftCancel(){
+        Yii::app()->db->createCommand()->update('gr_gift_request', array(
+            'state'=>0,
+        ), 'id=:id', array(':id'=>$this->id));
+    }
 }

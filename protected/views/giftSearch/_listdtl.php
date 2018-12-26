@@ -4,7 +4,9 @@
 	<td><?php echo $this->needHrefButton('SR03', 'giftSearch/view', 'view', array('index'=>$this->record['id'])); ?></td>
 
 
+    <td><?php echo $this->record['employee_code']; ?></td>
     <td><?php echo $this->record['employee_name']; ?></td>
+    <td><?php echo $this->record['city']; ?></td>
     <td><?php echo $this->record['gift_name']; ?></td>
     <td><?php echo $this->record['bonus_point']; ?></td>
     <td><?php echo $this->record['apply_num']; ?></td>

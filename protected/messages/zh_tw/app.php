@@ -112,6 +112,7 @@ return array(
     'Prize List Report'=>'金銀銅獎項申請報表',
     'Stretch List Report'=>'學分三冠王報表',
     'Back Prize'=>'退回金銀銅獎',
+    'Back Gift'=>'退回積分',
     'Sum Gift search'=>'總積分查詢',
     //沈超添加结束
 );
