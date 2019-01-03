@@ -1,11 +1,11 @@
 <tr>
     <th>
-        <?php echo TbHtml::link($this->getLabelName('employee_code').$this->drawOrderArrow('a.employee_code'),'#',$this->createOrderLink('sumSearch-list','a.employee_code'))
+        <?php echo TbHtml::link($this->getLabelName('employee_code').$this->drawOrderArrow('d.code'),'#',$this->createOrderLink('sumSearch-list','d.code'))
         ;
         ?>
     </th>
     <th>
-        <?php echo TbHtml::link($this->getLabelName('employee_name').$this->drawOrderArrow('a.employee_name'),'#',$this->createOrderLink('sumSearch-list','a.employee_name'))
+        <?php echo TbHtml::link($this->getLabelName('employee_name').$this->drawOrderArrow('d.name'),'#',$this->createOrderLink('sumSearch-list','d.name'))
         ;
         ?>
     </th>

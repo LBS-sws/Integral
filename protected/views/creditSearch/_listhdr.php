@@ -2,6 +2,11 @@
     <th>
     </th>
     <th>
+        <?php echo TbHtml::link($this->getLabelName('employee_code').$this->drawOrderArrow('d.code'),'#',$this->createOrderLink('creditSearch-list','d.code'))
+        ;
+        ?>
+    </th>
+    <th>
         <?php echo TbHtml::link($this->getLabelName('employee_name').$this->drawOrderArrow('d.name'),'#',$this->createOrderLink('creditSearch-list','d.name'))
         ;
         ?>

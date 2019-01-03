@@ -1,12 +1,12 @@
 <tr>
     <th></th>
     <th>
-        <?php echo TbHtml::link($this->getLabelName('employee_code').$this->drawOrderArrow('d.employee_code'),'#',$this->createOrderLink('giftSearch-list','d.employee_code'))
+        <?php echo TbHtml::link($this->getLabelName('employee_code').$this->drawOrderArrow('d.code'),'#',$this->createOrderLink('giftSearch-list','d.code'))
         ;
         ?>
     </th>
     <th>
-        <?php echo TbHtml::link($this->getLabelName('employee_id').$this->drawOrderArrow('d.employee_id'),'#',$this->createOrderLink('giftSearch-list','d.employee_id'))
+        <?php echo TbHtml::link($this->getLabelName('employee_id').$this->drawOrderArrow('d.name'),'#',$this->createOrderLink('giftSearch-list','d.name'))
         ;
         ?>
     </th>

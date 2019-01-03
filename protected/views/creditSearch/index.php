@@ -27,6 +27,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
     $search = array(
         'credit_name',
         'credit_point',
+        'employee_code',
         'employee_name',
         'city_name',
     );

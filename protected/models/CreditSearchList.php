@@ -14,6 +14,7 @@ class CreditSearchList extends CListPageModel
         return array(
             'id'=>Yii::t('integral','ID'),
             'employee_id'=>Yii::t('integral','Employee Name'),
+            'employee_code'=>Yii::t('integral','Employee Code'),
             'employee_name'=>Yii::t('integral','Employee Name'),
             'credit_type'=>Yii::t('integral','Integral Name'),
             'credit_name'=>Yii::t('integral','Integral Name'),
@@ -38,7 +39,7 @@ class CreditSearchList extends CListPageModel
     {
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $sql1 = "select a.*,b.category,b.credit_name,d.name AS employee_name,d.city AS s_city from gr_credit_request a
+        $sql1 = "select a.*,b.category,b.credit_name,d.name AS employee_name,d.code AS employee_code,d.city AS s_city from gr_credit_request a
                 LEFT JOIN gr_credit_type b ON a.credit_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city IN ($city_allow) AND a.state = 3 and d.staff_status = 0 
@@ -52,6 +53,9 @@ class CreditSearchList extends CListPageModel
         if (!empty($this->searchField) && !empty($this->searchValue)) {
             $svalue = str_replace("'","\'",$this->searchValue);
             switch ($this->searchField) {
+                case 'employee_code':
+                    $clause .= General::getSqlConditionClause('d.code',$svalue);
+                    break;
                 case 'employee_name':
                     $clause .= General::getSqlConditionClause('d.name',$svalue);
                     break;
@@ -96,6 +100,7 @@ class CreditSearchList extends CListPageModel
                 $this->attr[] = array(
                     'id'=>$record['id'],
                     'category'=>$categoryList[$record['category']],
+                    'employee_code'=>$record['employee_code'],
                     'employee_name'=>$record['employee_name'],
                     'credit_name'=>$record['credit_name'],
                     'credit_point'=>$record['credit_point'],
