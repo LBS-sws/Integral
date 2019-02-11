@@ -114,6 +114,7 @@ return array(
     'Back Prize'=>'退回金銀銅獎',
     'Back Gift'=>'退回積分',
     'Sum Gift search'=>'總積分查詢',
+    'Credit deduction details'=>'學分扣除明細',
     //沈超添加结束
 );
 ?>

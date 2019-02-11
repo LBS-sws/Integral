@@ -106,13 +106,13 @@ class PrizeRequestForm extends CFormModel
                     return false;
                 }
                 if($rows["full_time"] == 1){//申請時需要含有德智體群美5種學分
-                    $dateSql = date("Y-m-d");
-                    $dateSql = date("Y-01-01",strtotime("$dateSql - 5 years"));
+                    $year = date("Y");
                     $categoryList = CreditTypeForm::getCategoryAll();
                     for ($i=1;$i<6;$i++){
-                        $rs = Yii::app()->db->createCommand()->select("a.id")->from("gr_credit_request a")
-                            ->leftJoin("gr_credit_type b","a.credit_type = b.id")
-                            ->where("a.employee_id=:employee_id and a.state = 3 and a.apply_date>='$dateSql' and b.category=$i",
+                        $rs = Yii::app()->db->createCommand()->select("a.id")->from("gr_credit_point_ex a")
+                            ->leftJoin("gr_credit_point c","a.point_id = c.id")
+                            ->leftJoin("gr_credit_type b","c.credit_type = b.id")
+                            ->where("a.employee_id=:employee_id and a.year='$year' and a.end_num!=0 and b.category=$i",
                                 array(':employee_id'=>$this->employee_id))->queryRow();
                         if(!$rs){
                             $message = Yii::t("integral","The employee lacks a credit type:").$categoryList[$i];

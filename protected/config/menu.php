@@ -42,6 +42,10 @@ return array(
                 'access'=>'SR02',
                 'url'=>'/sumSearch/index',
             ),
+            'Credit deduction details'=>array(
+                'access'=>'SR06',
+                'url'=>'/deductionSearch/index',
+            ),
             'Exchange search'=>array(
                 'access'=>'SR03',
                 'url'=>'/giftSearch/index',

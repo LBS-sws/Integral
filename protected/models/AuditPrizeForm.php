@@ -56,11 +56,66 @@ class AuditPrizeForm extends CFormModel
     public function rules()
     {
         return array(
-            array('id, employee_id, employee_name, credit_type, credit_point, city, validity, apply_date, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
+            array('id, employee_id, employee_name, prize_type, credit_type, credit_point, city, validity, apply_date, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
 
+            array('prize_type','validatePrize',"on"=>"audit"),
             array('reject_note','required',"on"=>"reject"),
             array('id','required',"on"=>"reject"),
         );
+    }
+    public function validatePrize($attribute, $params){
+        $rows = Yii::app()->db->createCommand()->select("*")->from("gr_prize_type")
+            ->where("id=:id", array(':id'=>$this->prize_type))->queryRow();
+        if ($rows){
+            $this->prize_point = $rows["prize_point"];
+            $creditList = PrizeRequestForm::getCreditSumToYear($this->employee_id);
+            $prizeRow = Yii::app()->db->createCommand()->select("sum(prize_point) as prize_point")->from("gr_prize_request")
+                ->where("employee_id=:employee_id and state = 1", array(':employee_id'=>$this->employee_id))->queryRow();
+            $prizeNum = 0;//申請時當前用戶的總學分
+            if($prizeRow){
+                $prizeNum = $prizeRow["prize_point"];
+            }
+            $prizeNum = intval($creditList["end_num"])-intval($prizeNum);
+            if($rows["tries_limit"]!=0){//判斷是否有次數限制
+                $sumNum = Yii::app()->db->createCommand()->select("count(*)")->from("gr_prize_request")
+                    ->where("employee_id=:employee_id and prize_type=:prize_type and state in (1,3)",
+                        array(':prize_type'=>$this->prize_type,':employee_id'=>$this->employee_id))->queryScalar();
+                if(intval($rows["limit_number"])<=$sumNum){
+                    $message = Yii::t("integral","The number of applications for the award is").$rows["limit_number"];
+                    $this->addError($attribute,$message);
+                    return false;
+                }
+            }
+            if($prizeNum<intval($rows["prize_point"])){//判斷學分是否足夠扣除
+                $message = $this->employee_name.Yii::t("integral","available credits are").$prizeNum;
+                $this->addError($attribute,$message);
+                return false;
+            }
+            if ($prizeNum<intval($rows["min_point"])){//判斷學分是否滿足最小學分
+                $message = Yii::t("integral","The minimum credits allowed by the award are").$rows["min_point"];
+                $this->addError($attribute,$message);
+                return false;
+            }
+            if($rows["full_time"] == 1){//申請時需要含有德智體群美5種學分
+                $year = date("Y");
+                $categoryList = CreditTypeForm::getCategoryAll();
+                for ($i=1;$i<6;$i++){
+                    $rs = Yii::app()->db->createCommand()->select("a.id")->from("gr_credit_point_ex a")
+                        ->leftJoin("gr_credit_point c","a.point_id = c.id")
+                        ->leftJoin("gr_credit_type b","c.credit_type = b.id")
+                        ->where("a.employee_id=:employee_id and a.year='$year' and a.end_num!=0 and b.category=$i",
+                            array(':employee_id'=>$this->employee_id))->queryRow();
+                    if(!$rs){
+                        $message = Yii::t("integral","The employee lacks a credit type:").$categoryList[$i];
+                        $this->addError($attribute,$message);
+                        return false;
+                    }
+                }
+            }
+        }else{
+            $message = Yii::t('integral','Prize Name'). Yii::t('integral',' Did not find');
+            $this->addError($attribute,$message);
+        }
     }
 
 
