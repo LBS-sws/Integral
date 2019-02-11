@@ -67,35 +67,6 @@ class AuditPrizeForm extends CFormModel
         $rows = Yii::app()->db->createCommand()->select("*")->from("gr_prize_type")
             ->where("id=:id", array(':id'=>$this->prize_type))->queryRow();
         if ($rows){
-            $this->prize_point = $rows["prize_point"];
-            $creditList = PrizeRequestForm::getCreditSumToYear($this->employee_id);
-            $prizeRow = Yii::app()->db->createCommand()->select("sum(prize_point) as prize_point")->from("gr_prize_request")
-                ->where("employee_id=:employee_id and state = 1", array(':employee_id'=>$this->employee_id))->queryRow();
-            $prizeNum = 0;//申請時當前用戶的總學分
-            if($prizeRow){
-                $prizeNum = $prizeRow["prize_point"];
-            }
-            $prizeNum = intval($creditList["end_num"])-intval($prizeNum);
-            if($rows["tries_limit"]!=0){//判斷是否有次數限制
-                $sumNum = Yii::app()->db->createCommand()->select("count(*)")->from("gr_prize_request")
-                    ->where("employee_id=:employee_id and prize_type=:prize_type and state in (1,3)",
-                        array(':prize_type'=>$this->prize_type,':employee_id'=>$this->employee_id))->queryScalar();
-                if(intval($rows["limit_number"])<=$sumNum){
-                    $message = Yii::t("integral","The number of applications for the award is").$rows["limit_number"];
-                    $this->addError($attribute,$message);
-                    return false;
-                }
-            }
-            if($prizeNum<intval($rows["prize_point"])){//判斷學分是否足夠扣除
-                $message = $this->employee_name.Yii::t("integral","available credits are").$prizeNum;
-                $this->addError($attribute,$message);
-                return false;
-            }
-            if ($prizeNum<intval($rows["min_point"])){//判斷學分是否滿足最小學分
-                $message = Yii::t("integral","The minimum credits allowed by the award are").$rows["min_point"];
-                $this->addError($attribute,$message);
-                return false;
-            }
             if($rows["full_time"] == 1){//申請時需要含有德智體群美5種學分
                 $year = date("Y");
                 $categoryList = CreditTypeForm::getCategoryAll();
