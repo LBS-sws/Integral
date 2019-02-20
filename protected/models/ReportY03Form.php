@@ -38,10 +38,13 @@ class ReportY03Form extends CReportForm
 		$this->staffs_desc = Yii::t('misc','All');
 	}
 
-	public function getYearList(){
-	    $arr=array(''=>'所有');
-	    for ($i=2015;$i<=2025;$i++){
-	        $arr[$i] = $i.Yii::t("integral","year");
+    public function getYearList(){
+        $sql = "select year from gr_credit_point_ex GROUP BY year ORDER by year asc";
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $arr=array(''=>"所有");
+        foreach ($rows as $row){
+            $arr[$row["year"]] = $row["year"].Yii::t("integral","year");
         }
         return $arr;
     }

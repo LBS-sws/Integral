@@ -1,4 +1,4 @@
-<tr class=''>
+<tr class=' <?php echo $this->record['style']; ?>'>
 
     <td><?php echo $this->record['employee_code']; ?></td>
     <td><?php echo $this->record['employee_name']; ?></td>

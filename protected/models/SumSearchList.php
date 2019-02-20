@@ -87,6 +87,7 @@ class SumSearchList extends CListPageModel
         $list = array();
         $this->attr = array();
         if (count($records) > 0) {
+            $maxYear = intval(date("Y"))-5;
             foreach ($records as $k=>$record) {
                 $this->attr[] = array(
                     'employee_code'=>$record['employee_code'],
@@ -95,6 +96,7 @@ class SumSearchList extends CListPageModel
                     'end_num'=>$record['end_num'],
                     'year'=>$record['year'].Yii::t("integral","year"),
                     'city'=>CGeneral::getCityName($record["s_city"]),
+                    'style'=>intval($record['year'])<=$maxYear?"text-danger":"",
                 );
             }
         }
@@ -104,9 +106,12 @@ class SumSearchList extends CListPageModel
     }
 
     public function getYearList(){
+        $sql = "select year from gr_credit_point_ex GROUP BY year ORDER by year asc";
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
         $arr=array(''=>"所有");
-        for ($i=2015;$i<=2025;$i++){
-            $arr[$i] = $i.Yii::t("integral","year");
+        foreach ($rows as $row){
+            $arr[$row["year"]] = $row["year"].Yii::t("integral","year");
         }
         return $arr;
     }
