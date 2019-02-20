@@ -36,7 +36,16 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
     );
     $search_add_html="";
     $modelName = get_class($model);
-    $search_add_html .= TbHtml::dropDownList($modelName.'[year]',$model->year,$model->getYearList(),array("class"=>"form-control"));
+    $search_add_html .= '<select class="form-control" id="selectYearChange" name="SumSearchList[year]" id="SumSearchList_year">';
+    foreach ($model->getYearList() as $row) {
+        $search_add_html .= '<option value="'.$row["value"].'"';
+        if($row["value"] == $model->year){
+            $search_add_html.="selected ";
+        }
+        $search_add_html .='style="color:'.$row["color"].'">'.$row["name"].'</option>';
+    }
+    $search_add_html .='</select>';
+    //$search_add_html .= TbHtml::dropDownList($modelName.'[year]',$model->year,$model->getYearList(),array("class"=>"form-control"));
 
     $this->widget('ext.layout.ListPageWidget', array(
         'title'=>Yii::t('integral','Credit list'),
@@ -59,6 +68,17 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 <?php $this->endWidget(); ?>
 
 <?php
+$js = "
+$('#selectYearChange').on('change',function(){
+    var color = $(this).find('option:selected').attr('style');
+    if(color=='color:#a94442'){
+        $(this).css('color','#a94442');
+    }else{
+        $(this).css('color','#555');
+    }
+}).change();
+";
+Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);
 ?>

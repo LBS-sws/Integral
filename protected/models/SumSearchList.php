@@ -109,9 +109,10 @@ class SumSearchList extends CListPageModel
         $sql = "select year from gr_credit_point_ex GROUP BY year ORDER by year asc";
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
-        $arr=array(''=>"所有");
+        $arr[]=array('value'=>"",'name'=>"所有","color"=>"#555");
+        $maxYear = intval(date("Y"))-5;
         foreach ($rows as $row){
-            $arr[$row["year"]] = $row["year"].Yii::t("integral","year");
+            $arr[]=array('value'=>$row["year"],'name'=>$row["year"].Yii::t("integral","year"),"color"=>intval($row['year'])<=$maxYear?"#a94442":"#555");
         }
         return $arr;
     }
