@@ -90,7 +90,13 @@ class CGeneral {
 	public static function getCityListWithNoDescendant($city_allow='') {
 		$list = array();
 		$suffix = Yii::app()->params['envSuffix'];
-        $sql = "select code, name from security$suffix.sec_city WHERE code in ($city_allow) order by name";
+		$clause = !empty($city_allow) ? "and a.code in ($city_allow)" : "";
+		$sql = "select distinct a.code, a.name from security$suffix.sec_city a 
+					left outer join security$suffix.sec_city b on a.code=b.region 
+					where b.code is null 
+					$clause 
+					order by a.code
+			";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 		if (count($rows) > 0) {
 			foreach ($rows as $row) {
@@ -163,7 +169,7 @@ class CGeneral {
 
 	public static function getInstalledSystemList() {
 		$rtn = array();
-		$systems = Yii::app()->params['systemMapping'];
+		$systems = General::systemMapping();
 		foreach ($systems as $key=>$value) {
 			$rtn[$key] = Yii::t('app',$value['name']);
 		}
@@ -174,7 +180,7 @@ class CGeneral {
 		$rtn = array();
 		$sysid = Yii::app()->user->system();
 		$basePath = Yii::app()->basePath;
-		$systems = Yii::app()->params['systemMapping'];
+		$systems = General::systemMapping();
 		$cpathid = end(explode('/',$systems[$sysid]['webroot']));
 		foreach ($systems as $key=>$value) {
 			$rtn[$key] = array('name'=>$value['name'], 'item'=>array());
@@ -202,13 +208,18 @@ class CGeneral {
 		return $rtn;
 	}
 
+	public function systemMapping() {
+		$rtn = require(Yii::app()->basePath.'/config/system.php');
+		return $rtn;
+	}
+
 	public static function getLocaleAppLabels() {
 		$rtn = array();
 		$sysid = Yii::app()->user->system();
 		$basePath = Yii::app()->basePath;
 		$lang = Yii::app()->language;
 		if (Yii::app()->sourceLanguage!=$lang) {
-			$systems = Yii::app()->params['systemMapping'];
+			$systems = General::systemMapping();
 			$cpathid = end(explode('/',$systems[$sysid]['webroot']));
 			foreach ($systems as $key=>$value) {
 				$pathid = end(explode('/',$systems[$key]['webroot']));
