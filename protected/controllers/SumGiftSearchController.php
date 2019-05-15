@@ -2,6 +2,8 @@
 
 class SumGiftSearchController extends Controller
 {
+	public $function_id='SR05';
+
     public function filters()
     {
         return array(

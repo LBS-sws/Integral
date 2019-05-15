@@ -7,6 +7,8 @@
 class IntegralController extends Controller
 {
 
+	public $function_id='DE02';
+	
     public function filters()
     {
         return array(

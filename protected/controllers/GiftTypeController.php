@@ -2,6 +2,8 @@
 
 class GiftTypeController extends Controller
 {
+ 	public $function_id='SS04';
+	
     public function filters()
     {
         return array(

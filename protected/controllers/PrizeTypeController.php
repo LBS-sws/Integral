@@ -2,6 +2,8 @@
 
 class PrizeTypeController extends Controller
 {
+	public $function_id='SS02';
+	
     public function filters()
     {
         return array(

@@ -2,6 +2,8 @@
 
 class DeductionSearchController extends Controller
 {
+	public $function_id='SR06';
+	
     public function filters()
     {
         return array(

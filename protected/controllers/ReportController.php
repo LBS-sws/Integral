@@ -50,6 +50,9 @@ class ReportController extends Controller
 	}
 
     public function actionCreditslist() {
+		$this->function_id = self::$actions['creditslist'];
+		Yii::app()->session['active_func'] = $this->function_id;
+
         $model = new ReportY02Form;
         if (isset($_POST['ReportY02Form'])) {
             $model->attributes = $_POST['ReportY02Form'];
@@ -65,6 +68,9 @@ class ReportController extends Controller
     }
 
     public function actionYearlist() {
+		$this->function_id = self::$actions['yearlist'];
+		Yii::app()->session['active_func'] = $this->function_id;
+
         $model = new ReportY03Form;
         if (isset($_POST['ReportY03Form'])) {
             $model->attributes = $_POST['ReportY03Form'];
@@ -80,6 +86,8 @@ class ReportController extends Controller
     }
 
     public function actionCutlist() {
+		$this->function_id = self::$actions['cutlist'];
+		Yii::app()->session['active_func'] = $this->function_id;
         $model = new ReportY04Form;
         if (isset($_POST['ReportY04Form'])) {
             $model->attributes = $_POST['ReportY04Form'];
@@ -95,6 +103,8 @@ class ReportController extends Controller
     }
 
     public function actionPrizelist() {
+		$this->function_id = self::$actions['prizelist'];
+		Yii::app()->session['active_func'] = $this->function_id;
         $model = new ReportY04Form;
         $model->id="RptPrizeList";
         $model->name=Yii::t("app","Prize List Report");
@@ -112,6 +122,8 @@ class ReportController extends Controller
     }
 
     public function actionStretchlist() {
+		$this->function_id = self::$actions['stretchlist'];
+		Yii::app()->session['active_func'] = $this->function_id;
         $model = new ReportY05Form;
         if (isset($_POST['ReportY05Form'])) {
             $model->attributes = $_POST['ReportY05Form'];

@@ -2,6 +2,7 @@
 
 class ConfirmCreditController extends Controller
 {
+	public $function_id='GA04';
 
     public function filters()
     {

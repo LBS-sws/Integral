@@ -2,6 +2,8 @@
 
 class LookupController extends Controller
 {
+	public $interface=false;
+	
 	/**
 	 * @return array action filters
 	 */

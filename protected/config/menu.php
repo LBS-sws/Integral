@@ -3,6 +3,7 @@
 return array(
     'Credit'=>array(
         'access'=>'DE',
+		'icon'=>'fa-flag-checkered',
         'items'=>array(
             'Credit application'=>array(
                 'access'=>'DE01',
@@ -20,6 +21,7 @@ return array(
     ),
     'Exchange'=>array(
         'access'=>'EX',
+		'icon'=>'fa-diamond',
         'items'=>array(
             'Credits for'=>array(
                 'access'=>'EX01',
@@ -33,6 +35,7 @@ return array(
     ),
     'Search'=>array(
         'access'=>'SR',
+		'icon'=>'fa-binoculars',
         'items'=>array(
             'Credits search'=>array(
                 'access'=>'SR01',
@@ -62,6 +65,7 @@ return array(
     ),
     'ranking list'=>array(
         'access'=>'RL',
+		'icon'=>'fa-sort-numeric-asc',
         'items'=>array(
             'City ranking'=>array(
                 'access'=>'RL01',
@@ -79,6 +83,7 @@ return array(
     ),
     'Audit'=>array(
         'access'=>'GA',
+		'icon'=>'fa-legal',
         'items'=>array(
             'Confirm review'=>array(
                 'access'=>'GA04',
@@ -100,6 +105,7 @@ return array(
     ),
     'System Setting'=>array(
         'access'=>'SS',
+		'icon'=>'fa-gear',
         'items'=>array(
             'Credit type allocation'=>array(
                 'access'=>'SS01',
@@ -117,6 +123,7 @@ return array(
     ),
     'Report'=>array(
         'access'=>'YB',
+		'icon'=>'fa-file-text-o',
         'items'=>array(
             'Credits subsidiary List'=>array(
                 'access'=>'YB02',

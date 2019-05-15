@@ -2,6 +2,8 @@
 
 class StretchSearchController extends Controller
 {
+	public $function_id='SR04';
+
     public function filters()
     {
         return array(

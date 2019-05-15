@@ -2,6 +2,8 @@
 
 class CreditSearchController extends Controller
 {
+	public $function_id='SR01';
+	
     public function filters()
     {
         return array(

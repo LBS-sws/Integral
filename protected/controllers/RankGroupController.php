@@ -2,6 +2,8 @@
 
 class RankGroupController extends Controller
 {
+	public $function_id='RL03';
+	
     public function filters()
     {
         return array(

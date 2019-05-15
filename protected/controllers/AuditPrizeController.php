@@ -2,6 +2,7 @@
 
 class AuditPrizeController extends Controller
 {
+	public $function_id='GA03';
 
     public function filters()
     {

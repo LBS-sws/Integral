@@ -7,6 +7,10 @@ class Email {
     protected $description;//郵件副題
     protected $message;//郵件內容（html）
 
+	protected $to_user=array(); 	//因通知記錄需要
+	protected $form_id='Email';
+	protected $rec_id=0;
+
     public function __construct($subject="",$message="",$description=""){
         $this->subject = $subject;
         $this->message = $message;
@@ -54,7 +58,7 @@ class Email {
         }else{
             $sql = " and b.city = '$city' ";
         }
-        $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_user_access a")
+        $rs = Yii::app()->db->createCommand()->select("b.email,b.username")->from("security$suffix.sec_user_access a")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
             ->where("a.system_id='$systemId' and a.a_read_write like '%$str%' $sql and b.email != '' and b.status='A'")
             ->queryAll();
@@ -63,6 +67,9 @@ class Email {
                 if(!in_array($row["email"],$this->to_addr)){
                     $this->to_addr[] = $row["email"];
                 }
+                if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                    $this->to_user[] = $row["username"];
+                }
             }
         }
     }
@@ -70,7 +77,7 @@ class Email {
     //添加收信人(地區老總）
     public function addEmailToCity($city){
         $suffix = Yii::app()->params['envSuffix'];
-        $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_city a")
+        $rs = Yii::app()->db->createCommand()->select("b.email,b.username")->from("security$suffix.sec_city a")
             ->leftJoin("security$suffix.sec_user b","a.incharge=b.username")
             ->where("a.code='$city' and b.email != '' and b.status='A'")
             ->queryRow();
@@ -78,6 +85,9 @@ class Email {
             if(!empty($rs["email"])){
                 if(!in_array($rs["email"],$this->to_addr)){
                     $this->to_addr[] = $rs["email"];
+                }
+                if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                    $this->to_user[] = $row["username"];
                 }
             }
         }
@@ -119,7 +129,7 @@ class Email {
             }
             $likeSql .=")";
         }
-        $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_user_access a")
+        $rs = Yii::app()->db->createCommand()->select("b.email,b.username")->from("security$suffix.sec_user_access a")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
             ->where("a.system_id='$systemId' $likeSql $sql and b.email != '' and b.status='A'")
             ->queryAll();
@@ -127,6 +137,9 @@ class Email {
             foreach ($rs as $row){
                 if(!in_array($row["email"],$this->to_addr)){
                     $this->to_addr[] = $row["email"];
+                }
+                if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                    $this->to_user[] = $row["username"];
                 }
             }
         }
@@ -150,7 +163,7 @@ class Email {
             }
             $likeSql .=")";
         }
-        $rs = Yii::app()->db->createCommand()->select("b.email")->from("security$suffix.sec_user_access a")
+        $rs = Yii::app()->db->createCommand()->select("b.email,b.username")->from("security$suffix.sec_user_access a")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
             ->where("a.system_id='$systemId' $likeSql $sql and b.email != '' and b.status='A'")
             ->queryAll();
@@ -158,6 +171,9 @@ class Email {
             foreach ($rs as $row){
                 if(!in_array($row["email"],$this->to_addr)){
                     $this->to_addr[] = $row["email"];
+                }
+                if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                    $this->to_user[] = $row["username"];
                 }
             }
         }
@@ -181,7 +197,7 @@ class Email {
             }
             $likeSql .=")";
         }
-        $rs = Yii::app()->db->createCommand()->select("b.email")->from("hr$suffix.hr_binding e")
+        $rs = Yii::app()->db->createCommand()->select("b.email,b.username")->from("hr$suffix.hr_binding e")
             ->leftJoin("hr$suffix.hr_employee d","d.id = e.employee_id")
             ->leftJoin("security$suffix.sec_user_access a","a.username = e.user_id")
             ->leftJoin("security$suffix.sec_user b","a.username=b.username")
@@ -192,6 +208,9 @@ class Email {
                 if(!in_array($row["email"],$this->to_addr)){
                     $this->to_addr[] = $row["email"];
                 }
+                if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                    $this->to_user[] = $row["username"];
+                }
             }
         }
     }
@@ -199,12 +218,15 @@ class Email {
     //添加收信人(lcu）
     public function addEmailToLcu($lcu){
         $suffix = Yii::app()->params['envSuffix'];
-        $email = Yii::app()->db->createCommand()->select("email")->from("security$suffix.sec_user")
+        $email = Yii::app()->db->createCommand()->select("email,username")->from("security$suffix.sec_user")
             ->where("username=:username",array(":username"=>$lcu))
             ->queryRow();
         if($email){
             if(!in_array($email["email"],$this->to_addr)){
                 $this->to_addr[] = $email["email"];
+            }
+            if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                $this->to_user[] = $row["username"];
             }
         }
     }
@@ -212,13 +234,16 @@ class Email {
     //添加收信人(員工id）
     public function addEmailToStaffId($staffId){
         $suffix = Yii::app()->params['envSuffix'];
-        $email = Yii::app()->db->createCommand()->select("b.email")->from("hr$suffix.hr_binding a")
+        $email = Yii::app()->db->createCommand()->select("b.email,b.username")->from("hr$suffix.hr_binding a")
             ->leftJoin("security$suffix.sec_user b","b.username = a.user_id")
             ->where("a.employee_id=:employee_id",array(":employee_id"=>$staffId))
             ->queryRow();
         if($email){
             if(!in_array($email["email"],$this->to_addr)){
                 $this->to_addr[] = $email["email"];
+            }
+            if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
+                $this->to_user[] = $row["username"];
             }
         }
     }
@@ -245,6 +270,20 @@ class Email {
             'lcu'=>$uid,
             'lcd'=>date('Y-m-d H:i:s'),
         ));
+
+		//新增通知記錄
+ 		$connection = Yii::app()->db;
+		SystemNotice::addNotice($connection, array(
+				'note_type'=>'notice',
+				'subject'=>$this->subject,//郵件主題
+				'description'=>$this->description,//郵件副題
+				'message'=>$this->message,
+				'username'=>json_encode($to_user),
+				'system_id'=>Yii::app()->user->system(),
+				'form_id'=>$this->form_id,
+				'rec_id'=>$this->rec_id,
+			)
+		);
     }
 
     //查找管轄某城市的所有城市（根據小城市查找大城市）

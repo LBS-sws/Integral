@@ -7,6 +7,8 @@
 class GiftRequestController extends Controller
 {
 
+	public $function_id='EX02';
+	
     public function filters()
     {
         return array(

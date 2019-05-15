@@ -2,6 +2,8 @@
 
 class CreditTypeController extends Controller
 {
+ 	public $function_id='SS01';
+	
     public function filters()
     {
         return array(

@@ -2,6 +2,8 @@
 
 class RankCityController extends Controller
 {
+	public $function_id='RL01';
+	
     public function filters()
     {
         return array(

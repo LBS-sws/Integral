@@ -2,6 +2,8 @@
 
 class PrizeRequestController extends Controller
 {
+	public $function_id='DE03';
+	
     public function filters()
     {
         return array(

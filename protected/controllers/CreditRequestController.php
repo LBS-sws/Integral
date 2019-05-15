@@ -2,6 +2,8 @@
 
 class CreditRequestController extends Controller
 {
+	public $function_id='DE02';
+	
     public function filters()
     {
         return array(
@@ -139,6 +141,9 @@ class CreditRequestController extends Controller
 
     public function actionNew()
     {
+		$this->function_id = 'DE01';
+		Yii::app()->session['active_func'] = $this->function_id;
+
         $model = new CreditRequestForm('new');
         $model->apply_date = date("Y-m-d");
         if($model->validateNowUser(true)){

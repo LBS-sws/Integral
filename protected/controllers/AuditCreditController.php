@@ -2,6 +2,7 @@
 
 class AuditCreditController extends Controller
 {
+	public $function_id='GA01';
 
     public function filters()
     {

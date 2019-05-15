@@ -2,6 +2,8 @@
 
 class RankNationalController extends Controller
 {
+	public $function_id='RL02';
+	
     public function filters()
     {
         return array(
@@ -30,7 +32,7 @@ class RankNationalController extends Controller
         );
     }
     public static function allowReadOnly() {
-        return Yii::app()->user->validFunction('RL01');
+        return Yii::app()->user->validFunction('RL02');
     }
 
 	public function actionIndex($pageNum=0) 

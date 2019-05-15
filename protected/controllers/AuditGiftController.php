@@ -6,6 +6,7 @@
  */
 class AuditGiftController extends Controller
 {
+	public $function_id='GA02';
 
     public function filters()
     {

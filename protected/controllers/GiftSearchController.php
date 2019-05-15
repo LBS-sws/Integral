@@ -6,6 +6,7 @@
  */
 class GiftSearchController extends Controller
 {
+	public $function_id='SR03';
 
     public function filters()
     {
