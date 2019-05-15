@@ -86,8 +86,8 @@ class Email {
                 if(!in_array($rs["email"],$this->to_addr)){
                     $this->to_addr[] = $rs["email"];
                 }
-                if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
-                    $this->to_user[] = $row["username"];
+                if(!in_array($rs["username"],$this->to_user)){	//因通知記錄需要
+                    $this->to_user[] = $rs["username"];
                 }
             }
         }
@@ -225,8 +225,8 @@ class Email {
             if(!in_array($email["email"],$this->to_addr)){
                 $this->to_addr[] = $email["email"];
             }
-            if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
-                $this->to_user[] = $row["username"];
+            if(!in_array($email["username"],$this->to_user)){	//因通知記錄需要
+                $this->to_user[] = $email["username"];
             }
         }
     }
@@ -242,8 +242,8 @@ class Email {
             if(!in_array($email["email"],$this->to_addr)){
                 $this->to_addr[] = $email["email"];
             }
-            if(!in_array($row["username"],$this->to_user)){	//因通知記錄需要
-                $this->to_user[] = $row["username"];
+            if(!in_array($email["username"],$this->to_user)){	//因通知記錄需要
+                $this->to_user[] = $email["username"];
             }
         }
     }
@@ -278,7 +278,7 @@ class Email {
 				'subject'=>$this->subject,//郵件主題
 				'description'=>$this->description,//郵件副題
 				'message'=>$this->message,
-				'username'=>json_encode($to_user),
+				'username'=>json_encode($this->to_user),
 				'system_id'=>Yii::app()->user->system(),
 				'form_id'=>$this->form_id,
 				'rec_id'=>$this->rec_id,
