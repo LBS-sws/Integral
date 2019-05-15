@@ -79,6 +79,10 @@ return array(
                 'access'=>'RL03',
                 'url'=>'/rankGroup/index',
             ),
+            'Valid ranking'=>array(
+                'access'=>'RL04',
+                'url'=>'/rankValid/index',
+            ),
         ),
     ),
     'Audit'=>array(

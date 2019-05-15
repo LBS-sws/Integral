@@ -147,5 +147,7 @@ return array(
     'After receiving the award, the gold number of the credit target will be reaccumulated'=>'領獎后將重新累積學分目標金獎次數',
 
     'start credit num'=>'初始學分',
+
+    'valid credit'=>'有效學分',
 );
 ?>
