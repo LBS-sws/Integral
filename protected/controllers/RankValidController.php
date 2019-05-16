@@ -2,7 +2,7 @@
 
 class RankValidController extends Controller
 {
-	public $function_id='RL02';
+	public $function_id='RL04';
 	
     public function filters()
     {
