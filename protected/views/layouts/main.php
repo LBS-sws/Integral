@@ -17,7 +17,7 @@
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
-<body class="hold-transition <?php echo Yii::app()->params['appcolor']; ?> sidebar-mini">
+<body class="hold-transition skin-purple-light <?php echo Yii::app()->params['appcolor']; ?> sidebar-mini">
 <div class="wrapper">
 
 	<header class="main-header">
