@@ -86,7 +86,7 @@ class ConfirmCreditList extends CListPageModel
 			}
 		}
 		$session = Yii::app()->session;
-		$session['auditCredit_ya01'] = $this->getCriteria();
+		$session['confirmCredit_ya01'] = $this->getCriteria();
 		return true;
 	}
 
