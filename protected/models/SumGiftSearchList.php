@@ -51,12 +51,12 @@ class SumGiftSearchList extends CListPageModel
                 LEFT JOIN ((SELECT sum(apply_num*bonus_point) as sum_apply,employee_id FROM gr_gift_request WHERE state in (1,3) and apply_date >='$startDate' and apply_date <='$lastDate' GROUP BY employee_id)) b
                 ON a.employee_id = b.employee_id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                WHERE d.city IN ($city_allow) 
+                WHERE d.city IN ($city_allow) and d.staff_status = 0 
 			";
         $sql2 = "SELECT count(*) FROM 
                 (SELECT sum(bonus_point) as sum_gift,employee_id FROM gr_bonus_point WHERE rec_date >='$startDate' and rec_date <='$lastDate' GROUP BY employee_id) a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                WHERE d.city IN ($city_allow) 
+                WHERE d.city IN ($city_allow) and d.staff_status = 0 
           ";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {

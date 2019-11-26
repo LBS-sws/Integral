@@ -32,7 +32,7 @@ class PrizeTypeController extends Controller
             ),
             array('allow',
                 'actions'=>array('view','fileDownload'),
-                'expression'=>array('GiftTypeController','allowRead'),
+                'expression'=>array('PrizeTypeController','allowRead'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
