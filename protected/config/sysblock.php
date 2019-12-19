@@ -18,5 +18,17 @@ return array(
 			'function'=>'RE02',
 			'message'=>Yii::t('block','Please complete Personnel System - Appraisial before using other functions.'),
 		),
+	'sp.GA01' => array(
+			'validation'=>'isCreditApproved',
+			'system'=>'sp',
+			'function'=>'GA01',
+			'message'=>Yii::t('block','Please complete Academic Credit System - Credit Request Approval before using other functions.'),
+		),
+	'sp.GA04' => array(
+			'validation'=>'isCreditConfirmed',
+			'system'=>'sp',
+			'function'=>'GA04',
+			'message'=>Yii::t('block','Please complete Academic Credit System - Credit Request Confirmation before using other functions.'),
+		),
 );
 ?>
