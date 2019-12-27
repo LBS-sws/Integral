@@ -40,16 +40,21 @@ echo $doc->genTableFileList($ronly);
 <div id="inputFile">
 <?php
 if (!$ronly) {
+    $onFileSelect = 'function(e, v, m){}';
+    if(isset($maxSize)){
+        $onFileSelect = 'function(e, v, m){var size=$("#attachmentgral").get(0).files[0].size;if(size>'.$maxSize.'){alert("文件过大，请重新上传");$("#attachmentgral").val("");return false;}}';
+    }
 	$this->widget('CMultiFileUpload', array(
 		'name'=>$doc->inputName,
 		'model'=>$model,
 		'attribute'=>'files',
 		'accept'=>'jpg|gif|png|xlsx|xls|docx|doc|pdf|jpeg|tif',
+        //'maxSize'=>1024 * 500,
 		'remove'=>Yii::t('dialog','Remove'),
 		'file'=>' $file',
 		'options'=>array(
 			'list'=>'#'.$doc->listName,
-//			'onFileSelect'=>'function(e, v, m){ alert("onFileSelect - "+v) }',
+			'onFileSelect'=>$onFileSelect,
 //			'afterFileSelect'=>'function(e, v, m){ $("ServiceFrom_files").attr("value","00"); }',
 //        'onFileAppend'=>'function(e, v, m){ alert("onFileAppend - "+v) }',
 //        'afterFileAppend'=>'function(e, v, m){ alert("afterFileAppend - "+v) }',
