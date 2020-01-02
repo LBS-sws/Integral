@@ -47,7 +47,7 @@ class SumGiftSearchList extends CListPageModel
         $startDate = "$year-01-01";
         $lastDate = "$year-12-31";
         $sql1 = "SELECT a.sum_gift,b.sum_apply,
-                CASE WHEN(b.sum_apply=0) THEN a.sum_gift ELSE (a.sum_gift-b.sum_apply) END as num
+                CASE WHEN(b.sum_apply is NULL || b.sum_apply=0) THEN a.sum_gift ELSE (a.sum_gift-b.sum_apply) END as num
                 ,d.* FROM 
                 (SELECT sum(bonus_point) as sum_gift,employee_id FROM gr_bonus_point WHERE rec_date >='$startDate' and rec_date <='$lastDate' GROUP BY employee_id) a
                 LEFT JOIN ((SELECT sum(apply_num*bonus_point) as sum_apply,employee_id FROM gr_gift_request WHERE state in (1,3) and apply_date >='$startDate' and apply_date <='$lastDate' GROUP BY employee_id)) b
