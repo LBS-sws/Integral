@@ -113,7 +113,7 @@ $this->pageTitle=Yii::app()->name . ' - creditRequest Form';
 <?php $this->renderPartial('//site/fileupload',array('model'=>$model,
     'form'=>$form,
     'doctype'=>'GRAL',
-    'maxSize'=>1024*500,
+    //'maxSize'=>1024*500,
     'header'=>Yii::t('dialog','File Attachment'),
     'ronly'=>($model->scenario=='view'||$model->state == 1||$model->state == 3||$model->state == 4),
 ));
