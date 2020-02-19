@@ -142,9 +142,15 @@ class DocMan {
 				$filename .= '.'.$ext;
 				$filetype = $this->files['type'][$idx];
 				$path = $this->hashDirectory($filename);
-				if (rename($phyname, $path.'/'.$filename)) {
-					$recs[] = array('path'=>$path, 'filename'=>$filename, 'dispname'=>$dispname, 'filetype'=>$filetype);
-				}
+				if(in_array($ext,array("gif","jpeg","jpg","png"))){
+                    if($this->resizeImage($phyname,$path.'/'.$filename,$ext)){
+                        $recs[] = array('path'=>$path, 'filename'=>$filename, 'dispname'=>$dispname, 'filetype'=>$filetype);
+                    }
+                }else{
+                    if (rename($phyname, $path.'/'.$filename)) {
+                        $recs[] = array('path'=>$path, 'filename'=>$filename, 'dispname'=>$dispname, 'filetype'=>$filetype);
+                    }
+                }
 			}
 		}
 		$connection = Yii::app()->db;
@@ -167,7 +173,35 @@ class DocMan {
 			throw new CHttpException(404,'Cannot update.'.$e->getMessage());
 		}
 	}
-	
+
+	private function resizeImage($uploadfile,$path,$imgType){
+        $imgType = $imgType == "jpg"?"jpeg":$imgType;
+        $src_fnc = 'imagecreatefrom'.$imgType;
+        $src_image = $src_fnc($uploadfile);//临时图片资源
+        $width = imagesx($src_image);
+        $height = imagesy($src_image);
+        $max_width = 600;
+        $max_height = 400;
+        $dst_w = $max_width;
+        $dst_h = $max_height;
+        if ($width > $max_width) {
+            $dst_h = $height*($max_width/$width);
+            $dst_w = $max_width;
+        }
+        if ($height > $max_height) {
+            $dst_w = $width*($max_height/$height);
+            $dst_h = $max_height;
+        }
+        $dst_image = imagecreatetruecolor($dst_w, $dst_h);
+        imagecopyresampled($dst_image, $src_image, 0, 0, 0, 0, $dst_w, $dst_h, $width, $height);
+        $out_fnc = 'image' . $imgType;//imagepng   imagejpeg
+        if($out_fnc($dst_image ,$path)){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
 	public function fileDownload($fileId) {
 		$mast_id = $this->getMasterId(false);
 		$file_mast_id = $this->getFileMasterId($fileId);
