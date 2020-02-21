@@ -301,7 +301,8 @@ function $rmfuncid(id) {
 				}
 			},
 			error: function(data) { // if error occured
-				alert('Error occured.please try again');
+			    console.log(data);
+				alert('Error occured.please try again.'+'ReadyState:'+data['readyState']+'~status:'+data['status']+'<br>text:'+data['responseText']);
 			}
 		});	
 	}
@@ -343,7 +344,8 @@ $('#$btnid').on('click', function() {
 			}
 		},
 		error: function(data) { // if error occured
-			alert('Error occured.please try again');
+			    console.log(data);
+				alert('Error occured.please try again.'+'ReadyState:'+data['readyState']+'~status:'+data['status']+'<br>text:'+data['responseText']);
 		}
 	});
 });
