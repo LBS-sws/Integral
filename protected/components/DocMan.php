@@ -175,7 +175,13 @@ class DocMan {
 	}
 
 	private function resizeImage($uploadfile,$path,$imgType){
-        $imgType = $imgType == "jpg"?"jpeg":$imgType;
+        $fileType = exif_imagetype($uploadfile);// 获取上傳文件的真實類型
+        $mime = image_type_to_extension($fileType);
+        $mime = array_pop(explode(".",$mime));
+        if(!in_array($mime,array("gif","jpeg","jpg","png"))){
+            return false;
+        }
+        $imgType = $mime == "jpg"?"jpeg":$mime;
         $src_fnc = 'imagecreatefrom'.$imgType;
         $src_image = $src_fnc($uploadfile);//临时图片资源
         $width = imagesx($src_image);
