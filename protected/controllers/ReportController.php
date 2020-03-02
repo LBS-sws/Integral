@@ -111,6 +111,7 @@ class ReportController extends Controller
         if (isset($_POST['ReportY04Form'])) {
             $model->attributes = $_POST['ReportY04Form'];
             if ($model->validate()) {
+                $model->city_allow = Yii::app()->user->city_allow();
                 $model->addQueueItem();
                 Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Report submitted. Please go to Report Manager to retrieve the output.'));
             } else {

@@ -37,16 +37,26 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 			<?php echo $form->hiddenField($model, 'name'); ?>
 			<?php echo $form->hiddenField($model, 'fields'); ?>
 			<?php echo $form->hiddenField($model, 'staffs'); ?>
+			<?php echo $form->hiddenField($model, 'city'); ?>
 
             <?php if ($model->showField('city') && !Yii::app()->user->isSingleCity()): ?>
-                <div class="form-group">
-                    <?php echo $form->labelEx($model,'city',array('class'=>"col-sm-2 control-label")); ?>
-                    <div class="col-sm-3">
-                        <?php echo $form->dropDownList($model, 'city', General::getCityListWithNoDescendant(Yii::app()->user->city_allow()),
-                            array('disabled'=>($model->scenario=='view'))
-                        ); ?>
-                    </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'city',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+                    <?php
+                    echo $form->textArea($model, 'city_desc',
+                        array('rows'=>4,'cols'=>80,'maxlength'=>1000,'readonly'=>true,)
+                    );
+                    ?>
                 </div>
+                <div class="col-sm-2">
+                    <?php
+                    echo TbHtml::button('<span class="fa fa-search"></span> '.Yii::t('integral','City'),
+                        array('name'=>'btnCity','id'=>'btnCity',)
+                    );
+                    ?>
+                </div>
+            </div>
             <?php else: ?>
                 <?php echo $form->hiddenField($model, 'city'); ?>
             <?php endif ?>
@@ -107,9 +117,13 @@ $js = Script::genLookupSearchEx();
 Yii::app()->clientScript->registerScript('lookupSearch',$js,CClientScript::POS_READY);
 
 $js = Script::genLookupButtonEx('btnStaff', 'staff', 'staffs', 'staffs_desc',
-		array(),
-		true
-	);
+    array(),
+    true
+);
+$js.= Script::genLookupButtonEx('btnCity', 'city', 'city', 'city_desc',
+    array(),
+    true
+);
 Yii::app()->clientScript->registerScript('lookupStaffs',$js,CClientScript::POS_READY);
 
 $js = Script::genDatePicker(array(

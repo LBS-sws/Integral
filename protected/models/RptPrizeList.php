@@ -16,7 +16,8 @@ class RptPrizeList extends CReport {
 		$this->retrieveData();
 		$this->title = $this->getReportName();
 		$this->subtitle = Yii::t('integral','Apply Prize Form').':'.$this->criteria['START_DT'].' - '.$this->criteria['END_DT'].' / '
-			.Yii::t('report','Staffs').':'.$this->criteria['STAFFSDESC']
+			.Yii::t('report','Staff List').':'.$this->criteria['STAFFSDESC'].' / '
+            .Yii::t('report','City').':'.$this->criteria['CITYDESC']
 			;
 		return $this->exportExcel();
 	}
@@ -26,10 +27,20 @@ class RptPrizeList extends CReport {
         $end_dt = $this->criteria['END_DT'];
 		$city = $this->criteria['CITY'];
 		$staff_id = $this->criteria['STAFFS'];
-		
-		$citymodel = new City();
-		$citylist = $citymodel->getDescendantList($city);
-		$citylist = empty($citylist) ? "'$city'" : "$citylist,'$city'";
+        $city_allow = $this->criteria['city_allow'];
+
+        $cond_city = "";
+        if (!empty($city)) {
+            $citylist = explode('~',$city);
+            if(count($citylist)>1){
+                $cond_city = implode("','",$citylist);
+            }else{
+                $cond_city = "'".reset($citylist)."'";
+            }
+            if ($cond_city!=''){
+                $cond_city = " and d.city in ($cond_city) ";
+            }
+        }
 		
 		$suffix = Yii::app()->params['envSuffix'];
 
@@ -59,8 +70,8 @@ class RptPrizeList extends CReport {
         $sql = "select a.*,b.prize_name,d.code AS employee_code,d.name AS employee_name,d.city AS s_city from gr_prize_request a
                 LEFT JOIN gr_prize_type b ON a.prize_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city in($citylist) and d.staff_status = 0  and a.state = 3 
-                $cond_staff $cond_time ORDER BY d.city DESC 
+                where d.city in($city_allow) and d.staff_status = 0  and a.state = 3 
+                $cond_staff $cond_time $cond_city ORDER BY d.city DESC 
 			";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 		if (count($rows) > 0) {
@@ -80,7 +91,7 @@ class RptPrizeList extends CReport {
 	}
 	
 	public function getReportName() {
-		$city_name = isset($this->criteria) ? ' - '.General::getCityName($this->criteria['CITY']) : '';
+		$city_name = isset($this->criteria) ? ' - '.$this->criteria['CITYDESC'] : '';
 		return (isset($this->criteria) ? Yii::t('report',$this->criteria['RPT_NAME']) : Yii::t('report','Nil')).$city_name;
 	}
 }
