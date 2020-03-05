@@ -94,11 +94,27 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                     <div class="input-group">
                         <div class="input-group-btn">
                             <?php echo $form->dropDownList($model, 'tries_limit',$model->getTriesLimtList(),
-                                array('id'=>"tries_limit",'readonly'=>($model->scenario=='view'),"style"=>"width:150px;")
+                                array('class'=>"tries_change",'readonly'=>($model->scenario=='view'),"style"=>"width:150px;")
                             ); ?>
                         </div>
                         <?php echo $form->numberField($model, 'limit_number',
-                            array('min'=>1,'id'=>"limit_number",'readonly'=>($model->scenario=='view'),"style"=>"display:none")
+                            array('min'=>1,'class'=>"tries_change_info",'readonly'=>($model->scenario=='view'),"style"=>"display:none")
+                        ); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <?php echo $form->labelEx($model,'leave_limit',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-sm-4">
+
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <?php echo $form->dropDownList($model, 'leave_limit',$model->getTriesLimtList(),
+                                array('class'=>"tries_change",'readonly'=>($model->scenario=='view'),"style"=>"width:150px;")
+                            ); ?>
+                        </div>
+                        <?php echo $form->numberField($model, 'leave_number',
+                            array('min'=>1,'class'=>"tries_change_info",'readonly'=>($model->scenario=='view'),"style"=>"display:none")
                         ); ?>
                     </div>
                 </div>
@@ -134,11 +150,11 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 <?php
 $js = "
-    $('#tries_limit').on('change',function(){
+    $('.tries_change').on('change',function(){
         if($(this).val()==0){
-            $('#limit_number').hide();
+            $(this).parent('.input-group-btn').next('.tries_change_info').hide();
         }else{
-            $('#limit_number').show();
+            $(this).parent('.input-group-btn').next('.tries_change_info').show();
         }
     }).trigger('change');
 ";

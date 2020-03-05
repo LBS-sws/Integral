@@ -23,10 +23,20 @@ class RptYearList extends CReport {
 		$year = $this->criteria['YEAR'];
 		$city = $this->criteria['CITY'];
 		$staff_id = $this->criteria['STAFFS'];
-		
-		$citymodel = new City();
-		$citylist = $citymodel->getDescendantList($city);
-		$citylist = empty($citylist) ? "'$city'" : "$citylist,'$city'";
+        $city_allow = $this->criteria['city_allow'];
+
+        $cond_city = "";
+        if (!empty($city)) {
+            $citylist = explode('~',$city);
+            if(count($citylist)>1){
+                $cond_city = implode("','",$citylist);
+            }else{
+                $cond_city = "'".reset($citylist)."'";
+            }
+            if ($cond_city!=''){
+                $cond_city = " and d.city in ($cond_city) ";
+            }
+        }
 		
 		$suffix = Yii::app()->params['envSuffix'];
 
@@ -48,8 +58,8 @@ class RptYearList extends CReport {
 		}
         $sql = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num from gr_credit_point_ex a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($citylist)  and d.staff_status = 0 
-                $cond_staff $dateSql
+                where d.city IN ($city_allow)  and d.staff_status = 0 
+                $cond_staff $dateSql $cond_city
                 GROUP BY a.employee_id,a.year 
 			";
         $rows = Yii::app()->db->createCommand($sql)->queryAll();

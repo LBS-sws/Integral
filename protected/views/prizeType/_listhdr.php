@@ -20,4 +20,9 @@
         ;
         ?>
     </th>
+    <th>
+        <?php echo TbHtml::link($this->getLabelName('leave_limit').$this->drawOrderArrow('leave_limit'),'#',$this->createOrderLink('prizeType-list','leave_limit'))
+        ;
+        ?>
+    </th>
 </tr>

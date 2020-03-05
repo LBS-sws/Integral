@@ -4,4 +4,5 @@
 	<td><?php echo $this->record['prize_point']; ?></td>
 	<td><?php echo $this->record['min_point']; ?></td>
 	<td><?php echo $this->record['tries_limit']; ?></td>
+	<td><?php echo $this->record['leave_limit']; ?></td>
 </tr>

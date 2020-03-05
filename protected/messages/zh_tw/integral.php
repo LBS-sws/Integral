@@ -149,5 +149,7 @@ return array(
     'start credit num'=>'初始學分',
 
     'valid credit'=>'有效學分',
+
+    'Leave Limit'=>'等級限制',
 );
 ?>

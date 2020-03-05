@@ -5,6 +5,8 @@ class ReportY03Form extends CReportForm
 {
 	public $staffs;
 	public $staffs_desc;
+    public $city_desc;
+    public $city_allow;
 	
 	protected function labelsEx() {
 		return array(
@@ -14,7 +16,7 @@ class ReportY03Form extends CReportForm
 	
 	protected function rulesEx() {
         return array(
-            array('city,year,staffs, staffs_desc','safe'),
+            array('city,city_desc,year,staffs, staffs_desc','safe'),
         );
 	}
 	
@@ -24,6 +26,8 @@ class ReportY03Form extends CReportForm
 				'YEAR'=>$this->year,
 				'STAFFS'=>$this->staffs,
 				'STAFFSDESC'=>$this->staffs_desc,
+            'city_allow'=>$this->city_allow,
+            'CITYDESC'=>$this->city_desc,
 			);
 	}
 	
@@ -33,7 +37,8 @@ class ReportY03Form extends CReportForm
 		$this->format = 'EXCEL';
 		$this->fields = 'city,year,staffs,staffs_desc';
 		$this->year = date("Y");
-        $this->city = Yii::app()->user->city();
+        $this->city = '';
+        $this->city_desc = Yii::t('misc','All');
 		$this->staffs = '';
 		$this->staffs_desc = Yii::t('misc','All');
 	}

@@ -9,6 +9,7 @@ class PrizeTypeList extends CListPageModel
 			'prize_point'=>Yii::t('integral','Prize Point'),
 			'min_point'=>Yii::t('integral','min point'),
             'tries_limit'=>Yii::t('integral','Tries Limit'),
+            'leave_limit'=>Yii::t('integral','Leave Limit'),
 		);
 	}
 	
@@ -59,6 +60,7 @@ class PrizeTypeList extends CListPageModel
 						'prize_name'=>$record['prize_name'],
 						'prize_point'=>$record['prize_point'],
 						'tries_limit'=>$record['tries_limit'] == 0?$limitList[0]:$limitList[1],
+						'leave_limit'=>$record['leave_limit'] == 0?$limitList[0]:$limitList[1]." → ".$record['leave_number'],
 						'min_point'=>$record['min_point'],
 					);
 			}

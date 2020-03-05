@@ -26,10 +26,20 @@ class RptCutList extends CReport {
         $end_dt = $this->criteria['END_DT'];
 		$city = $this->criteria['CITY'];
 		$staff_id = $this->criteria['STAFFS'];
-		
-		$citymodel = new City();
-		$citylist = $citymodel->getDescendantList($city);
-		$citylist = empty($citylist) ? "'$city'" : "$citylist,'$city'";
+        $city_allow = $this->criteria['city_allow'];
+
+        $cond_city = "";
+        if (!empty($city)) {
+            $citylist = explode('~',$city);
+            if(count($citylist)>1){
+                $cond_city = implode("','",$citylist);
+            }else{
+                $cond_city = "'".reset($citylist)."'";
+            }
+            if ($cond_city!=''){
+                $cond_city = " and d.city in ($cond_city) ";
+            }
+        }
 		
 		$suffix = Yii::app()->params['envSuffix'];
 
@@ -59,8 +69,8 @@ class RptCutList extends CReport {
         $sql = "select a.*,b.gift_name,d.name AS employee_name,d.city AS s_city from gr_gift_request a
                 LEFT JOIN gr_gift_type b ON a.gift_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city in($citylist)  and d.staff_status = 0 and a.state = 3 
-                $cond_staff $cond_time
+                where d.city in($city_allow)  and d.staff_status = 0 and a.state = 3 
+                $cond_staff $cond_time $cond_city 
 			";
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 		if (count($rows) > 0) {

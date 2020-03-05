@@ -95,6 +95,17 @@ class PrizeRequestForm extends CFormModel
                         return false;
                     }
                 }
+                if($rows["leave_limit"]!=0){//判断是否有等级限制（只能向上申请）
+                    $leaveLimit = Yii::app()->db->createCommand()->select("b.prize_name")->from("gr_prize_request a")
+                        ->leftJoin("gr_prize_type b","a.prize_type=b.id")
+                        ->where("a.employee_id=:employee_id and b.leave_limit=1 and b.leave_number>:leave_number and a.state in (1,3)",
+                            array(':leave_number'=>$rows["leave_number"],':employee_id'=>$this->employee_id))->queryRow();
+                    if($leaveLimit){
+                        $message = "您已经申请了".$leaveLimit["prize_name"]."，无法申请该奖项";
+                        $this->addError($attribute,$message);
+                        return false;
+                    }
+                }
                 if($prizeNum<intval($rows["prize_point"])){//判斷學分是否足夠扣除
                     $message = $this->employee_name.Yii::t("integral","available credits are").$prizeNum;
                     $this->addError($attribute,$message);

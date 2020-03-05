@@ -29,10 +29,20 @@ class RptStretchList extends CReport {
 	public function retrieveData() {
 		$city = $this->criteria['CITY'];
 		$staff_id = $this->criteria['STAFFS'];
-		
-		$citymodel = new City();
-		$citylist = $citymodel->getDescendantList($city);
-		$citylist = empty($citylist) ? "'$city'" : "$citylist,'$city'";
+        $city_allow = $this->criteria['city_allow'];
+
+        $cond_city = "";
+        if (!empty($city)) {
+            $citylist = explode('~',$city);
+            if(count($citylist)>1){
+                $cond_city = implode("','",$citylist);
+            }else{
+                $cond_city = "'".reset($citylist)."'";
+            }
+            if ($cond_city!=''){
+                $cond_city = " and d.city in ($cond_city) ";
+            }
+        }
 		
 		$suffix = Yii::app()->params['envSuffix'];
 
@@ -58,7 +68,7 @@ class RptStretchList extends CReport {
 
         $sql = "select d.code AS employee_code,d.name AS employee_name,d.city AS s_city$prize_sql from gr_prize_request a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where d.city IN ($citylist) and d.staff_status = 0 and a.state = 3 $cond_staff 
+                where d.city IN ($city_allow) and d.staff_status = 0 and a.state = 3 $cond_staff $cond_city 
                 GROUP BY a.employee_id 
                 ORDER BY d.city DESC 
 			";
