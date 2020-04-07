@@ -39,7 +39,8 @@ $this->pageTitle=Yii::app()->name . ' - Dezhi body group beauty';
     -->
     <?php
     $modelName = get_class($model);
-    $search_add_html = TbHtml::dropDownList($modelName.'[category]',$model->category,CreditTypeForm::getCategoryAll(),array("class"=>"changeCategory"));
+    $search_add_html = TbHtml::dropDownList($modelName.'[year]',$model->year,SumGiftSearchList::getYearList(),array("class"=>"changeCategory"));
+    $search_add_html .= TbHtml::dropDownList($modelName.'[category]',$model->category,CreditTypeForm::getCategoryAll(),array("class"=>"changeCategory"));
     $search = array(
             "employee_code",
             "employee_name"

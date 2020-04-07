@@ -2,6 +2,7 @@
 
 class RankGroupList extends CListPageModel
 {
+    public $year;//搜索的年份
     public $category =1;//積分類型： 1：德  2：智 3：體 4：群 5：美
     /**
      * Declares customized attribute labels.
@@ -28,7 +29,7 @@ class RankGroupList extends CListPageModel
     public function rules()
     {
         return array(
-            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, category','safe',),
+            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, category, year','safe',),
         );
     }
 
@@ -37,7 +38,10 @@ class RankGroupList extends CListPageModel
         $suffix = Yii::app()->params['envSuffix'];
         //$city_allow = Yii::app()->user->city_allow();
         $category = $this->category;
-        $year = date("Y");
+        if(empty($this->year)||!is_numeric($this->year)){
+            $this->year = date("Y");
+        }
+        $year = $this->year;
         if(empty($category)){
             $this->attr = array();
             return true;
@@ -47,14 +51,14 @@ class RankGroupList extends CListPageModel
                 LEFT JOIN gr_credit_point e ON a.point_id = e.id
                 LEFT JOIN gr_credit_type f ON e.credit_type = f.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where f.category = '$category' and a.year = '$year' and d.staff_status = 0 
+                where f.category = '$category' and a.year = '$year' and date_format(a.lcd,'%Y') = '$year' and d.staff_status = 0 
 			";
         $sql2 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num 
                 from gr_credit_point_ex a
                 LEFT JOIN gr_credit_point e ON a.point_id = e.id
                 LEFT JOIN gr_credit_type f ON e.credit_type = f.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where f.category = '$category' and a.year = '$year' and d.staff_status = 0 
+                where f.category = '$category' and a.year = '$year' and date_format(a.lcd,'%Y') = '$year' and d.staff_status = 0 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {
@@ -120,6 +124,20 @@ class RankGroupList extends CListPageModel
         $session = Yii::app()->session;
         $session['rankGroup_op01'] = $this->getCriteria();
         return true;
+    }
+
+    public function getCriteria() {
+        return array(
+            'searchField'=>$this->searchField,
+            'searchValue'=>$this->searchValue,
+            'orderField'=>$this->orderField,
+            'orderType'=>$this->orderType,
+            'noOfItem'=>$this->noOfItem,
+            'pageNum'=>$this->pageNum,
+            'filter'=>$this->filter,
+            'year'=>$this->year,
+            'category'=>$this->category,
+        );
     }
 
     //導出excel
