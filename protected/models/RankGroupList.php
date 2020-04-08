@@ -41,7 +41,7 @@ class RankGroupList extends CListPageModel
         $yearSql = "";
         if(!empty($this->year)){
             $year = $this->year;
-            $yearSql = " and date_format(a.lcd,'%Y') = '$year' ";
+            $yearSql = " and date_format(g.apply_date,'%Y') = '$year' ";
         }else{
             $year = date("Y");
         }
@@ -49,10 +49,11 @@ class RankGroupList extends CListPageModel
             $this->attr = array();
             return true;
         }
-        $sql1 = "select a.year,a.year,d.code AS employee_code,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num 
+        $sql1 = "select a.year,d.code AS employee_code,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num 
                 from gr_credit_point_ex a
                 LEFT JOIN gr_credit_point e ON a.point_id = e.id
                 LEFT JOIN gr_credit_type f ON e.credit_type = f.id
+                LEFT JOIN gr_credit_request g ON e.credit_req_id = g.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where f.category = '$category' and a.year = '$year' $yearSql and d.staff_status = 0 
 			";
@@ -60,6 +61,7 @@ class RankGroupList extends CListPageModel
                 from gr_credit_point_ex a
                 LEFT JOIN gr_credit_point e ON a.point_id = e.id
                 LEFT JOIN gr_credit_type f ON e.credit_type = f.id
+                LEFT JOIN gr_credit_request g ON e.credit_req_id = g.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where f.category = '$category' and a.year = '$year' $yearSql and d.staff_status = 0 
 			";
