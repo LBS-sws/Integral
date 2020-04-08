@@ -38,10 +38,13 @@ class RankGroupList extends CListPageModel
         $suffix = Yii::app()->params['envSuffix'];
         //$city_allow = Yii::app()->user->city_allow();
         $category = $this->category;
-        if(empty($this->year)||!is_numeric($this->year)){
-            $this->year = date("Y");
+        $yearSql = "";
+        if(!empty($this->year)){
+            $year = $this->year;
+            $yearSql = " and date_format(a.lcd,'%Y') = '$year' ";
+        }else{
+            $year = date("Y");
         }
-        $year = $this->year;
         if(empty($category)){
             $this->attr = array();
             return true;
@@ -51,14 +54,14 @@ class RankGroupList extends CListPageModel
                 LEFT JOIN gr_credit_point e ON a.point_id = e.id
                 LEFT JOIN gr_credit_type f ON e.credit_type = f.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where f.category = '$category' and a.year = '$year' and date_format(a.lcd,'%Y') = '$year' and d.staff_status = 0 
+                where f.category = '$category' and a.year = '$year' $yearSql and d.staff_status = 0 
 			";
         $sql2 = "select a.year,d.name AS employee_name,d.city AS s_city,SUM(a.start_num) AS start_num,SUM(a.end_num) AS end_num 
                 from gr_credit_point_ex a
                 LEFT JOIN gr_credit_point e ON a.point_id = e.id
                 LEFT JOIN gr_credit_type f ON e.credit_type = f.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
-                where f.category = '$category' and a.year = '$year' and date_format(a.lcd,'%Y') = '$year' and d.staff_status = 0 
+                where f.category = '$category' and a.year = '$year' $yearSql and d.staff_status = 0 
 			";
         $clause = "";
         if (!empty($this->searchField) && !empty($this->searchValue)) {
@@ -155,5 +158,13 @@ class RankGroupList extends CListPageModel
         $myExcel->setDataHeard($arrHeard);
         $myExcel->setDataBody($this->attr);
         $myExcel->outDownExcel($title);
+    }
+
+    public function getYearList(){
+        $arr=array(''=>Yii::t("misc","All"));
+        for ($i=2015;$i<=2025;$i++){
+            $arr[$i] = $i.Yii::t("integral","year");
+        }
+        return $arr;
     }
 }
