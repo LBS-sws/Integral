@@ -31,7 +31,7 @@ class CreditSearchList extends CListPageModel
     public function rules()
     {
         return array(
-            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, searchTimeStart, searchTimeEnd','safe',),
+            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, searchTimeStart, searchTimeEnd, dateRangeValue','safe',),
         );
     }
 
@@ -78,13 +78,18 @@ class CreditSearchList extends CListPageModel
             $svalue = str_replace("'","\'",$this->searchTimeEnd);
             $clause .= " and date_format(a.apply_date,'%Y/%m/%d') <='$svalue' ";
         }
+		if (empty($this->searchTimeStart) && empty($this->searchTimeEnd)) {
+			$clause .= $this->getDateRangeCondition('a.apply_date');
+		} else {
+			$this->dateRangeValue = '0';
+		}
 
         $order = "";
         if (!empty($this->orderField)) {
             $order .= " order by ".$this->orderField." ";
             if ($this->orderType=='D') $order .= "desc ";
         } else
-            $order = " order by a.id desc";
+            $order = " order by a.apply_date desc";
 
         $sql = $sql2.$clause;
         $this->totalRow = Yii::app()->db->createCommand($sql)->queryScalar();
