@@ -44,10 +44,9 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
         'model'=>$model,
         'viewhdr'=>'//creditSearch/_listhdr',
         'viewdtl'=>'//creditSearch/_listdtl',
-        'gridsize'=>'24',
-        'height'=>'600',
         'search_add_html'=>$search_add_html,
         'search'=>$search,
+		'hasDateButton'=>true,
     ));
     ?>
 </section>
