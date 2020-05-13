@@ -129,7 +129,7 @@ class CreditTypeForm extends CFormModel
 	    $arr = array(
 	        ""=>array("name"=>"","num"=>"","gral"=>"")
         );
-        $rs = Yii::app()->db->createCommand()->select()->from("gr_credit_type")->order("z_index desc")->queryAll();
+        $rs = Yii::app()->db->createCommand()->select()->from("gr_credit_type")->where("credit_point>0")->order("z_index desc")->queryAll();
         if($rs){
             foreach ($rs as $row){//&amp;nbsp;
                 $arr[$row["id"]] =array("name"=>$row["credit_code"]." - ".$row["credit_name"],"num"=>$row["credit_point"],"gral"=>$row["category"]);
