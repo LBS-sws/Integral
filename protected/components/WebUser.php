@@ -75,6 +75,13 @@ class WebUser extends CWebUser
             ->where("a.user_id ='$uid'")->queryRow();
         if($rs){
             $cstr = $rs["city"];
+            if($cstr != Yii::app()->session['city']){ //如果城市不一致，需要查臨時城市
+                $row = Yii::app()->db->createCommand()->select("city,department,position")->from("hr$suffix.hr_plus_city")
+                    ->where("employee_id =:employee_id",array(":employee_id"=>$rs["id"]))->queryRow();
+                if($row){
+                    $cstr = $row["city"];
+                }
+            }
             $city_allow = City::model()->getDescendantList($cstr);
             $city_allow .= (empty($city_allow)) ? "'$cstr'" : ",'$cstr'";
             return $city_allow;
