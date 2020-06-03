@@ -133,6 +133,7 @@ class DocMan {
 
 		$mast_id = $this->getMasterId();
 		$recs = array();
+		//var_dump($this->files);die();
 		foreach ($this->files['name'] as $idx=>$value) {
 			$dispname = $value;
 			$phyname = $this->files['tmp_name'][$idx];
@@ -141,8 +142,9 @@ class DocMan {
 				$ext = pathinfo($dispname,PATHINFO_EXTENSION);
 				$filename .= '.'.$ext;
 				$filetype = $this->files['type'][$idx];
+				$filesize = $this->files['size'][$idx];
 				$path = $this->hashDirectory($filename);
-				if(in_array($ext,array("gif","jpeg","jpg","png"))){
+				if(in_array($ext,array("gif","jpeg","jpg","png"))&&$filesize>800*1024){
                     if($this->resizeImage($phyname,$path.'/'.$filename,$ext)){
                         $recs[] = array('path'=>$path, 'filename'=>$filename, 'dispname'=>$dispname, 'filetype'=>$filetype);
                     }
@@ -186,8 +188,8 @@ class DocMan {
         $src_image = $src_fnc($uploadfile);//临时图片资源
         $width = imagesx($src_image);
         $height = imagesy($src_image);
-        $max_width = 600;
-        $max_height = 400;
+        $max_width = 2500;
+        $max_height = 2000;
         $dst_w = $max_width;
         $dst_h = $max_height;
         if ($width > $max_width) {
