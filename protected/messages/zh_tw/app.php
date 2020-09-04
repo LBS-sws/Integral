@@ -21,6 +21,7 @@ return array(
 'Integral'=>'學分系統',
 'Online Library'=>'網上文庫',
 'System Use'=>'系統使用',
+'Charitable Credit'=>'慈善分系統',
 
 
 'Data Entry'=>'數據輸入',
