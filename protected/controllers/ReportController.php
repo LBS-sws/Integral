@@ -8,6 +8,7 @@ class ReportController extends Controller
 						'cutlist'=>'YB04',
 						'prizelist'=>'YB05',
 						'stretchlist'=>'YB06',
+						'giftlist'=>'YB07',
 					);
 	
 	public function filters()
@@ -85,6 +86,25 @@ class ReportController extends Controller
             }
         }
         $this->render('form_y03',array('model'=>$model));
+    }
+
+    public function actionGiftlist() {
+		$this->function_id = self::$actions['giftlist'];
+		Yii::app()->session['active_func'] = $this->function_id;
+
+        $model = new ReportY06Form;
+        if (isset($_POST['ReportY06Form'])) {
+            $model->attributes = $_POST['ReportY06Form'];
+            if ($model->validate()) {
+                $model->city_allow = Yii::app()->user->city_allow();
+                $model->addQueueItem();
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('dialog','Report submitted. Please go to Report Manager to retrieve the output.'));
+            } else {
+                $message = CHtml::errorSummary($model);
+                Dialog::message(Yii::t('dialog','Validation Message'), $message);
+            }
+        }
+        $this->render('form_y06',array('model'=>$model));
     }
 
     public function actionCutlist() {

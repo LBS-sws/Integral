@@ -30,7 +30,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit deduction details';
     );
     $search_add_html="";
     $modelName = get_class($model);
-    $search_add_html .= TbHtml::dropDownList($modelName.'[category]',$model->category,$model->getCategoryAll(),array("class"=>"form-control"));
+    $search_add_html .= TbHtml::dropDownList($modelName.'[category]',$model->category,$model->getCategoryAll(),array("class"=>"form-control submit_category"));
 
     $this->widget('ext.layout.ListPageWidget', array(
         'title'=>Yii::t('app','Credit deduction details'),
@@ -53,6 +53,12 @@ $this->pageTitle=Yii::app()->name . ' - Credit deduction details';
 <?php $this->endWidget(); ?>
 
 <?php
+$js = "
+    $('.submit_category').on('change',function(){
+        $('form:first').submit();
+    });
+";
+Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);
 ?>

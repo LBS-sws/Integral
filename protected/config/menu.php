@@ -149,6 +149,10 @@ return array(
                 'access'=>'YB06',
                 'url'=>'/report/stretchlist',
             ),
+            'Sum Gift Report'=>array(
+                'access'=>'YB07',
+                'url'=>'/report/giftlist',
+            ),
             'Report Manager'=>array(
                 'access'=>'YB01',
                 'url'=>'/queue/index',

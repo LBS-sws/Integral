@@ -36,7 +36,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
     );
     $search_add_html="";
     $modelName = get_class($model);
-    $search_add_html .= '<select class="form-control" id="selectYearChange" name="SumSearchList[year]" id="SumSearchList_year">';
+    $search_add_html .= '<select class="form-control" id="selectYearChange" name="SumSearchList[year]">';
     foreach ($model->getYearList() as $row) {
         $search_add_html .= '<option value="'.$row["value"].'"';
         if($row["value"] == $model->year){
@@ -69,14 +69,9 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 
 <?php
 $js = "
-$('#selectYearChange').on('change',function(){
-    var color = $(this).find('option:selected').attr('style');
-    if(color=='color:#a94442'){
-        $(this).css('color','#a94442');
-    }else{
-        $(this).css('color','#555');
-    }
-}).change();
+    $('#selectYearChange').on('change',function(){
+        $('form:first').submit();
+    });
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 	$js = Script::genTableRowClick();

@@ -31,7 +31,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
     );
     $search_add_html="";
     $modelName = get_class($model);
-    $search_add_html .= TbHtml::dropDownList($modelName.'[year]',$model->year,$model->getYearList(),array("class"=>"form-control"));
+    $search_add_html .= TbHtml::dropDownList($modelName.'[year]',$model->year,$model->getYearList(),array("class"=>"form-control submit_year"));
 
     $this->widget('ext.layout.ListPageWidget', array(
         'title'=>Yii::t('app','Sum Gift search'),
@@ -54,6 +54,12 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 <?php $this->endWidget(); ?>
 
 <?php
+$js = "
+    $('.submit_year').on('change',function(){
+        $('form:first').submit();
+    });
+";
+Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);
 ?>

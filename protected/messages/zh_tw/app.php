@@ -120,6 +120,7 @@ return array(
 'Back Gift'=>'退回積分',
 'Sum Gift search'=>'總積分查詢',
 'Credit deduction details'=>'學分扣除明細',
+'Sum Gift Report'=>'總積分報表',
 //沈超添加結束
 );
 ?>

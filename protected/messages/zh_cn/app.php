@@ -120,6 +120,7 @@ return array(
     'Back Gift'=>'退回积分',
     'Sum Gift search'=>'总积分查询',
     'Credit deduction details'=>'学分扣除明细',
+    'Sum Gift Report'=>'总积分报表',
     //沈超添加结束
 );
 ?>
