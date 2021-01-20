@@ -1,80 +1,72 @@
 <?php
 class Counter {
-    //獲取訂單需要處理的數據
-	
-	//快速訂單的數量
-	public static function getFastNum() {
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-        $fast_num = Yii::app()->db->createCommand()->select("count(id)")
-            ->from("opr_order")->where('status="sent" and status_type=1 and order_class="Fast" and judge=1')->queryScalar();
-		return $fast_num;
-	}
+    public static function test(){
+        $city =1;
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("hr_apply_support a")
+            ->leftJoin("hr_employee b","a.employee_id = b.id")
+            ->where("a.apply_city='$city' and status_type in (14,5,13)")->queryScalar();
 
-	//採購活動的數量
-    public function getImdoNum(){
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-        $imDo_num = Yii::app()->db->createCommand()->select("count(id)")
-            ->from("opr_order")->where('status="sent" and status_type=1  and order_class!="Fast" and judge=1')->queryScalar();
-		return $imDo_num;
-    }
-	
-	//地區審核數量
-    public function getAreaNum(){
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-        $area_num = Yii::app()->db->createCommand()->select("count(id)")
-            ->from("opr_order")->where('status="sent" and status_type=0 and city=:city and judge=1',array(":city"=>$city))->queryScalar();
-		return $area_num;
+        $count = Yii::app()->db->createCommand()->select("count(*)")->from("hr_apply_support")
+            ->where("status_type IN (6,2,4)")->queryScalar();
+        return $count;
     }
 
-	//地區待收貨的數量
-    public function getTakeNum(){
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-        $take_num = Yii::app()->db->createCommand()->select("count(id)")
-            ->from("opr_order")->where('status="approve" and judge=1 and city=:city',array(":city"=>$city))->queryScalar();
-		return $take_num;
+//学分申请(被拒絕後提示)
+    public static function getCreditApply() {
+        $staffId = Yii::app()->user->staff_id();
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("gr_credit_request a")
+            ->where("a.employee_id='$staffId' and a.state = 2")->queryScalar();
+        return $count;
     }
-
-	//地區發貨的數量
-    public function getDeliNum(){
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-        $deli_num = Yii::app()->db->createCommand()->select("count(id)")
-            ->from("opr_order")->where('status="sent" and judge=0 and city=:city',array(":city"=>$city))->queryScalar();
-		return $deli_num;
+//金银铜奖项申请(被拒絕後提示)
+    public static function getPrizeApply() {
+        $staffId = Yii::app()->user->staff_id();
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("gr_prize_request a")
+            ->where("a.employee_id='$staffId' and a.state = 2")->queryScalar();
+        return $count;
     }
-
-	//技術員收貨的數量
-    public function getGoodsNum(){
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-        $goods_num = Yii::app()->db->createCommand()->select("count(id)")
-            ->from("opr_order")->where('status="approve" and judge=0 and city=:city and lcu=:lcu',array(":city"=>$city,":lcu"=>$uid))->queryScalar();
-		return $goods_num;
+//积分兑换列表(被拒絕後提示)
+    public static function getGiftApply() {
+        $staffId = Yii::app()->user->staff_id();
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("gr_gift_request a")
+            ->where("a.employee_id='$staffId' and a.state = 2")->queryScalar();
+        return $count;
     }
-
-	// 营业报告审核的數量
-    public function getRepNum(){
-        $city = Yii::app()->user->city();
-        $uid = Yii::app()->user->id;
-		$suffix = Yii::app()->params['envSuffix'];
-		$type = Yii::app()->user->validFunction('YN01') ? 'PA' : 'PH';
-		$wf = new WorkflowOprpt;
-		$wf->connection = Yii::app()->db;
-		$list = $wf->getPendingRequestIdList('OPRPT', $type, $uid);
-		if (empty($list)) $list = '0';
-		$cityallow = Yii::app()->user->city_allow();
-		$sql = "select count(a.id)
-				from opr_monthly_hdr a, security$suffix.sec_city b 
-				where a.city in ($cityallow) and a.city=b.code 
-				and a.id in ($list)
-			";
-		$rep_num = Yii::app()->db->createCommand($sql)->queryScalar();
-		
-		return $rep_num;
+//学分专员确认(審核)
+    public static function getCreditAuditOne() {
+        $suffix = Yii::app()->params['envSuffix'];
+        $city_allow = Yii::app()->user->city_allow();
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("gr_credit_request a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("b.city IN ($city_allow) AND a.state = 1")->queryScalar();
+        return $count;
+    }
+//学分审核(審核)
+    public static function getCreditAuditTwo() {
+        $suffix = Yii::app()->params['envSuffix'];
+        $city_allow = Yii::app()->user->city_allow();
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("gr_credit_request a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("b.city IN ($city_allow) AND a.state = 4")->queryScalar();
+        return $count;
+    }
+//积分兑换审核(審核)
+    public static function getGiftAudit() {
+        $suffix = Yii::app()->params['envSuffix'];
+        $city_allow = Yii::app()->user->city_allow();
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("gr_gift_request a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("b.city IN ($city_allow) AND a.state = 1")->queryScalar();
+        return $count;
+    }
+//奖项审核(審核)
+    public static function getPrizeAudit() {
+        $suffix = Yii::app()->params['envSuffix'];
+        $city_allow = Yii::app()->user->city_allow();
+        $count = Yii::app()->db->createCommand()->select("count(a.id)")->from("gr_prize_request a")
+            ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+            ->where("b.city IN ($city_allow) AND a.state = 1")->queryScalar();
+        return $count;
     }
 }
 ?>
