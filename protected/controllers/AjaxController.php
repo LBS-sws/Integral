@@ -136,7 +136,7 @@ class AjaxController extends Controller
 		$items = empty($param) ? array() : json_decode($param);
 		foreach ($items as $item) {
 //			if (isset($item->code) && isset($item->function) && isset($this->color)) {
-			if (Yii::app()->user->validFunction($item->code)) {
+			if (Yii::app()->user->validRWFunction($item->code)) {
 				$result = call_user_func($item->function);
 				$rtn[] = array('code'=>$item->code,'count'=>$result,'color'=>$item->color);
 			}
