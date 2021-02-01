@@ -82,7 +82,7 @@ class CreditRequestForm extends CFormModel
 
 	public function validateIntegral($attribute, $params){
         $rows = Yii::app()->db->createCommand()->select("*")->from("gr_credit_type")
-            ->where("id=:id", array(':id'=>$this->credit_type))->queryRow();
+            ->where("id=:id and display=1", array(':id'=>$this->credit_type))->queryRow();
         if ($rows){
             if($rows["year_sw"]==1){
                 $year = date("Y");

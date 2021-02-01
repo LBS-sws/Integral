@@ -6,4 +6,5 @@
 	<td><?php echo $this->record['category']; ?></td>
 	<td><?php echo $this->record['validity']; ?></td>
 	<td><?php echo $this->record['rule']; ?></td>
+	<td><?php echo $this->record['display']; ?></td>
 </tr>

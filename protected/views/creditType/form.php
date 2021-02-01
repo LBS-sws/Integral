@@ -120,6 +120,15 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
                 </div>
             </div>
             <div class="form-group">
+                <?php echo $form->labelEx($model,'display',array('class'=>"col-sm-2 control-label")); ?>
+                <div class="col-lg-6">
+                    <?php
+                    echo $form->inlineRadioButtonList($model, 'display',array(Yii::t("misc","No"),Yii::t("misc","Yes")),
+                        array('readonly'=>($model->scenario=='view'))
+                    ); ?>
+                </div>
+            </div>
+            <div class="form-group">
                 <?php echo $form->labelEx($model,'remark',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-6">
                     <?php echo $form->textArea($model, 'remark',

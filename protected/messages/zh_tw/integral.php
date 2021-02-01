@@ -151,5 +151,6 @@ return array(
     'valid credit'=>'有效學分',
 
     'Leave Limit'=>'等級限制',
+    'judge for visible'=>'是否顯示',
 );
 ?>

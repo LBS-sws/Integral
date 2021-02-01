@@ -13,6 +13,7 @@ class CreditTypeForm extends CFormModel
 	public $year_max=0;
 	public $validity=5;
 	public $remark;
+	public $display=1;
 
 	public function attributeLabels()
 	{
@@ -26,6 +27,7 @@ class CreditTypeForm extends CFormModel
             'year_max'=>Yii::t('integral','Limited number'),
             'z_index'=>Yii::t('integral','Level'),
             'remark'=>Yii::t('integral','Remark'),
+            'display'=>Yii::t('integral','judge for visible'),
 		);
 	}
 
@@ -35,7 +37,7 @@ class CreditTypeForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id,credit_code,credit_name,credit_point,category,rule,year_sw,year_max,remark,z_index','safe'),
+			array('id,credit_code,credit_name,credit_point,category,rule,year_sw,year_max,remark,z_index,display','safe'),
             array('credit_code','required'),
             array('credit_name','required'),
             array('credit_point','required'),
@@ -118,6 +120,7 @@ class CreditTypeForm extends CFormModel
                 $this->z_index = $row['z_index'];
                 $this->validity = $row['validity'];
                 $this->remark = $row['remark'];
+                $this->display = $row['display'];
                 break;
 			}
 		}
@@ -125,11 +128,16 @@ class CreditTypeForm extends CFormModel
 	}
 
     //獲取積分類型列表
-    public function getCreditTypeList(){
+    public function getCreditTypeList($ready=true){
 	    $arr = array(
 	        ""=>array("name"=>"","num"=>"","gral"=>"")
         );
-        $rs = Yii::app()->db->createCommand()->select()->from("gr_credit_type")->where("credit_point>0")->order("z_index desc")->queryAll();
+	    if($ready){
+            $where = "credit_point>0";
+        }else{
+            $where = "credit_point>0 and display=1";
+        }
+        $rs = Yii::app()->db->createCommand()->select()->from("gr_credit_type")->where($where)->order("z_index desc")->queryAll();
         if($rs){
             foreach ($rs as $row){//&amp;nbsp;
                 $arr[$row["id"]] =array("name"=>$row["credit_code"]." - ".$row["credit_name"],"num"=>$row["credit_point"],"gral"=>$row["category"]);
@@ -182,9 +190,9 @@ class CreditTypeForm extends CFormModel
                 break;
             case 'new':
                 $sql = "insert into gr_credit_type(
-							credit_name,credit_code,credit_point, category, rule, remark, year_sw, year_max, validity, z_index, lcu, city
+							credit_name,credit_code,credit_point, category, rule, remark, year_sw, year_max, validity, display, z_index, lcu, city
 						) values (
-							:credit_name,:credit_code,:credit_point, :category, :rule, :remark, :year_sw, :year_max, 5, :z_index, :lcu, :city
+							:credit_name,:credit_code,:credit_point, :category, :rule, :remark, :year_sw, :year_max, 5, :display, :z_index, :lcu, :city
 						)";
                 break;
             case 'edit':
@@ -197,6 +205,7 @@ class CreditTypeForm extends CFormModel
 							remark = :remark, 
 							year_sw = :year_sw, 
 							year_max = :year_max, 
+							display = :display, 
 							validity = 5, 
 							z_index = :z_index, 
 							luu = :luu
@@ -231,6 +240,8 @@ class CreditTypeForm extends CFormModel
             $command->bindParam(':year_max',$this->year_max,PDO::PARAM_INT);
         if (strpos($sql,':z_index')!==false)
             $command->bindParam(':z_index',$this->z_index,PDO::PARAM_INT);
+        if (strpos($sql,':display')!==false)
+            $command->bindParam(':display',$this->display,PDO::PARAM_INT);
 
         if (strpos($sql,':city')!==false)
             $command->bindParam(':city',$city,PDO::PARAM_STR);

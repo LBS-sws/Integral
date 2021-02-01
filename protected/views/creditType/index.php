@@ -53,6 +53,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 							'credit_name',
 							'credit_point',
 							'rule',
+							'display',
 						),
 		));
 	?>

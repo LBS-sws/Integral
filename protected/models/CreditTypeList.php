@@ -11,7 +11,7 @@ class CreditTypeList extends CListPageModel
             'rule'=>Yii::t('integral','integral conditions'),
             'category'=>Yii::t('integral','integral type'),
             'validity'=>Yii::t('integral','validity'),
-            'rule'=>Yii::t('integral','integral conditions'),
+            'display'=>Yii::t('integral','judge for visible'),
 		);
 	}
 	
@@ -48,6 +48,10 @@ class CreditTypeList extends CListPageModel
 				case 'rule':
 					$clause .= General::getSqlConditionClause('rule', $svalue);
 					break;
+                case 'display':
+                    $svalue = (strpos($svalue,Yii::t("misc","No"))!==false)?0:1;
+                    $clause .= General::getSqlConditionClause('display', $svalue);
+                    break;
 			}
 		}
 		
@@ -76,6 +80,7 @@ class CreditTypeList extends CListPageModel
 						'validity'=>$record['validity'],
 						'rule'=>$record['rule'],
 						'category'=>$this->getCategoryToNum($record['category']),
+                        'display'=>empty($record['display'])?Yii::t("misc","No"):Yii::t("misc","Yes"),
 					);
 			}
 		}

@@ -153,5 +153,6 @@ return array(
     'valid credit'=>'有效学分',
 
     'Leave Limit'=>'等级限制',
+    'judge for visible'=>'是否显示',
 );
 ?>

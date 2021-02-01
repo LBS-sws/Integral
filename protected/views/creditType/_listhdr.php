@@ -30,4 +30,9 @@
         ;
         ?>
     </th>
+    <th>
+        <?php echo TbHtml::link($this->getLabelName('display').$this->drawOrderArrow('display'),'#',$this->createOrderLink('creditType-list','display'))
+        ;
+        ?>
+    </th>
 </tr>
