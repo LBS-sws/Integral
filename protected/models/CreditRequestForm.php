@@ -345,7 +345,7 @@ class CreditRequestForm extends CFormModel
         if ($this->scenario=='new'){
             $this->id = Yii::app()->db->getLastInsertID();
         }
-        $this->sendEmail();
+        //$this->sendEmail(); //後續修改，不需要發送郵件
         return true;
 	}
 

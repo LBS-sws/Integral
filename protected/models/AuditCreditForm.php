@@ -161,7 +161,7 @@ class AuditCreditForm extends CFormModel
             $command->bindParam(':luu',$uid,PDO::PARAM_STR);
         $command->execute();
 
-        $this->sendEmail();
+        //$this->sendEmail(); //後續修改，不需要發送郵件
 		return true;
 	}
 
