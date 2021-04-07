@@ -8,6 +8,8 @@ class RptCreditsList extends CReport {
 			's_city'=>array('label'=>Yii::t('integral','City'),'width'=>20,'align'=>'L'),
 			'category'=>array('label'=>Yii::t('integral','integral type'),'width'=>20,'align'=>'L'),
 			'apply_date'=>array('label'=>Yii::t('integral','apply for time'),'width'=>15,'align'=>'L'),
+			'confirm_date'=>array('label'=>Yii::t('integral','confirm for time'),'width'=>15,'align'=>'L'),
+			'audit_date'=>array('label'=>Yii::t('integral','audit for time'),'width'=>15,'align'=>'L'),
 		);
 	}
 	
@@ -83,7 +85,9 @@ class RptCreditsList extends CReport {
 				$temp['credit_point'] = $row['credit_point'];
 				$temp['s_city'] = CGeneral::getCityName($row['s_city']);
                 $temp['category'] = $categoryList[$row['category']];
-                $temp['apply_date'] = CGeneral::toDate($row['apply_date']);
+                $temp['apply_date'] = $row['apply_date'];
+                $temp['confirm_date'] = $row['confirm_date'];
+                $temp['audit_date'] = $row['audit_date'];
 				$this->data[] = $temp;
 			}
 		}
