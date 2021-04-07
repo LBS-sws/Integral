@@ -78,7 +78,7 @@ class AuditCreditList extends CListPageModel
                     'employee_name'=>$record['employee_name'],
                     'credit_name'=>$record['credit_name'],
                     'credit_point'=>$record['credit_point'],
-                    'apply_date'=>date("Y-m-d",strtotime($record['apply_date'])),
+                    'apply_date'=>$record['apply_date'],
                     'status'=>$colorList["status"],
                     'city'=>CGeneral::getCityName($record["s_city"]),
                     'style'=>$colorList["style"],

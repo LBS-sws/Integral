@@ -26,6 +26,8 @@ class CreditSearchForm extends CFormModel
     public $rule;
     public $integral_type;
     public $s_remark;
+    public $confirm_date;
+    public $audit_date;
 
 
     public $no_of_attm = array(
@@ -59,6 +61,8 @@ class CreditSearchForm extends CFormModel
             's_remark'=>Yii::t('integral','integral conditions'),
             'integral_type'=>Yii::t('integral','integral type'),
             'apply_date'=>Yii::t('integral','apply for time'),
+            'audit_date'=>Yii::t('integral','audit for time'),
+            'confirm_date'=>Yii::t('integral','confirm for time'),
         );
     }
 
@@ -96,6 +100,8 @@ class CreditSearchForm extends CFormModel
                 $this->credit_type = $row['credit_type'];
                 $this->credit_point = $row['credit_point'];
                 $this->apply_date = $row['apply_date'];
+                $this->audit_date = $row['audit_date'];
+                $this->confirm_date = $row['confirm_date'];
                 $this->images_url = $row['images_url'];
                 $this->remark = $row['remark'];
                 $this->reject_note = $row['reject_note'];
@@ -106,7 +112,6 @@ class CreditSearchForm extends CFormModel
                 $this->lud = $row['lud'];
                 $this->rule = $row['rule'];
                 $this->city = $row['city'];
-                $this->apply_date = CGeneral::toDate($row['apply_date']);
                 $this->integral_type = $row['category'];
                 $this->s_remark = $row['s_remark'];
                 $this->no_of_attm['gral'] = $row['graldoc'];

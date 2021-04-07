@@ -152,5 +152,7 @@ return array(
 
     'Leave Limit'=>'等級限制',
     'judge for visible'=>'是否顯示',
+    'audit for time'=>'審核時間',
+    'confirm for time'=>'確認時間',
 );
 ?>

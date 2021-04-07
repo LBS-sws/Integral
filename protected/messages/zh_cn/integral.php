@@ -154,5 +154,7 @@ return array(
 
     'Leave Limit'=>'等级限制',
     'judge for visible'=>'是否显示',
+    'audit for time'=>'审核时间',
+    'confirm for time'=>'确认时间',
 );
 ?>

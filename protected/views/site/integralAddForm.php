@@ -1,4 +1,5 @@
 
+<?php if (!empty($model->id)): ?>
 <div class="form-group">
     <?php echo $form->labelEx($model,'apply_date',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
@@ -7,7 +8,7 @@
                 <i class="fa fa-calendar"></i>
             </div>
             <?php echo $form->textField($model, 'apply_date',
-                array('class'=>'form-control pull-right','readonly'=>($readonly),'id'=>"apply_date"));
+                array('class'=>'form-control pull-right','readonly'=>(true),'id'=>"apply_date"));
             ?>
         </div>
     </div>
@@ -25,6 +26,7 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
 <div class="form-group">
     <?php echo $form->labelEx($model,'integral_type',array('class'=>"col-sm-2 control-label")); ?>
     <div class="col-sm-3">
@@ -65,6 +67,36 @@
         ); ?>
     </div>
 </div>
+<?php if (in_array($model->state,array(3,4))): ?>
+    <div class="form-group">
+        <?php echo $form->labelEx($model,'confirm_date',array('class'=>"col-sm-2 control-label")); ?>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <?php echo $form->textField($model, 'confirm_date',
+                    array('class'=>'form-control pull-right','readonly'=>(true)));
+                ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if ($model->state==3): ?>
+    <div class="form-group">
+        <?php echo $form->labelEx($model,'audit_date',array('class'=>"col-sm-2 control-label")); ?>
+        <div class="col-sm-3">
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <?php echo $form->textField($model, 'audit_date',
+                    array('class'=>'form-control pull-right','readonly'=>(true)));
+                ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <script>
     $(function () {

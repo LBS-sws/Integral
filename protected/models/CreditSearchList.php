@@ -109,7 +109,7 @@ class CreditSearchList extends CListPageModel
                     'employee_name'=>$record['employee_name'],
                     'credit_name'=>$record['credit_name'],
                     'credit_point'=>$record['credit_point'],
-                    'apply_date'=>date("Y-m-d",strtotime($record['apply_date'])),
+                    'apply_date'=>$record['apply_date'],
                     'exp_date'=>date("Y-12-31",strtotime($record['apply_date']." + 4 year")),
                     'city'=>CGeneral::getCityName($record["s_city"]),
                 );

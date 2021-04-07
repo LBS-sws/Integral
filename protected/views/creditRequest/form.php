@@ -132,7 +132,7 @@ $('#btnCancelData').on('click',function() {
 	var elm=$('#btnCancelData');
 	jQuery.yii.submitForm(elm,'".Yii::app()->createUrl('creditRequest/cancel')."',{});
 });
-$('#apply_date').datepicker({autoclose: true, format: 'yyyy-mm-dd',language: 'zh_cn',endDate:new Date()});
+//$('#apply_date').datepicker({autoclose: true, format: 'yyyy-mm-dd',language: 'zh_cn',endDate:new Date()});
 ";
 Yii::app()->clientScript->registerScript('calcFunction',$js,CClientScript::POS_READY);
 

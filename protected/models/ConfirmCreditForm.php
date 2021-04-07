@@ -21,6 +21,8 @@ class ConfirmCreditForm extends CFormModel
     public $integral_type;
     public $rule;
     public $validity;
+    public $confirm_date;
+    public $audit_date;
 
 
     public $no_of_attm = array(
@@ -53,6 +55,8 @@ class ConfirmCreditForm extends CFormModel
             'rule'=>Yii::t('integral','integral conditions'),
             'integral_type'=>Yii::t('integral','integral type'),
             'apply_date'=>Yii::t('integral','apply for time'),
+            'audit_date'=>Yii::t('integral','audit for time'),
+            'confirm_date'=>Yii::t('integral','confirm for time'),
         );
     }
 
@@ -62,7 +66,7 @@ class ConfirmCreditForm extends CFormModel
     public function rules()
     {
         return array(
-            array('id, employee_id, employee_name, credit_type, credit_point, city, validity, apply_date, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
+            array('id, employee_id, employee_name, audit_date, confirm_date, credit_type, credit_point, city, validity, apply_date, images_url, remark, reject_note, lcu, luu, lcd, lud','safe'),
 
             array('reject_note','required',"on"=>"reject"),
             array('id','required',"on"=>"reject"),
@@ -86,6 +90,8 @@ class ConfirmCreditForm extends CFormModel
                 $this->credit_type = $row['credit_type'];
                 $this->credit_point = $row['credit_point'];
                 $this->apply_date = $row['apply_date'];
+                $this->audit_date = $row['audit_date'];
+                $this->confirm_date = $row['confirm_date'];
                 $this->images_url = $row['images_url'];
                 $this->remark = $row['remark'];
                 $this->reject_note = $row['reject_note'];
@@ -97,7 +103,6 @@ class ConfirmCreditForm extends CFormModel
                 $this->lud = $row['lud'];
                 $this->city = $row['s_city'];
                 $this->validity = $row['validity'];
-                $this->apply_date = CGeneral::toDate($row['apply_date']);
                 $this->integral_type = $row['category'];
                 $this->no_of_attm['gral'] = $row['graldoc'];
                 break;
@@ -127,6 +132,7 @@ class ConfirmCreditForm extends CFormModel
             case 'audit':
                 $sql = "update gr_credit_request set
 							state = 4, 
+							confirm_date = :confirm_date, 
 							luu = :luu
 						where id = :id
 						";
@@ -134,6 +140,7 @@ class ConfirmCreditForm extends CFormModel
             case 'reject':
                 $sql = "update gr_credit_request set
 							state = 2, 
+							confirm_date = :confirm_date, 
 							reject_note = :reject_note, 
 							luu = :luu
 						where id = :id
@@ -150,6 +157,10 @@ class ConfirmCreditForm extends CFormModel
             $command->bindParam(':id',$this->id,PDO::PARAM_INT);
         if (strpos($sql,':reject_note')!==false)
             $command->bindParam(':reject_note',$this->reject_note,PDO::PARAM_STR);
+        if (strpos($sql,':confirm_date')!==false){
+            $this->confirm_date = date("Y-m-d H:i:s");
+            $command->bindParam(':confirm_date',$this->confirm_date,PDO::PARAM_STR);
+        }
 
         if (strpos($sql,':luu')!==false)
             $command->bindParam(':luu',$uid,PDO::PARAM_STR);

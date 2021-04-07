@@ -26,6 +26,8 @@ class CreditRequestForm extends CFormModel
 	public $lud;
     public $integral_type;
     public $s_remark;
+    public $confirm_date;
+    public $audit_date;
 
 
     public $no_of_attm = array(
@@ -59,6 +61,8 @@ class CreditRequestForm extends CFormModel
             's_remark'=>Yii::t('integral','integral conditions'),
             'integral_type'=>Yii::t('integral','integral type'),
             'apply_date'=>Yii::t('integral','apply for time'),
+            'audit_date'=>Yii::t('integral','audit for time'),
+            'confirm_date'=>Yii::t('integral','confirm for time'),
 		);
 	}
 
@@ -68,12 +72,12 @@ class CreditRequestForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, employee_id, employee_name, credit_type, credit_point, apply_date, images_url, rule, remark, reject_note, lcu, luu, lcd, lud','safe'),
+			array('id, employee_id, employee_name, audit_date, confirm_date, credit_type, credit_point, apply_date, images_url, rule, remark, reject_note, lcu, luu, lcd, lud','safe'),
 
-			array('apply_date','required'),
+			//array('apply_date','required'),
 			array('employee_id','required'),
             array('employee_id','validateEmployee'),
-            array('apply_date','validateApplyDate'),
+            //array('apply_date','validateApplyDate'),
 			array('credit_type','required'),
 			array('credit_type','validateIntegral'),
             array('files, removeFileId, docMasterId, no_of_attm','safe'),
@@ -238,6 +242,8 @@ class CreditRequestForm extends CFormModel
                 $this->credit_type = $row['credit_type'];
                 $this->credit_point = $row['credit_point'];
                 $this->apply_date = $row['apply_date'];
+                $this->audit_date = $row['audit_date'];
+                $this->confirm_date = $row['confirm_date'];
                 $this->images_url = $row['images_url'];
                 $this->remark = $row['remark'];
                 $this->reject_note = $row['reject_note'];
@@ -248,7 +254,6 @@ class CreditRequestForm extends CFormModel
                 $this->lcd = $row['lcd'];
                 $this->lud = $row['lud'];
                 $this->city = $row['city'];
-                $this->apply_date = CGeneral::toDate($row['apply_date']);
                 $this->integral_type = $row['category'];
                 $this->s_remark = $row['s_remark'];
                 $this->no_of_attm['gral'] = $row['graldoc'];
@@ -320,8 +325,10 @@ class CreditRequestForm extends CFormModel
 		$command=$connection->createCommand($sql);
 		if (strpos($sql,':id')!==false)
 			$command->bindParam(':id',$this->id,PDO::PARAM_INT);
-		if (strpos($sql,':apply_date')!==false)
-			$command->bindParam(':apply_date',$this->apply_date,PDO::PARAM_STR);
+		if (strpos($sql,':apply_date')!==false){
+            $this->apply_date = date("Y-m-d H:i:s");
+            $command->bindParam(':apply_date',$this->apply_date,PDO::PARAM_STR);
+        }
 		if (strpos($sql,':employee_id')!==false)
 			$command->bindParam(':employee_id',$this->employee_id,PDO::PARAM_INT);
 		if (strpos($sql,':credit_type')!==false)
