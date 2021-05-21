@@ -57,6 +57,10 @@ return array(
                 'access'=>'SR05',
                 'url'=>'/SumGiftSearch/index',
             ),
+            'Prize search'=>array(
+                'access'=>'SR07',
+                'url'=>'/prizeSearch/index',
+            ),
             'Stretch search'=>array(
                 'access'=>'SR04',
                 'url'=>'/StretchSearch/index',

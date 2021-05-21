@@ -38,7 +38,7 @@ class StretchSearchList extends CListPageModel
         $prize_sql = $this->prize_sql;
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $sql1 = "select d.code AS employee_code,d.name AS employee_name,d.city AS s_city$prize_sql from gr_prize_request a
+        $sql1 = "select a.employee_id,d.code AS employee_code,d.name AS employee_name,d.city AS s_city$prize_sql from gr_prize_request a
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city IN ($city_allow)  and d.staff_status = 0 and a.state = 3 
 			";
@@ -89,7 +89,6 @@ class StretchSearchList extends CListPageModel
         $this->attr = array();
         if (count($records) > 0) {
             foreach ($records as $k=>$record) {
-                $prize_sum = 0;
                 $arr = array(
                     'employee_code'=>$record['employee_code'],
                     'employee_name'=>$record['employee_name'],
@@ -98,16 +97,63 @@ class StretchSearchList extends CListPageModel
                 foreach ($list as $item){
                     $key = "prize_".$item["id"];
                     $arr[$key]=$record[$key];
-                    if (strpos($item["prize_name"],'金奖')!==false||strpos($item["prize_name"],'金獎')!==false)
-                        $prize_sum = floor(intval($record[$key])/3);
                 }
-                $arr["prize_sum"]=$prize_sum;
+                $arr["prize_sum"]=$this->getPrizeSum($record["employee_id"]);
                 $this->attr[] = $arr;
             }
         }
         $session = Yii::app()->session;
         $session['stretchSearch_op01'] = $this->getCriteria();
         return true;
+    }
+
+    private function getPrizeSum($employee_id){
+        $list = $this->prize_list;
+        $id = 0;
+        $score = 0;//三冠王總數
+        foreach ($list as $item){ //查詢金獎的id
+            if (strpos($item["prize_name"],'金奖')!==false||strpos($item["prize_name"],'金獎')!==false){
+                $id = $item["id"];
+            }
+        }
+        $prizeRequest=Yii::app()->db->createCommand()->select("id,apply_date")
+            ->from("gr_prize_request")
+            ->where("prize_type=$id and employee_id = $employee_id and state = 3")
+            ->order("apply_date asc")->queryAll();
+        $cycleList=array();
+        if($prizeRequest&&count($prizeRequest)>2){
+            foreach ($prizeRequest as $prizeList){
+                $dateRow = Yii::app()->db->createCommand()
+                    ->select("min(rec_date) as min_date,max(rec_date) as max_date")
+                    ->from("gr_credit_point")
+                    ->where("FIND_IN_SET(".$prizeList["id"].",prize_id_list) and employee_id=$employee_id")
+                    ->queryRow();
+                if($dateRow&&!empty($dateRow["min_date"])){
+                    $cycleList[]=array(
+                        "startYear"=>date("Y",strtotime($dateRow["min_date"])),
+                        "thisYear"=>date("Y",strtotime($dateRow["max_date"])),
+                    );
+                }
+            }
+        }
+        return $this->cycleCompany($score,$cycleList);
+    }
+
+    private function cycleCompany($score,$requestList){
+        if (!is_array($requestList)||count($requestList)<3){
+            return $score;
+        }else{
+            $startYear = $requestList[0]["startYear"];
+            $maxYear = $startYear+4;
+            if($requestList[2]["thisYear"]>$maxYear){
+                array_splice($requestList,0,1);
+                return $this->cycleCompany($score,$requestList);
+            }else{
+                array_splice($requestList,0,3);
+                $score++;
+                return $this->cycleCompany($score,$requestList);
+            }
+        }
     }
 
 //獲取城市列表

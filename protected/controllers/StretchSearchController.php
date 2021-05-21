@@ -23,7 +23,7 @@ class StretchSearchController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('index'),
+                'actions'=>array('index','test'),
                 'expression'=>array('StretchSearchController','allowReadOnly'),
             ),
             array('deny',  // deny all users
@@ -50,5 +50,11 @@ class StretchSearchController extends Controller
 		$model->determinePageNum($pageNum);
 		$model->retrieveDataByPage($model->pageNum);
 		$this->render('index',array('model'=>$model));
+	}
+
+	public function actionTest()
+	{
+		$model = new ResetIntegral();
+        $model->start();
 	}
 }

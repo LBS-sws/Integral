@@ -145,7 +145,7 @@ return array(
     'define'=>'定义',
     'Back'=>'退回',
     'Return to success.'=>'退回成功。',
-    'Swisher who has accumulated 3 gold awards for academic target'=>'累积取得3次学分目标金奖的史伟莎人',
+    'Swisher who has accumulated 3 gold awards for academic target'=>'累积取得3次学分目标金奖的史伟莎人(有限制，具体规则问管理员)',
     'After receiving the award, the gold number of the credit target will be reaccumulated'=>'领奖后将重新累积学分目标金奖次数',
 
     'start credit num'=>'初始学分',
@@ -156,5 +156,6 @@ return array(
     'judge for visible'=>'是否显示',
     'audit for time'=>'审核时间',
     'confirm for time'=>'确认时间',
+    'Cut gift'=>'扣除的学分',
 );
 ?>

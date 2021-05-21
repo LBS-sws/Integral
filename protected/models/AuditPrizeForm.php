@@ -242,6 +242,7 @@ class AuditPrizeForm extends CFormModel
                 if($creditList){
                     foreach ($creditList as $credit){
                         $nowNum = intval($credit["end_num"]);
+                        $cycNum = $sum<($num+$nowNum)?($sum - $num):$nowNum;//記錄需要
                         $num+=$nowNum;
                         $updateNum = $num<$sum?0:$num-$sum;
                         Yii::app()->db->createCommand()->update('gr_credit_point_ex', array(
@@ -253,6 +254,13 @@ class AuditPrizeForm extends CFormModel
                                 'end_num'=>$updateNum,
                             ), 'point_id=:point_id and year > :year', array(':point_id'=>$credit["point_id"],':year'=>$year));
                         }
+                        //2021-05-21添加扣除明細的記錄（開始）
+                        $sql = "update gr_credit_point set
+                            prize_id_list = CONCAT(prize_id_list,',".$row["id"]."'),
+                            prize_json = CONCAT(prize_json,'+".json_encode(array('id'=>$row["id"],'num'=>$cycNum))."')
+                             WHERE id=".$credit["point_id"];
+                        Yii::app()->db->createCommand($sql)->execute();
+                        //2021-05-21添加扣除明細的記錄（結束）
                         if($num>=$sum){
                             break;
                         }

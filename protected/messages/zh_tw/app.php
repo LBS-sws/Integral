@@ -122,6 +122,7 @@ return array(
 'Sum Gift search'=>'總積分查詢',
 'Credit deduction details'=>'學分扣除明細',
 'Sum Gift Report'=>'總積分報表',
+'Prize search'=>'獎項查詢',
 //沈超添加結束
 );
 ?>
