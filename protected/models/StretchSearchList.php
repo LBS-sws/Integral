@@ -130,8 +130,8 @@ class StretchSearchList extends CListPageModel
                     ->queryRow();
                 if($dateRow&&!empty($dateRow["min_date"])){
                     $cycleList[]=array(
-                        "startYear"=>date("Y",strtotime($dateRow["min_date"])),
-                        "thisYear"=>date("Y",strtotime($dateRow["max_date"])),
+                        "startYear"=>date("Y-m-d",strtotime($dateRow["min_date"])),
+                        "thisYear"=>date("Y-m-d",strtotime($dateRow["max_date"])),
                     );
                 }
             }
@@ -144,7 +144,7 @@ class StretchSearchList extends CListPageModel
             return $score;
         }else{
             $startYear = $requestList[0]["startYear"];
-            $maxYear = $startYear+4;
+            $maxYear = date("Y-m-d",strtotime($startYear." + 4 year"));
             if($requestList[2]["thisYear"]>$maxYear){
                 array_splice($requestList,0,1);
                 return $this->cycleCompany($score,$requestList);
