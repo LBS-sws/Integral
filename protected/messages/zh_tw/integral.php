@@ -143,8 +143,8 @@ return array(
     'define'=>'定義',
     'Back'=>'退回',
     'Return to success.'=>'退回成功。',
-    'Swisher who has accumulated 3 gold awards for academic target'=>'累積取得3次學分目標金獎的史偉莎人（有限制，具體規則問管理員）',
-    'After receiving the award, the gold number of the credit target will be reaccumulated'=>'領獎后將重新累積學分目標金獎次數',
+    'Swisher who has accumulated 3 gold awards for academic target'=>'三冠王要點：拿三冠王，從第一個金獎的第一分開始，到最後一個金獎的最後一分，都是在5年的學分',
+    'After receiving the award, the gold number of the credit target will be reaccumulated'=>'有效期內從第一個金獎的第一分開始，到三冠王的最後一分，都是在5年的學分有效期內',
 
     'start credit num'=>'初始學分',
 

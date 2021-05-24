@@ -144,7 +144,7 @@ class StretchSearchList extends CListPageModel
             return $score;
         }else{
             $startYear = $requestList[0]["startYear"];
-            $maxYear = date("Y-m-d",strtotime($startYear." + 4 year"));
+            $maxYear = date("Y-m-d",strtotime($startYear." + 5 year"));
             if($requestList[2]["thisYear"]>$maxYear){
                 array_splice($requestList,0,1);
                 return $this->cycleCompany($score,$requestList);

@@ -41,12 +41,12 @@ class ResetIntegral{
 
                 if ($creditList){ //開始記錄扣減學分
                     for($i=$creditKey;$i<count($creditList);$i++){
-                        $minYear = date("Y",strtotime($creditList[$i]["rec_date"]));
+/*                        $minYear = date("Y",strtotime($creditList[$i]["rec_date"]));
                         $maxYear = date("Y",strtotime($creditList[$i]["expiry_date"]));
                         if($prizeYear>$maxYear||$prizeYear<$minYear){
                             echo "error:Year error for gr_prize_request(".$prize["id"].")<br/>";
                             break;
-                        }
+                        }*/
                         $nowNum = intval($creditList[$i]["credit_point"]);
                         $updateNum = $sum<($startNum+$nowNum)?($sum - $startNum):$nowNum;
                         //echo $prize["id"].":".$sum."_".$startNum."_".$nowNum."_".$updateNum."<br/>";
@@ -67,7 +67,7 @@ class ResetIntegral{
                 }
 
                 if($sum > $startNum){
-                    echo "error:Score on min for gr_prize_request(".$prize["id"].")<br/>";
+                    echo "error:Score on min for gr_prize_request(".$prize["id"].")-(sum:$sum>startNum:$startNum)<br/>";
                 }
             }
         }
