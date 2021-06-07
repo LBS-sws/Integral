@@ -48,11 +48,11 @@ class RptCreditsList extends CReport {
 		$cond_time = "";
 		if(!empty($start_dt)){
 		    $start_dt = date("Y-m-d",strtotime($start_dt));
-		    $cond_time.=" and a.apply_date>='$start_dt' ";
+		    $cond_time.=" and date_format(a.apply_date,'%Y-%m-%d')>='$start_dt' ";
         }
 		if(!empty($end_dt)){
             $end_dt = date("Y-m-d",strtotime($end_dt));
-		    $cond_time.=" and a.apply_date<='$end_dt' ";
+		    $cond_time.=" and date_format(a.apply_date,'%Y-%m-%d')<='$end_dt' ";
         }
 
 		$cond_staff = '';
