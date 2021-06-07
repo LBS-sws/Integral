@@ -37,6 +37,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 			<?php echo $form->hiddenField($model, 'name'); ?>
 			<?php echo $form->hiddenField($model, 'fields'); ?>
 			<?php echo $form->hiddenField($model, 'staffs'); ?>
+            <?php echo $form->hiddenField($model, 'city'); ?>
 
 
             <?php if ($model->showField('city') && !Yii::app()->user->isSingleCity()): ?>
@@ -57,8 +58,6 @@ $this->pageTitle=Yii::app()->name . ' - Report';
                         ?>
                     </div>
                 </div>
-            <?php else: ?>
-                <?php echo $form->hiddenField($model, 'city'); ?>
             <?php endif ?>
 
 

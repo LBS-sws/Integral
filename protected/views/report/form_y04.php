@@ -57,8 +57,6 @@ $this->pageTitle=Yii::app()->name . ' - Report';
                     ?>
                 </div>
             </div>
-            <?php else: ?>
-                <?php echo $form->hiddenField($model, 'city'); ?>
             <?php endif ?>
 
             <div class="form-group">
