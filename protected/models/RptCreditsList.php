@@ -10,6 +10,7 @@ class RptCreditsList extends CReport {
 			'apply_date'=>array('label'=>Yii::t('integral','apply for time'),'width'=>15,'align'=>'L'),
 			'confirm_date'=>array('label'=>Yii::t('integral','confirm for time'),'width'=>15,'align'=>'L'),
 			'audit_date'=>array('label'=>Yii::t('integral','audit for time'),'width'=>15,'align'=>'L'),
+			'remark'=>array('label'=>Yii::t('integral','Remark'),'width'=>45,'align'=>'L'),
 		);
 	}
 	
@@ -88,6 +89,7 @@ class RptCreditsList extends CReport {
                 $temp['apply_date'] = $row['apply_date'];
                 $temp['confirm_date'] = $row['confirm_date'];
                 $temp['audit_date'] = $row['audit_date'];
+                $temp['remark'] = $row['remark'];
 				$this->data[] = $temp;
 			}
 		}
