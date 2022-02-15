@@ -173,8 +173,20 @@ class AuditCreditForm extends CFormModel
         $command->execute();
 
         //$this->sendEmail(); //後續修改，不需要發送郵件
+        $this->saveCreditFlow();
 		return true;
 	}
+
+    //記錄申請
+    protected function saveCreditFlow(){
+        Yii::app()->db->createCommand()->insert('gr_credit_flow',array(
+            'credit_id'=>$this->id,
+            'state_type'=>$this->scenario == "audit"?"Finish":"Confirm Reject",
+            'state_remark'=>$this->scenario == "audit"?"":$this->reject_note,
+            'none_info'=>0,
+            'lcu'=>Yii::app()->user->id,
+        ));
+    }
 
     //發送郵件
     protected function sendEmail(){

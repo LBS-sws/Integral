@@ -157,5 +157,14 @@ return array(
     'audit for time'=>'审核时间',
     'confirm for time'=>'确认时间',
     'Cut gift'=>'扣除的学分',
+
+    'Cancelled Credit'=>'取消学分',
+    'Confirm Audit'=>'已确认',
+    'Confirm Reject'=>'已拒绝',
+    'Operation'=>'操作',
+    'Operator Time'=>'操作时间',
+    'Operator User'=>'操作人员',
+    'flow list'=>'流程信息',
+
 );
 ?>

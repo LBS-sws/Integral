@@ -184,6 +184,8 @@ class CreditRequestForm extends CFormModel
             Yii::app()->db->createCommand()->delete('gr_credit_point', 'credit_req_id=:id', array(':id'=>$this->id));//刪除學分記錄表
             Yii::app()->db->createCommand()->delete('gr_credit_point_ex', 'point_id=:id', array(':id'=>$row["id"]));//刪除學分查詢表
 
+            //删除记录
+            Yii::app()->db->createCommand()->delete('gr_credit_flow', 'credit_id=:id', array(':id'=>$row["id"]));
             return array(
                 "status"=>true
             );
@@ -278,6 +280,15 @@ class CreditRequestForm extends CFormModel
 		}
 	}
 
+	public static function getCreditFlowList($id){
+        $suffix = Yii::app()->params['envSuffix'];
+        $rows = Yii::app()->db->createCommand()->select("c.disp_name,a.*")
+            ->from("gr_credit_flow a")
+            ->leftJoin("security$suffix.sec_user c","a.lcu = c.username")
+            ->where("a.credit_id=:id",array(":id"=>$id))->queryAll();
+        return $rows?$rows:array();
+    }
+
     protected function updateDocman(&$connection, $doctype) {
         if ($this->scenario=='new') {
             $docidx = strtolower($doctype);
@@ -353,8 +364,22 @@ class CreditRequestForm extends CFormModel
             $this->id = Yii::app()->db->getLastInsertID();
         }
         //$this->sendEmail(); //後續修改，不需要發送郵件
+        $this->saveCreditFlow();
         return true;
 	}
+
+	//記錄申請
+    protected function saveCreditFlow(){
+        if($this->state == 1){
+            Yii::app()->db->createCommand()->insert('gr_credit_flow',array(
+                'credit_id'=>$this->id,
+                'state_type'=>"For Audit",
+                'state_remark'=>"",
+                'none_info'=>0,
+                'lcu'=>Yii::app()->user->id,
+            ));
+        }
+    }
 
     //發送郵件
     protected function sendEmail(){

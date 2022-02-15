@@ -40,6 +40,11 @@ $this->pageTitle=Yii::app()->name . ' - creditSearch Form';
                         'name'=>'btnFile','id'=>'btnFile','data-toggle'=>'modal','data-target'=>'#fileuploadgral',)
                 );
                 ?>
+                <?php if ($model->scenario!='new'){
+                    //流程
+                    echo TbHtml::button('<span class="fa fa-file-text-o"></span> '.Yii::t('integral','flow list'), array(
+                        'name'=>'btnCreditFlow','id'=>'btnCreditFlow','data-toggle'=>'modal','data-target'=>'#creditflowinfodialog'));
+                } ?>
             </div>
         </div></div>
 
@@ -90,6 +95,8 @@ $this->pageTitle=Yii::app()->name . ' - creditSearch Form';
 ));
 ?>
 <?php
+$this->renderPartial('//site/creditflow',array('flowList'=>CreditRequestForm::getCreditFlowList($model->id)));
+
 Script::genFileUpload($model,$form->id,'GRAL');
 
 

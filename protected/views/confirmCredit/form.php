@@ -52,6 +52,11 @@ $this->pageTitle=Yii::app()->name . ' - confirmCredit Info';
                         'name'=>'btnFile','id'=>'btnFile','data-toggle'=>'modal','data-target'=>'#fileuploadgral',)
                 );
                 ?>
+                <?php if ($model->scenario!='new'){
+                    //流程
+                    echo TbHtml::button('<span class="fa fa-file-text-o"></span> '.Yii::t('integral','flow list'), array(
+                        'name'=>'btnCreditFlow','id'=>'btnCreditFlow','data-toggle'=>'modal','data-target'=>'#creditflowinfodialog'));
+                } ?>
             </div>
 	</div></div>
 
@@ -100,6 +105,8 @@ $this->pageTitle=Yii::app()->name . ' - confirmCredit Info';
 ));
 ?>
 <?php
+$this->renderPartial('//site/creditflow',array('flowList'=>CreditRequestForm::getCreditFlowList($model->id)));
+
 $this->renderPartial('//site/ject',array('model'=>$model,'form'=>$form,'rejectName'=>"reject_note",'submit'=>Yii::app()->createUrl('confirmCredit/reject')));
 ?>
 <?php
