@@ -23,6 +23,7 @@ class AuditCreditForm extends CFormModel
     public $validity;
     public $confirm_date;
     public $audit_date;
+    public $batchAttr;
 
 
     public $no_of_attm = array(
@@ -289,6 +290,59 @@ class AuditCreditForm extends CFormModel
         }else{
             throw new CHttpException(404,'Cannot update.222');
             return false;
+        }
+    }
+
+    //批量审核的验证
+    public function validatorBatch(){
+        $this->batchAttr=array();
+        $city_allow = Yii::app()->user->city_allow();
+        $suffix = Yii::app()->params['envSuffix'];
+        if(isset($_POST['auditCreditList']["attr"])&&!empty($_POST['auditCreditList']["attr"])){
+            foreach ($_POST['auditCreditList']["attr"] as $id){
+                $row = Yii::app()->db->createCommand()->select("a.id,a.employee_id,a.credit_type,a.credit_point,b.city")
+                    ->from("gr_credit_request a")
+                    ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                    ->where("a.id=:id and a.state = 4 and b.city in ($city_allow) ", array(':id'=>$id))->queryRow();
+                if($row){
+                    $this->batchAttr[]=array(
+                        "id"=>$row["id"],
+                        "employee_id"=>$row["employee_id"],
+                        "credit_type"=>$row["credit_type"],
+                        "credit_point"=>$row["credit_point"],
+                        "city"=>$row["city"]
+                    );
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //批量审核保存
+    public function saveBatch(){
+        if(!empty($this->batchAttr)){
+            foreach ($this->batchAttr as $row){
+                $this->id = $row["id"];
+                $this->employee_id = $row["employee_id"];
+                $this->credit_type = $row["credit_type"];
+                $this->credit_point = $row["credit_point"];
+                $this->city = $row["city"];
+                $this->auditCredit();//添加学分
+                Yii::app()->db->createCommand()->update('gr_credit_request',array(
+                    'state'=>3,
+                    'audit_date'=>date("Y-m-d H:i:s"),
+                    'luu'=>Yii::app()->user->id
+                ),"id={$row["id"]}");//修改状态
+                Yii::app()->db->createCommand()->insert('gr_credit_flow',array(
+                    'credit_id'=>$this->id,
+                    'state_type'=>"Finish",
+                    'state_remark'=>"批量完成",
+                    'none_info'=>0,
+                    'lcu'=>Yii::app()->user->id,
+                ));//流程
+            }
         }
     }
 }

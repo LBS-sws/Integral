@@ -23,7 +23,7 @@ class ConfirmCreditController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('edit','reject','audit'),
+                'actions'=>array('edit','reject','audit','batch'),
                 'expression'=>array('ConfirmCreditController','allowReadWrite'),
             ),
             array('allow',
@@ -75,6 +75,22 @@ class ConfirmCreditController extends Controller
 				Dialog::message(Yii::t('dialog','Validation Message'), $message);
                 $this->redirect(Yii::app()->createUrl('confirmCredit/edit',array('index'=>$model->id)));
 			}
+		}
+	}
+
+	public function actionBatch()
+	{
+		if (isset($_POST['ConfirmCreditList'])) {
+		    set_time_limit(0);
+			$model = new ConfirmCreditForm("audit");
+			if($model->validatorBatch()){
+                $model->saveBatch();
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('integral','batch confirm success'));
+                $this->redirect(Yii::app()->createUrl('confirmCredit/index'));
+            }else{
+                Dialog::message(Yii::t('dialog','Validation Message'), Yii::t('integral','please batch select for integral'));
+                $this->redirect(Yii::app()->createUrl('confirmCredit/index'));
+            }
 		}
 	}
 

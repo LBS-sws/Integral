@@ -165,6 +165,10 @@ return array(
     'Operator Time'=>'操作时间',
     'Operator User'=>'操作人员',
     'flow list'=>'流程信息',
-
+    'batch confirm'=>'批量确认',
+    'batch audit'=>'批量审核',
+    'batch confirm success'=>'批量确认成功',
+    'batch audit success'=>'批量审核成功',
+    'please batch select for integral'=>'请勾选需要批量完成的学分',
 );
 ?>

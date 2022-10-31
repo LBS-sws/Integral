@@ -1,6 +1,6 @@
 <tr>
-    <th>
-    </th>
+    <th><input name="Fruit"  type="checkbox"  id="all"></th>
+    <th></th>
     <th>
         <?php echo TbHtml::link($this->getLabelName('employee_name').$this->drawOrderArrow('d.name'),'#',$this->createOrderLink('auditCredit-list','d.name'))
         ;

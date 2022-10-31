@@ -1,6 +1,8 @@
 <tr class='clickable-row <?php echo $this->record['style']; ?>' data-href='<?php echo $this->getLink('GA01', 'auditCredit/edit', 'auditCredit/view', array('index'=>$this->record['id']));?>'>
 
 
+    <td class="che"> <input value="<?php echo $this->record['id']; ?>"  type="checkbox" name="auditCreditList[attr][]" ></td>
+
     <td><?php echo $this->drawEditButton('GA01', 'auditCredit/edit', 'edit', array('index'=>$this->record['id'])); ?></td>
 
 

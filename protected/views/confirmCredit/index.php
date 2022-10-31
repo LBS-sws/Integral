@@ -23,6 +23,19 @@ $this->pageTitle=Yii::app()->name . ' - confirmCredit Info';
 </section>
 
 <section class="content">
+    <?php if (Yii::app()->user->validFunction('GA04')): ?>
+        <div class="box">
+            <div class="box-body">
+                <div class="btn-group" role="group">
+                    <?php
+                    echo TbHtml::button('<span class="fa fa-glass"></span> '.Yii::t('integral','batch confirm'), array(
+                        'submit'=>Yii::app()->createUrl('confirmCredit/batch'),
+                    ));
+                    ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 	<?php $this->widget('ext.layout.ListPageWidget', array(
 			'title'=>Yii::t('app','Confirm review'),
 			'model'=>$model,
@@ -46,6 +59,17 @@ $this->pageTitle=Yii::app()->name . ' - confirmCredit Info';
 <?php $this->endWidget(); ?>
 
 <?php
+$js = "
+$('.che').on('click', function(e){
+e.stopPropagation();
+});
+
+$('body').on('click','#all',function() {
+	var val = $(this).prop('checked');
+	$('input[type=checkbox][name*=\"confirmCreditList[attr][]\"]').prop('checked',val);
+});
+";
+Yii::app()->clientScript->registerScript('selectAll',$js,CClientScript::POS_READY);
 	$js = Script::genTableRowClick();
 	Yii::app()->clientScript->registerScript('rowClick',$js,CClientScript::POS_READY);
 ?>

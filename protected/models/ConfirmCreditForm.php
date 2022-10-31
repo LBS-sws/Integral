@@ -23,6 +23,7 @@ class ConfirmCreditForm extends CFormModel
     public $validity;
     public $confirm_date;
     public $audit_date;
+    public $batchAttr=array();//批量审核需要的id
 
 
     public $no_of_attm = array(
@@ -217,5 +218,47 @@ class ConfirmCreditForm extends CFormModel
     //判斷輸入框能否修改
     public function getInputBool(){
         return true;
+    }
+
+    //批量审核的验证
+    public function validatorBatch(){
+        $this->batchAttr=array();
+        $city_allow = Yii::app()->user->city_allow();
+        $suffix = Yii::app()->params['envSuffix'];
+        if(isset($_POST['confirmCreditList']["attr"])&&!empty($_POST['confirmCreditList']["attr"])){
+            foreach ($_POST['confirmCreditList']["attr"] as $id){
+                $row = Yii::app()->db->createCommand()->select("a.id")
+                    ->from("gr_credit_request a")
+                    ->leftJoin("hr$suffix.hr_employee b","a.employee_id = b.id")
+                    ->where("a.id=:id and a.state = 1 and b.city in ($city_allow) ", array(':id'=>$id))->queryRow();
+                if($row){
+                    $this->batchAttr[]=$id;
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //批量审核保存
+    public function saveBatch(){
+        if(!empty($this->batchAttr)){
+            foreach ($this->batchAttr as $id){
+                $this->id = $id;
+                Yii::app()->db->createCommand()->update('gr_credit_request',array(
+                    'state'=>4,
+                    'confirm_date'=>date("Y-m-d H:i:s"),
+                    'luu'=>Yii::app()->user->id
+                ),"id={$id}");
+                Yii::app()->db->createCommand()->insert('gr_credit_flow',array(
+                    'credit_id'=>$this->id,
+                    'state_type'=>"Confirm Audit",
+                    'state_remark'=>"批量确认",
+                    'none_info'=>0,
+                    'lcu'=>Yii::app()->user->id,
+                ));//流程
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ class AuditCreditController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('edit','reject','audit'),
+                'actions'=>array('edit','reject','audit','batch'),
                 'expression'=>array('AuditCreditController','allowReadWrite'),
             ),
             array('allow',
@@ -77,6 +77,22 @@ class AuditCreditController extends Controller
 			}
 		}
 	}
+
+    public function actionBatch()
+    {
+        if (isset($_POST['auditCreditList'])) {
+            set_time_limit(0);
+            $model = new AuditCreditForm("audit");
+            if($model->validatorBatch()){
+                $model->saveBatch();
+                Dialog::message(Yii::t('dialog','Information'), Yii::t('integral','batch confirm success'));
+                $this->redirect(Yii::app()->createUrl('auditCredit/index'));
+            }else{
+                Dialog::message(Yii::t('dialog','Validation Message'), Yii::t('integral','please batch select for integral'));
+                $this->redirect(Yii::app()->createUrl('auditCredit/index'));
+            }
+        }
+    }
 
 	public function actionReject()
 	{
