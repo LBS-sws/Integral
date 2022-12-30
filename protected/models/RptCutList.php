@@ -5,8 +5,9 @@ class RptCutList extends CReport {
 			'employee_name'=>array('label'=>Yii::t('integral','Employee Name'),'width'=>22,'align'=>'L'),
             's_city'=>array('label'=>Yii::t('integral','City'),'width'=>20,'align'=>'L'),
 			'gift_type'=>array('label'=>Yii::t('integral','Cut Name'),'width'=>30,'align'=>'L'),
-			'bonus_point'=>array('label'=>Yii::t('integral','Cut Integral'),'width'=>25,'align'=>'C'),
+			'bonus_point'=>array('label'=>Yii::t('integral','gift'),'width'=>25,'align'=>'C'),
             'apply_num'=>array('label'=>Yii::t('integral','Number of applications'),'width'=>20,'align'=>'L'),
+            'gift_point'=>array('label'=>Yii::t('integral','Cut Integral'),'width'=>20,'align'=>'L'),
             'integral_sum'=>array('label'=>Yii::t('integral','Cut Integral Sum'),'width'=>20,'align'=>'L'),
 			'apply_date'=>array('label'=>Yii::t('integral','apply for time'),'width'=>15,'align'=>'L'),
 		);
@@ -66,7 +67,7 @@ class RptCutList extends CReport {
             } 
 		}
 
-        $sql = "select a.*,b.gift_name,d.name AS employee_name,d.city AS s_city from gr_gift_request a
+        $sql = "select a.*,a.bonus_point*a.apply_num as gift_point,b.gift_name,d.name AS employee_name,d.city AS s_city from gr_gift_request a
                 LEFT JOIN gr_gift_type b ON a.gift_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city in($city_allow)  and d.staff_status = 0 and a.state = 3 
@@ -79,6 +80,7 @@ class RptCutList extends CReport {
 				$temp['employee_name'] = $row['employee_name'];
                 $temp['s_city'] = CGeneral::getCityName($row['s_city']);
 				$temp['gift_type'] = $row['gift_name'];
+				$temp['gift_point'] = $row['gift_point'];
 				$temp['bonus_point'] = $row['bonus_point'];
                 $temp['apply_num'] = $row['apply_num'];
                 $temp['integral_sum'] = intval($row['apply_num'])*intval($row['bonus_point']);

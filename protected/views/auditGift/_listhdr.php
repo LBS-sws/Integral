@@ -26,6 +26,11 @@
 		?>
 	</th>
 	<th>
+		<?php echo TbHtml::link($this->getLabelName('gift_point').$this->drawOrderArrow('gift_point'),'#',$this->createOrderLink('auditGift-list','gift_point'))
+			;
+		?>
+	</th>
+	<th>
 		<?php echo TbHtml::link($this->getLabelName('apply_date').$this->drawOrderArrow('a.apply_date'),'#',$this->createOrderLink('auditGift-list','a.apply_date'))
 			;
 		?>

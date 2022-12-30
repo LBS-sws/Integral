@@ -8,6 +8,7 @@
     <td><?php echo $this->record['gift_name']; ?></td>
     <td><?php echo $this->record['bonus_point']; ?></td>
     <td><?php echo $this->record['apply_num']; ?></td>
+    <td><?php echo $this->record['gift_point']; ?></td>
     <td><?php echo $this->record['apply_date']; ?></td>
     <td><?php echo $this->record['status']; ?></td>
 </tr>

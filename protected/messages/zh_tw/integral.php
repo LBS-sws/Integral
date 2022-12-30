@@ -168,5 +168,6 @@ return array(
     'batch confirm success'=>'批量確認成功',
     'batch audit success'=>'批量審核成功',
     'please batch select for integral'=>'請勾選需要批量完成的學分',
+    'gift'=>'積分',
 );
 ?>

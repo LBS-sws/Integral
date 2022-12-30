@@ -17,7 +17,8 @@ class GiftSearchList extends CListPageModel
             'employee_code'=>Yii::t('integral','Employee Code'),
             'employee_name'=>Yii::t('integral','Employee Name'),
             'gift_name'=>Yii::t('integral','Cut Name'),
-            'bonus_point'=>Yii::t('integral','Cut Integral'),
+            'gift_point'=>Yii::t('integral','Cut Integral'),
+            'bonus_point'=>Yii::t('integral','gift'),
             'apply_num'=>Yii::t('integral','Number of applications'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
@@ -37,7 +38,7 @@ class GiftSearchList extends CListPageModel
     {
         $suffix = Yii::app()->params['envSuffix'];
         $city_allow = Yii::app()->user->city_allow();
-        $sql1 = "select a.*,b.gift_name,d.name AS employee_name,d.code AS employee_code,d.city AS s_city from gr_gift_request a
+        $sql1 = "select a.*,a.bonus_point*a.apply_num as gift_point,b.gift_name,d.name AS employee_name,d.code AS employee_code,d.city AS s_city from gr_gift_request a
                 LEFT JOIN gr_gift_type b ON a.gift_type = b.id
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
                 where d.city IN ($city_allow) and a.state = 3 and d.staff_status = 0 
@@ -106,6 +107,7 @@ class GiftSearchList extends CListPageModel
                     'employee_code'=>$record['employee_code'],
                     'employee_name'=>$record['employee_name'],
                     'gift_name'=>$record['gift_name'],
+                    'gift_point'=>$record['gift_point'],
                     'bonus_point'=>$record['bonus_point'],
                     'apply_num'=>$record['apply_num'],
                     'apply_date'=>date("Y-m-d",strtotime($record['apply_date'])),
