@@ -9,7 +9,7 @@ class CreditTypeForm extends CFormModel
 	public $category;
 	public $rule;
 	public $z_index=0;
-	public $year_sw=0;
+	public $year_sw=0;//0:无限制  1：每年限制  2：每月限制
 	public $year_max=0;
 	public $validity=5;
 	public $remark;
@@ -23,7 +23,7 @@ class CreditTypeForm extends CFormModel
             'credit_point'=>Yii::t('integral','Integral Num'),
             'rule'=>Yii::t('integral','integral conditions'),
             'category'=>Yii::t('integral','integral type'),
-            'year_sw'=>Yii::t('integral','Age limit'),
+            'year_sw'=>Yii::t('integral','Application restriction'),
             'year_max'=>Yii::t('integral','Limited number'),
             'z_index'=>Yii::t('integral','Level'),
             'remark'=>Yii::t('integral','Remark'),
@@ -44,7 +44,7 @@ class CreditTypeForm extends CFormModel
             array('category','required'),
             array('year_sw','required'),
             array('year_max','validateYearNum'),
-            array('year_sw', 'in', 'range' => array(0, 1)),
+            array('year_sw', 'in', 'range' => array(0, 1, 2)),
             array('credit_name','validateName'),
             array('credit_code','validateCode'),
             array('credit_point', 'numerical', 'min'=>0, 'integerOnly'=>true),
@@ -79,7 +79,7 @@ class CreditTypeForm extends CFormModel
 	}
 
 	public function validateYearNum($attribute, $params){
-	    if($this->year_sw == 1){
+	    if(in_array($this->year_sw,array(1,2))){
 	        if(!is_numeric($this->year_max)){
                 $message = "限制次数只能为数字";
                 $this->addError($attribute,$message);
@@ -166,6 +166,23 @@ class CreditTypeForm extends CFormModel
         }else{
             return true;
         }
+    }
+
+    //学分限制类型
+    public static function getYearSWList($type=0,$bool=false){
+        $arr = array(
+            0=>Yii::t("integral","off"),//无限制
+            1=>Yii::t("integral","Annual limit"),//每年限制
+            2=>Yii::t("integral","Monthly limit"),//每月限制
+        );
+        if($bool){
+            if(key_exists($type,$arr)){
+                return $arr[$type];
+            }else{
+                return $type;
+            }
+        }
+        return $arr;
     }
 
 	public function saveData()

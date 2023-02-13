@@ -72,7 +72,7 @@ class CreditRequestForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('id, employee_id, employee_name, audit_date, confirm_date, credit_type, credit_point, apply_date, images_url, rule, remark, reject_note, lcu, luu, lcd, lud','safe'),
+			array('id, employee_id, employee_name, audit_date, confirm_date, credit_type, credit_point, apply_date, images_url, rule, remark, reject_note, integral_type, lcu, luu, lcd, lud','safe'),
 
 			//array('apply_date','required'),
 			array('employee_id','required'),
@@ -88,13 +88,22 @@ class CreditRequestForm extends CFormModel
         $rows = Yii::app()->db->createCommand()->select("*")->from("gr_credit_type")
             ->where("id=:id and display=1", array(':id'=>$this->credit_type))->queryRow();
         if ($rows){
-            if($rows["year_sw"]==1){
+            if($rows["year_sw"]==1){//每年限制申请
                 $year = date("Y");
                 $count = Yii::app()->db->createCommand()->select("count(*)")->from("gr_credit_request")
                     ->where("credit_type=:credit_type and employee_id=:employee_id and state in (1,3,4) and date_format(apply_date,'%Y') ='$year'",
                         array(':credit_type'=>$this->credit_type,':employee_id'=>$this->employee_id))->queryScalar();
-                if($count > $rows["year_max"]){
+                if($count >= $rows["year_max"]){
                     $message = "该学分每年申請次數不能大于".$rows["year_max"];
+                    $this->addError($attribute,$message);
+                }
+            }elseif($rows["year_sw"]==2){//每月限制申请
+                $month = date("Y/m");
+                $count = Yii::app()->db->createCommand()->select("count(*)")->from("gr_credit_request")
+                    ->where("credit_type=:credit_type and employee_id=:employee_id and state in (1,3,4) and date_format(apply_date,'%Y/%m') ='$month'",
+                        array(':credit_type'=>$this->credit_type,':employee_id'=>$this->employee_id))->queryScalar();
+                if($count >= $rows["year_max"]){
+                    $message = "该学分每月申請次數不能大于".$rows["year_max"];
                     $this->addError($attribute,$message);
                 }
             }else{

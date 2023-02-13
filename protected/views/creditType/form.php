@@ -89,7 +89,7 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
             <div class="form-group">
                 <?php echo $form->labelEx($model,'year_sw',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-4">
-                    <?php echo $form->dropDownList($model, 'year_sw',array(Yii::t("integral","off"),Yii::t("integral","on")),
+                    <?php echo $form->dropDownList($model, 'year_sw',CreditTypeForm::getYearSWList(),
                         array('readonly'=>($model->scenario=='view'),'id'=>'yearSw')
                     ); ?>
                 </div>
@@ -145,10 +145,10 @@ $this->pageTitle=Yii::app()->name . ' - Credit type allocation';
 <?php
 $js = "
         $('#yearSw').on('change',function () {
-            if($(this).val()==1){
-                $('#yearNum').parents('.form-group:first').slideDown(100);
-            }else{
+            if($(this).val()==0){
                 $('#yearNum').parents('.form-group:first').slideUp(100);
+            }else{
+                $('#yearNum').parents('.form-group:first').slideDown(100);
             }
         }).trigger('change');
 ";
