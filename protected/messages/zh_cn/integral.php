@@ -171,5 +171,8 @@ return array(
     'batch audit success'=>'批量审核成功',
     'please batch select for integral'=>'请勾选需要批量完成的学分',
     'gift'=>'积分',
+    'Annual limit'=>'每年限制',
+    'Monthly limit'=>'每月限制',
+    'Application restriction'=>'申请限制',
 );
 ?>

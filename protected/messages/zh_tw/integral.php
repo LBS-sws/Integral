@@ -169,5 +169,8 @@ return array(
     'batch audit success'=>'批量審核成功',
     'please batch select for integral'=>'請勾選需要批量完成的學分',
     'gift'=>'積分',
+    'Annual limit'=>'每年限製',
+    'Monthly limit'=>'每月限製',
+    'Application restriction'=>'申請限製',
 );
 ?>
