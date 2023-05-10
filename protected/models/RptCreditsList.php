@@ -3,6 +3,7 @@ class RptCreditsList extends CReport {
 	protected function fields() {
 		return array(
 			'employee_name'=>array('label'=>Yii::t('integral','Employee Name'),'width'=>22,'align'=>'L'),
+			'department_name'=>array('label'=>Yii::t('integral','Department'),'width'=>30,'align'=>'L'),
 			'credit_type'=>array('label'=>Yii::t('integral','Integral Name'),'width'=>30,'align'=>'L'),
 			'credit_point'=>array('label'=>Yii::t('integral','Integral Num'),'width'=>25,'align'=>'C'),
 			's_city'=>array('label'=>Yii::t('integral','City'),'width'=>20,'align'=>'L'),
@@ -68,9 +69,10 @@ class RptCreditsList extends CReport {
                 $cond_staff = " and a.employee_id in ($cond_staff) ";
             } 
 		}
-        $sql = "select a.*,d.name AS employee_name,d.city AS s_city,e.credit_name ,e.category 
+        $sql = "select a.*,f.name AS department_name,d.name AS employee_name,d.city AS s_city,e.credit_name ,e.category 
                 from gr_credit_request a 
                 LEFT JOIN hr$suffix.hr_employee d ON a.employee_id = d.id
+                LEFT JOIN hr$suffix.hr_dept f ON d.department = f.id
                 LEFT JOIN gr_credit_type e ON a.credit_type = e.id
                 where d.city in($city_allow) and a.state=3  and d.staff_status = 0 
                 $cond_staff $cond_time $cond_city 
@@ -82,6 +84,7 @@ class RptCreditsList extends CReport {
 			foreach ($rows as $row) {
 				$temp = array();
 				$temp['employee_name'] = $row['employee_name'];
+				$temp['department_name'] = $row['department_name'];
 				$temp['credit_type'] = $row['credit_name'];
 				$temp['credit_point'] = $row['credit_point'];
 				$temp['s_city'] = CGeneral::getCityName($row['s_city']);

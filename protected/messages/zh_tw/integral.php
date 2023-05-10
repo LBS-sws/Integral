@@ -172,5 +172,6 @@ return array(
     'Annual limit'=>'每年限製',
     'Monthly limit'=>'每月限製',
     'Application restriction'=>'申請限製',
+    'Department'=>'部門',
 );
 ?>
