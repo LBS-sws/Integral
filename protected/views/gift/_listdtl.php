@@ -22,6 +22,8 @@
             $("#gift_type").val($(this).data("id"));
             $("#gift_name").val($tr.find(".integral_name:first").text());
             $("#bonus_point").val($tr.find(".integral_num:first").text());
+            $("#point_gift").val($("#bonus_point").val());
+            $("#apply_num").val(1);
             $('#integralApply').modal('show');
             return false;
         })

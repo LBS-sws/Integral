@@ -175,5 +175,6 @@ return array(
     'Monthly limit'=>'每月限制',
     'Application restriction'=>'申请限制',
     'Department'=>'部门',
+    'Points Integral'=>'应扣积分',
 );
 ?>

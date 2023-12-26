@@ -33,7 +33,13 @@ $ftrbtn[] = TbHtml::button(Yii::t('integral','apply'), array('color'=>TbHtml::BU
         <?php echo TbHtml::label(Yii::t('integral','Number of applications'),'',array('class'=>"col-sm-2 control-label")); ?>
         <div class="col-sm-4">
             <?php echo TbHtml::numberField('GiftRequestForm[apply_num]','1',
-                array('readonly'=>(false))
+                array('readonly'=>(false),'id'=>'apply_num')
+            ); ?>
+        </div>
+        <?php echo TbHtml::label(Yii::t('integral','Points Integral'),'',array('class'=>"col-sm-2 control-label")); ?>
+        <div class="col-sm-4">
+            <?php echo TbHtml::numberField('GiftRequestForm[point_gift]','',
+                array('readonly'=>(true),'id'=>'point_gift')
             ); ?>
         </div>
     </div>
@@ -48,4 +54,19 @@ $ftrbtn[] = TbHtml::button(Yii::t('integral','apply'), array('color'=>TbHtml::BU
     </div>
 <?php
 	$this->endWidget();
+?>
+
+<?php
+
+$js = "
+$('#apply_num').change(function(){
+    var num = $('#apply_num').val();
+    var gift = $('#bonus_point').val();
+    if(!isNaN(num)&&!isNaN(gift)){
+        var point_gift = num*gift;
+        $('#point_gift').val(point_gift);
+    }
+});
+";
+Yii::app()->clientScript->registerScript('pointGift',$js,CClientScript::POS_READY);
 ?>

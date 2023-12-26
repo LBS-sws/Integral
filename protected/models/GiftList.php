@@ -11,6 +11,7 @@ class GiftList extends CListPageModel
             'inventory'=>Yii::t('integral','inventory'),
             'city'=>Yii::t('integral','City'),
             'city_name'=>Yii::t('integral','City'),
+            'point_gift'=>Yii::t('integral','Points Integral'),
         );
     }
 

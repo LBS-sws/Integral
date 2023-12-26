@@ -28,6 +28,7 @@ $this->pageTitle=Yii::app()->name . ' - Apply';
         'bonus_point',
         'apply_num',
         'city_name',
+        'employee_name',
     );
 
    $this->widget('ext.layout.ListPageWidget', array(

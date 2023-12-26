@@ -173,5 +173,6 @@ return array(
     'Monthly limit'=>'每月限製',
     'Application restriction'=>'申請限製',
     'Department'=>'部門',
+    'Points Integral'=>'应扣积分',
 );
 ?>

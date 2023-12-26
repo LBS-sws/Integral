@@ -37,6 +37,7 @@ $this->pageTitle=Yii::app()->name . ' - Apply';
     $search = array(
         'gift_name',
         'bonus_point',
+        'employee_name',
     );
     $search_add_html="";
     $modelName = get_class($model);

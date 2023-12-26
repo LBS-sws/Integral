@@ -102,6 +102,8 @@ $js = '
             $("#gift_type").val($("#rq_gift_id").val());
             $("#gift_name").val($("#rq_gift_name").val());
             $("#bonus_point").val($("#rq_bonus_point").val());
+            $("#point_gift").val($("#bonus_point").val());
+            $("#apply_num").val(1);
             $("#integralApply").modal("show");
             return false;
         })
