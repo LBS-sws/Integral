@@ -92,7 +92,7 @@ class CreditTypeForm extends CFormModel
         }
 	}
 
-	public function getCategoryAll(){
+	public static function getCategoryAll(){
         return array(
             ''=>'',
             1=>Yii::t("integral","de"),

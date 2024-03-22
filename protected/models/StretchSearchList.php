@@ -5,6 +5,18 @@ class StretchSearchList extends CListPageModel
     public $city;//
     public $prize_list;//
     public $prize_sql;//
+
+    public function getCriteria() {
+        return array(
+            'city'=>$this->city,
+            'orderField'=>$this->orderField,
+            'orderType'=>$this->orderType,
+            'noOfItem'=>$this->noOfItem,
+            'pageNum'=>$this->pageNum,
+            'filter'=>$this->filter,
+            'dateRangeValue'=>$this->dateRangeValue,
+        );
+    }
     /**
      * Declares customized attribute labels.
      * If not declared here, an attribute would have a label that is

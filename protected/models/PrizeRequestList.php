@@ -31,6 +31,21 @@ class PrizeRequestList extends CListPageModel
         );
     }
 
+    public function getCriteria() {
+        return array(
+            'searchTimeStart'=>$this->searchTimeStart,
+            'searchTimeEnd'=>$this->searchTimeEnd,
+            'searchField'=>$this->searchField,
+            'searchValue'=>$this->searchValue,
+            'orderField'=>$this->orderField,
+            'orderType'=>$this->orderType,
+            'noOfItem'=>$this->noOfItem,
+            'pageNum'=>$this->pageNum,
+            'filter'=>$this->filter,
+            'dateRangeValue'=>$this->dateRangeValue,
+        );
+    }
+
     public function retrieveDataByPage($pageNum=1)
     {
         $suffix = Yii::app()->params['envSuffix'];

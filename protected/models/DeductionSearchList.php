@@ -3,6 +3,18 @@
 class DeductionSearchList extends CListPageModel
 {
     public $category;//學分類型
+
+    public function getCriteria() {
+        return array(
+            'category'=>$this->category,
+            'orderField'=>$this->orderField,
+            'orderType'=>$this->orderType,
+            'noOfItem'=>$this->noOfItem,
+            'pageNum'=>$this->pageNum,
+            'filter'=>$this->filter,
+            'dateRangeValue'=>$this->dateRangeValue,
+        );
+    }
     /**
      * Declares customized attribute labels.
      * If not declared here, an attribute would have a label that is

@@ -3,6 +3,18 @@
 class SumSearchList extends CListPageModel
 {
     public $year;//年
+
+    public function getCriteria() {
+        return array(
+            '$year'=>$this->year,
+            'orderField'=>$this->orderField,
+            'orderType'=>$this->orderType,
+            'noOfItem'=>$this->noOfItem,
+            'pageNum'=>$this->pageNum,
+            'filter'=>$this->filter,
+            'dateRangeValue'=>$this->dateRangeValue,
+        );
+    }
     /**
      * Declares customized attribute labels.
      * If not declared here, an attribute would have a label that is

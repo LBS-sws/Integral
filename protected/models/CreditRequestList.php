@@ -4,6 +4,19 @@ class CreditRequestList extends CListPageModel
 {
     public $searchTimeStart;//開始日期
     public $searchTimeEnd;//結束日期
+
+    public function getCriteria() {
+        return array(
+            'searchTimeStart'=>$this->searchTimeStart,
+            'searchTimeEnd'=>$this->searchTimeEnd,
+            'orderField'=>$this->orderField,
+            'orderType'=>$this->orderType,
+            'noOfItem'=>$this->noOfItem,
+            'pageNum'=>$this->pageNum,
+            'filter'=>$this->filter,
+            'dateRangeValue'=>$this->dateRangeValue,
+        );
+    }
     /**
      * Declares customized attribute labels.
      * If not declared here, an attribute would have a label that is
