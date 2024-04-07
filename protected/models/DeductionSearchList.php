@@ -7,6 +7,8 @@ class DeductionSearchList extends CListPageModel
     public function getCriteria() {
         return array(
             'category'=>$this->category,
+            'searchField'=>$this->searchField,
+            'searchValue'=>$this->searchValue,
             'orderField'=>$this->orderField,
             'orderType'=>$this->orderType,
             'noOfItem'=>$this->noOfItem,

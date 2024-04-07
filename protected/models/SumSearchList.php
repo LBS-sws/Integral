@@ -6,7 +6,9 @@ class SumSearchList extends CListPageModel
 
     public function getCriteria() {
         return array(
-            '$year'=>$this->year,
+            'year'=>$this->year,
+            'searchField'=>$this->searchField,
+            'searchValue'=>$this->searchValue,
             'orderField'=>$this->orderField,
             'orderType'=>$this->orderType,
             'noOfItem'=>$this->noOfItem,

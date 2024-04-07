@@ -9,6 +9,8 @@ class StretchSearchList extends CListPageModel
     public function getCriteria() {
         return array(
             'city'=>$this->city,
+            'searchField'=>$this->searchField,
+            'searchValue'=>$this->searchValue,
             'orderField'=>$this->orderField,
             'orderType'=>$this->orderType,
             'noOfItem'=>$this->noOfItem,

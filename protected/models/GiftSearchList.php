@@ -9,6 +9,8 @@ class GiftSearchList extends CListPageModel
         return array(
             'searchTimeStart'=>$this->searchTimeStart,
             'searchTimeEnd'=>$this->searchTimeEnd,
+            'searchField'=>$this->searchField,
+            'searchValue'=>$this->searchValue,
             'orderField'=>$this->orderField,
             'orderType'=>$this->orderType,
             'noOfItem'=>$this->noOfItem,
