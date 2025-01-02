@@ -33,7 +33,7 @@ class RptCutList extends CReport {
         if (!empty($city)) {
             $citylist = explode('~',$city);
             if(count($citylist)>1){
-                $cond_city = implode("','",$citylist);
+                $cond_city = "'".implode("','",$citylist)."'";
             }else{
                 $cond_city = "'".reset($citylist)."'";
             }
